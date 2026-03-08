@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, AlertTriangle, CheckCircle2, Sparkles, History, RotateCcw, Brain, Atom } from "lucide-react";
+import { Loader2, AlertTriangle, CheckCircle2, Sparkles, History, RotateCcw, Brain, Atom, Languages } from "lucide-react";
 import { analyzeText, type AnalysisResult } from "@/lib/biasAnalyzer";
 import BiasResultCard from "./BiasResultCard";
 import BiasChart from "./BiasChart";
@@ -12,17 +12,41 @@ import BiasHeatmap from "./BiasHeatmap";
 import BiasEvolutionTimeline from "./BiasEvolutionTimeline";
 import ReasoningGraph from "./ReasoningGraph";
 import AttentionHighlights from "./AttentionHighlights";
+import LanguageSelector from "./LanguageSelector";
 import { useTheme } from "@/contexts/ThemeContext";
 
-const EXAMPLE_TEXTS = [
-  "Everyone in that city is rude.",
-  "I failed this exam so I am completely useless.",
-  "I feel stupid, so I must be incompetent.",
-  "Successful entrepreneurs dropped out of college, so education is useless.",
-  "I knew this plan would fail because my ideas are always ignored.",
-];
-
-const STORAGE_KEY = "mindtrace-history";
+const EXAMPLE_TEXTS: Record<string, string[]> = {
+  en: [
+    "Everyone in that city is rude.",
+    "I failed this exam so I am completely useless.",
+    "I feel stupid, so I must be incompetent.",
+    "Successful entrepreneurs dropped out of college, so education is useless.",
+    "I knew this plan would fail because my ideas are always ignored.",
+  ],
+  hi: [
+    "उस शहर में सब लोग बदतमीज़ हैं।",
+    "मैं परीक्षा में फेल हो गया तो मैं पूरी तरह बेकार हूँ।",
+    "मुझे बेवकूफ़ लगता है, तो मैं नाकाबिल ज़रूर हूँ।",
+    "सफल उद्यमियों ने कॉलेज छोड़ दिया, इसलिए शिक्षा बेकार है।",
+  ],
+  bn: [
+    "ওই শহরের সবাই অভদ্র।",
+    "আমি পরীক্ষায় ফেল করেছি তাই আমি সম্পূর্ণ অকেজো।",
+    "আমার বোকা লাগছে, তাই আমি নিশ্চয়ই অযোগ্য।",
+  ],
+  ta: [
+    "அந்த நகரத்தில் எல்லோரும் முரட்டுத்தனமானவர்கள்.",
+    "நான் தேர்வில் தோல்வியடைந்தேன் எனவே நான் முற்றிலும் பயனற்றவன்.",
+  ],
+  te: [
+    "ఆ నగరంలో అందరూ అమర్యాదగా ఉంటారు.",
+    "నేను పరీక్షలో ఫెయిల్ అయ్యాను కాబట్టి నేను పూర్తిగా పనికిరానివాడిని.",
+  ],
+  mr: [
+    "त्या शहरातील सगळे लोक उद्धट आहेत.",
+    "मी परीक्षेत नापास झालो म्हणजे मी पूर्णपणे निरुपयोगी आहे.",
+  ],
+};
 
 const BiasDetector = () => {
   const { isQuantum } = useTheme();
