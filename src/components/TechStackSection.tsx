@@ -11,18 +11,21 @@ const STACK = [
 
 const TechStackSection = () => {
   return (
-    <section className="py-24 px-6 bg-navy-deep/50">
-      <div className="max-w-5xl mx-auto">
+    <section className="py-28 px-6 bg-navy-deep/50 relative">
+      <div className="absolute inset-0 bg-grid-pattern opacity-5 pointer-events-none" />
+      
+      <div className="max-w-5xl mx-auto relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
+          <span className="text-xs font-mono text-primary/70 uppercase tracking-widest mb-3 block">Architecture</span>
+          <h2 className="font-display text-3xl md:text-5xl font-bold mb-4">
             Powered By <span className="text-gradient-cyan">Research-Grade</span> NLP
           </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
+          <p className="text-muted-foreground max-w-xl mx-auto text-base">
             A multi-model architecture combining state-of-the-art transformers with cognitive psychology knowledge graphs.
           </p>
         </motion.div>
@@ -35,10 +38,10 @@ const TechStackSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
-              className="glass-card rounded-xl p-5 hover:border-primary/30 transition-colors"
+              className="glass-card rounded-2xl p-5 hover:border-primary/30 transition-all duration-300 hover:-translate-y-0.5"
             >
               <div className="flex items-center gap-3 mb-3">
-                <div className="font-display font-bold text-primary text-sm">{item.name}</div>
+                <div className="font-display font-bold text-primary text-sm bg-primary/10 px-2.5 py-1 rounded-lg">{item.name}</div>
                 <div className="h-px flex-1 bg-border/50" />
                 <span className="text-[10px] font-mono text-muted-foreground/70 uppercase tracking-wider">{item.role}</span>
               </div>
@@ -52,24 +55,13 @@ const TechStackSection = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-12 glass-card rounded-xl p-8"
+          className="mt-12 glass-card rounded-2xl p-8"
         >
           <h3 className="font-display font-semibold text-center mb-8 text-sm text-muted-foreground uppercase tracking-wider">Pipeline Architecture</h3>
           <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-mono">
             {[
-              "User Input",
-              "→",
-              "Preprocessing",
-              "→",
-              "SBERT Embedding",
-              "→",
-              "RoBERTa Classifier",
-              "→",
-              "Pattern Analysis",
-              "→",
-              "FLAN-T5 Explainer",
-              "→",
-              "Output",
+              "User Input", "→", "Preprocessing", "→", "SBERT Embedding", "→",
+              "RoBERTa Classifier", "→", "Pattern Analysis", "→", "FLAN-T5 Explainer", "→", "Output",
             ].map((step, i) =>
               step === "→" ? (
                 <span key={i} className="text-primary text-lg">→</span>

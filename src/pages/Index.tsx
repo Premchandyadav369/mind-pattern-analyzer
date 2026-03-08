@@ -6,8 +6,8 @@ import BiasTypesSection from "@/components/BiasTypesSection";
 import TechStackSection from "@/components/TechStackSection";
 import ApplicationsSection from "@/components/ApplicationsSection";
 import BiasDetector from "@/components/BiasDetector";
-import { Brain, Github, ArrowUp } from "lucide-react";
-import { motion } from "framer-motion";
+import { ArrowUp } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 const Index = () => {
   const detectorRef = useRef<HTMLDivElement>(null);
@@ -20,27 +20,38 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <HeroSection onStartAnalysis={scrollToDetector} />
+      
+      {/* Divider glow */}
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      
       <HowItWorks />
+      
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+      
       <BiasTypesSection />
+      
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+      
       <TechStackSection />
+      
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+      
       <ApplicationsSection />
+      
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      
       <div ref={detectorRef}>
         <BiasDetector />
       </div>
 
       {/* Footer */}
-      <footer className="py-16 px-6 border-t border-border/50 bg-navy-deep/50">
+      <footer className="py-16 px-6 border-t border-border/30 bg-navy-deep/80">
         <div className="max-w-5xl mx-auto">
           <div className="grid md:grid-cols-3 gap-12 mb-12">
             {/* Brand */}
             <div>
-              <div className="flex items-center gap-2.5 mb-4">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/30 flex items-center justify-center">
-                  <Brain className="w-4 h-4 text-primary" />
-                </div>
-                <span className="font-display font-bold text-lg">
-                  Mind<span className="text-gradient-cyan">Trace</span> AI
-                </span>
+              <div className="flex items-center gap-3 mb-4">
+                <img src={logo} alt="MindTrace AI" className="h-10 w-auto" />
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Research-grade cognitive bias detection powered by NLP, cognitive psychology, and explainable AI.
@@ -60,7 +71,7 @@ const Index = () => {
                   <a
                     key={link.href}
                     href={link.href}
-                    className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                   >
                     {link.label}
                   </a>
@@ -87,7 +98,7 @@ const Index = () => {
             </p>
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              className="w-8 h-8 rounded-lg border border-border/50 hover:border-primary/50 flex items-center justify-center text-muted-foreground hover:text-primary transition-colors"
+              className="w-8 h-8 rounded-lg border border-border/50 hover:border-primary/50 hover:bg-primary/5 flex items-center justify-center text-muted-foreground hover:text-primary transition-all"
             >
               <ArrowUp className="w-4 h-4" />
             </button>
