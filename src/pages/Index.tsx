@@ -44,6 +44,10 @@ const Index = () => {
       <div ref={detectorRef}>
         <BiasDetector />
       </div>
+      
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      
+      <DebateAnalyzer />
 
       {/* Footer */}
       <footer className="py-16 px-6 border-t border-border/30 bg-navy-deep/80">
