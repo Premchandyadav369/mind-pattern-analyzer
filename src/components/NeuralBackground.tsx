@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useTheme } from "@/contexts/ThemeContext";
 
 interface Node {
   x: number;
@@ -12,6 +13,7 @@ interface Node {
 
 const NeuralBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { isQuantum } = useTheme();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -48,7 +50,6 @@ const NeuralBackground = () => {
       const h = canvas.offsetHeight;
       ctx.clearRect(0, 0, w, h);
 
-      // Update positions
       for (const node of nodes) {
         node.x += node.vx;
         node.y += node.vy;
@@ -57,8 +58,10 @@ const NeuralBackground = () => {
         if (node.y < 0 || node.y > h) node.vy *= -1;
       }
 
-      // Draw connections
       const maxDist = 150;
+      const lineColor = isQuantum ? [139, 92, 246] : [56, 189, 248]; // purple vs cyan
+      const nodeColor = isQuantum ? [139, 92, 246] : [56, 189, 248];
+
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const dx = nodes[i].x - nodes[j].x;
@@ -67,7 +70,7 @@ const NeuralBackground = () => {
           if (dist < maxDist) {
             const alpha = (1 - dist / maxDist) * 0.15;
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(56, 189, 248, ${alpha})`;
+            ctx.strokeStyle = `rgba(${lineColor.join(",")}, ${alpha})`;
             ctx.lineWidth = 0.5;
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
@@ -76,12 +79,11 @@ const NeuralBackground = () => {
         }
       }
 
-      // Draw nodes
       for (const node of nodes) {
         const glow = 0.3 + Math.sin(node.pulse) * 0.3;
         ctx.beginPath();
         ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(56, 189, 248, ${glow})`;
+        ctx.fillStyle = `rgba(${nodeColor.join(",")}, ${glow})`;
         ctx.fill();
       }
 
@@ -96,7 +98,7 @@ const NeuralBackground = () => {
       window.removeEventListener("resize", init);
       cancelAnimationFrame(animId);
     };
-  }, []);
+  }, [isQuantum]);
 
   return (
     <canvas
