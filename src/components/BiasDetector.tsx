@@ -310,6 +310,17 @@ const BiasDetector = () => {
                   <div className="bg-muted/20 rounded-xl p-4 font-mono text-sm leading-relaxed border border-border/30">
                     <HighlightedText text={result.overallText} triggers={result.biases.flatMap((b) => b.triggers)} />
                   </div>
+
+                  {/* Translation info */}
+                  {result.translatedText && (
+                    <div className="mt-3 p-3 rounded-lg bg-primary/5 border border-primary/20">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Languages className="w-3.5 h-3.5 text-primary" />
+                        <span className="text-[10px] font-mono text-primary uppercase tracking-wider">Translated to English for analysis</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground italic leading-relaxed">{result.translatedText}</p>
+                    </div>
+                  )}
                 </div>
 
                 {/* Quantum visualizations */}
