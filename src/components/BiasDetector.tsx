@@ -9,6 +9,9 @@ import QuantumSuperposition from "./QuantumSuperposition";
 import BiasEntanglementGraph from "./BiasEntanglementGraph";
 import QuantumCollapse from "./QuantumCollapse";
 import BiasHeatmap from "./BiasHeatmap";
+import BiasEvolutionTimeline from "./BiasEvolutionTimeline";
+import ReasoningGraph from "./ReasoningGraph";
+import AttentionHighlights from "./AttentionHighlights";
 import { useTheme } from "@/contexts/ThemeContext";
 
 const EXAMPLE_TEXTS = [
