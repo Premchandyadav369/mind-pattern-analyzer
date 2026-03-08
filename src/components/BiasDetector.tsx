@@ -1,10 +1,15 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, AlertTriangle, CheckCircle2, Sparkles, History, RotateCcw, Brain } from "lucide-react";
+import { Loader2, AlertTriangle, CheckCircle2, Sparkles, History, RotateCcw, Brain, Atom } from "lucide-react";
 import { analyzeText, type AnalysisResult } from "@/lib/biasAnalyzer";
 import BiasResultCard from "./BiasResultCard";
 import BiasChart from "./BiasChart";
 import AnalysisHistory from "./AnalysisHistory";
+import QuantumSuperposition from "./QuantumSuperposition";
+import BiasEntanglementGraph from "./BiasEntanglementGraph";
+import QuantumCollapse from "./QuantumCollapse";
+import BiasHeatmap from "./BiasHeatmap";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const EXAMPLE_TEXTS = [
   "Everyone in that city is rude.",
@@ -17,11 +22,13 @@ const EXAMPLE_TEXTS = [
 const STORAGE_KEY = "mindtrace-history";
 
 const BiasDetector = () => {
+  const { isQuantum } = useTheme();
   const [text, setText] = useState("");
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [history, setHistory] = useState<AnalysisResult[]>([]);
   const [showHistory, setShowHistory] = useState(false);
+  const [showCollapse, setShowCollapse] = useState(false);
   const resultRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -42,13 +49,17 @@ const BiasDetector = () => {
     if (!text.trim()) return;
     setIsAnalyzing(true);
     setResult(null);
+    setShowCollapse(false);
 
     try {
       const analysis = await analyzeText(text);
       setResult(analysis);
+      if (isQuantum && analysis.biases.length > 1) {
+        setShowCollapse(true);
+      }
       setHistory((prev) => [analysis, ...prev].slice(0, 20));
     } catch (err) {
-      console.error('Analysis failed:', err);
+      console.error("Analysis failed:", err);
     } finally {
       setIsAnalyzing(false);
       setTimeout(() => {
@@ -61,6 +72,7 @@ const BiasDetector = () => {
     setText(item.overallText);
     setResult(item);
     setShowHistory(false);
+    setShowCollapse(false);
   };
 
   const handleClearHistory = () => {
@@ -72,6 +84,7 @@ const BiasDetector = () => {
   const handleReset = () => {
     setText("");
     setResult(null);
+    setShowCollapse(false);
     textareaRef.current?.focus();
   };
 
@@ -81,7 +94,7 @@ const BiasDetector = () => {
   return (
     <section id="detector" className="py-28 px-6 relative">
       <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.02] via-transparent to-transparent pointer-events-none" />
-      
+
       <div className="max-w-3xl mx-auto relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -89,12 +102,19 @@ const BiasDetector = () => {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <span className="text-xs font-mono text-primary/70 uppercase tracking-widest mb-3 block">Live Demo</span>
+          <span className="text-xs font-mono text-primary/70 uppercase tracking-widest mb-3 block">
+            {isQuantum ? "Quantum Analysis" : "Live Demo"}
+          </span>
           <h2 className="font-display text-3xl md:text-5xl font-bold mb-4">
-            <span className="text-gradient-cyan">Analyze</span> Your Text
+            <span className={isQuantum ? "text-gradient-quantum" : "text-gradient-cyan"}>
+              {isQuantum ? "Quantum" : "Analyze"}
+            </span>{" "}
+            {isQuantum ? "Bias Detection" : "Your Text"}
           </h2>
           <p className="text-muted-foreground text-base">
-            Paste any text to detect cognitive biases in the reasoning.
+            {isQuantum
+              ? "Model cognitive biases as quantum superpositions. Observe the wavefunction collapse."
+              : "Paste any text to detect cognitive biases in the reasoning."}
           </p>
         </motion.div>
 
@@ -107,7 +127,7 @@ const BiasDetector = () => {
         />
 
         {/* Input */}
-        <div className="glass-card rounded-2xl p-6 mb-6 hover:border-primary/20 transition-colors">
+        <div className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-2xl p-6 mb-6 hover:border-primary/20 transition-colors`}>
           <textarea
             ref={textareaRef}
             value={text}
@@ -115,7 +135,7 @@ const BiasDetector = () => {
             onKeyDown={(e) => {
               if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleAnalyze();
             }}
-            placeholder="Enter text to analyze for cognitive biases..."
+            placeholder={isQuantum ? "Enter text for quantum cognitive analysis..." : "Enter text to analyze for cognitive biases..."}
             rows={5}
             className="w-full bg-transparent text-foreground placeholder:text-muted-foreground/40 resize-none outline-none font-sans text-base leading-relaxed"
           />
@@ -147,17 +167,17 @@ const BiasDetector = () => {
               <button
                 onClick={handleAnalyze}
                 disabled={!text.trim() || isAnalyzing}
-                className="px-6 py-2.5 rounded-xl bg-primary text-primary-foreground font-display font-semibold glow-cyan hover:scale-105 transition-transform disabled:opacity-50 disabled:hover:scale-100 flex items-center gap-2"
+                className={`px-6 py-2.5 rounded-xl bg-primary text-primary-foreground font-display font-semibold hover:scale-105 transition-transform disabled:opacity-50 disabled:hover:scale-100 flex items-center gap-2 ${isQuantum ? "glow-quantum" : "glow-cyan"}`}
               >
                 {isAnalyzing ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Analyzing...
+                    {isQuantum ? "Measuring..." : "Analyzing..."}
                   </>
                 ) : (
                   <>
-                    <Sparkles className="w-4 h-4" />
-                    Analyze
+                    {isQuantum ? <Atom className="w-4 h-4" /> : <Sparkles className="w-4 h-4" />}
+                    {isQuantum ? "Measure State" : "Analyze"}
                   </>
                 )}
               </button>
@@ -187,19 +207,26 @@ const BiasDetector = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="glass-card rounded-2xl p-10 mb-6"
+              className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-2xl p-10 mb-6`}
             >
               <div className="flex flex-col items-center gap-5">
                 <div className="relative w-20 h-20">
                   <div className="absolute inset-0 rounded-full border-2 border-primary/20 animate-ping" />
                   <div className="absolute inset-2 rounded-full border-2 border-t-primary border-r-transparent border-b-transparent border-l-transparent animate-spin" />
+                  {isQuantum && (
+                    <div className="absolute inset-4 rounded-full border-2 border-t-transparent border-r-secondary border-b-transparent border-l-transparent animate-spin" style={{ animationDirection: "reverse", animationDuration: "0.8s" }} />
+                  )}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <Brain className="w-6 h-6 text-primary" />
+                    {isQuantum ? <Atom className="w-6 h-6 text-primary" /> : <Brain className="w-6 h-6 text-primary" />}
                   </div>
                 </div>
                 <div className="text-center">
-                  <p className="text-sm font-display font-semibold text-foreground">AI is Thinking...</p>
-                  <p className="text-xs text-muted-foreground mt-1">Running deep bias pattern analysis</p>
+                  <p className="text-sm font-display font-semibold text-foreground">
+                    {isQuantum ? "Preparing Quantum Measurement..." : "AI is Thinking..."}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {isQuantum ? "Modeling cognitive superposition states" : "Running deep bias pattern analysis"}
+                  </p>
                 </div>
               </div>
             </motion.div>
@@ -217,7 +244,7 @@ const BiasDetector = () => {
                 className="space-y-6"
               >
                 {/* Summary */}
-                <div className="glass-card rounded-2xl p-6">
+                <div className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-2xl p-6`}>
                   <div className="flex items-center gap-3 mb-4">
                     {result.biases.length > 0 ? (
                       <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/30 flex items-center justify-center">
@@ -231,11 +258,14 @@ const BiasDetector = () => {
                     <div>
                       <h3 className="font-display font-semibold text-lg">
                         {result.biases.length > 0
-                          ? `${result.biases.length} Bias${result.biases.length > 1 ? "es" : ""} Detected`
+                          ? isQuantum
+                            ? `${result.biases.length} Quantum State${result.biases.length > 1 ? "s" : ""} Detected`
+                            : `${result.biases.length} Bias${result.biases.length > 1 ? "es" : ""} Detected`
                           : "No Clear Bias Detected"}
                       </h3>
                       <p className="text-xs text-muted-foreground">
-                        Analyzed at {new Date(result.analyzedAt).toLocaleTimeString()}
+                        {isQuantum ? "Quantum measurement at " : "Analyzed at "}
+                        {new Date(result.analyzedAt).toLocaleTimeString()}
                       </p>
                     </div>
                   </div>
@@ -245,26 +275,44 @@ const BiasDetector = () => {
                   </div>
                 </div>
 
+                {/* Quantum visualizations */}
+                {isQuantum && result.biases.length > 0 && (
+                  <>
+                    <QuantumSuperposition biases={result.biases} />
+                    {showCollapse && <QuantumCollapse biases={result.biases} />}
+                    {result.biases.length > 1 && <BiasEntanglementGraph biases={result.biases} />}
+                    <BiasHeatmap biases={result.biases} text={result.overallText} />
+                  </>
+                )}
+
+                {/* Bias cards */}
                 {result.biases.map((bias, i) => (
                   <BiasResultCard key={i} bias={bias} index={i} />
                 ))}
 
+                {/* Chart */}
                 {result.biases.length > 0 && <BiasChart biases={result.biases} />}
 
+                {/* Overall AI Insight */}
                 {result.overallInsight && (
-                  <div className="glass-card rounded-2xl p-6 border-primary/20">
+                  <div className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-2xl p-6 border-primary/20`}>
                     <div className="flex items-center gap-2 mb-3">
-                      <Brain className="w-4 h-4 text-primary" />
-                      <p className="text-xs font-display font-semibold text-primary">AI Insight</p>
+                      {isQuantum ? <Atom className="w-4 h-4 text-primary" /> : <Brain className="w-4 h-4 text-primary" />}
+                      <p className="text-xs font-display font-semibold text-primary">
+                        {isQuantum ? "Quantum Insight" : "AI Insight"}
+                      </p>
                     </div>
                     <p className="text-sm text-muted-foreground leading-relaxed">{result.overallInsight}</p>
                   </div>
                 )}
 
+                {/* No bias message */}
                 {result.biases.length === 0 && (
-                  <div className="glass-card rounded-2xl p-10 text-center">
+                  <div className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-2xl p-10 text-center`}>
                     <CheckCircle2 className="w-12 h-12 text-secondary mx-auto mb-4" />
-                    <p className="font-display font-semibold text-lg mb-2">Clear Reasoning Detected</p>
+                    <p className="font-display font-semibold text-lg mb-2">
+                      {isQuantum ? "Quantum State: Neutral" : "Clear Reasoning Detected"}
+                    </p>
                     <p className="text-sm text-muted-foreground max-w-md mx-auto">
                       {result.overallInsight || "The analyzed text doesn't show clear signs of common cognitive biases."}
                     </p>
