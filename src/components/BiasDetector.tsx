@@ -9,6 +9,9 @@ import QuantumSuperposition from "./QuantumSuperposition";
 import BiasEntanglementGraph from "./BiasEntanglementGraph";
 import QuantumCollapse from "./QuantumCollapse";
 import BiasHeatmap from "./BiasHeatmap";
+import BiasEvolutionTimeline from "./BiasEvolutionTimeline";
+import ReasoningGraph from "./ReasoningGraph";
+import AttentionHighlights from "./AttentionHighlights";
 import { useTheme } from "@/contexts/ThemeContext";
 
 const EXAMPLE_TEXTS = [
@@ -283,6 +286,21 @@ const BiasDetector = () => {
                     {result.biases.length > 1 && <BiasEntanglementGraph biases={result.biases} />}
                     <BiasHeatmap biases={result.biases} text={result.overallText} />
                   </>
+                )}
+
+                {/* Attention Highlights */}
+                {result.biases.length > 0 && (
+                  <AttentionHighlights biases={result.biases} text={result.overallText} />
+                )}
+
+                {/* Reasoning Graph */}
+                {result.biases.length > 0 && (
+                  <ReasoningGraph biases={result.biases} text={result.overallText} />
+                )}
+
+                {/* Bias Evolution Timeline */}
+                {result.biases.length > 0 && (
+                  <BiasEvolutionTimeline biases={result.biases} text={result.overallText} />
                 )}
 
                 {/* Bias cards */}
