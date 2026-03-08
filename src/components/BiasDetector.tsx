@@ -288,6 +288,21 @@ const BiasDetector = () => {
                   </>
                 )}
 
+                {/* Attention Highlights */}
+                {result.biases.length > 0 && (
+                  <AttentionHighlights biases={result.biases} text={result.overallText} />
+                )}
+
+                {/* Reasoning Graph */}
+                {result.biases.length > 0 && (
+                  <ReasoningGraph biases={result.biases} text={result.overallText} />
+                )}
+
+                {/* Bias Evolution Timeline */}
+                {result.biases.length > 0 && (
+                  <BiasEvolutionTimeline biases={result.biases} text={result.overallText} />
+                )}
+
                 {/* Bias cards */}
                 {result.biases.map((bias, i) => (
                   <BiasResultCard key={i} bias={bias} index={i} />
