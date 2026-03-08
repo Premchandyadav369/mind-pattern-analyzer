@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Atom } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
 import logo from "@/assets/logo.png";
 
 const NAV_ITEMS = [
@@ -13,6 +14,7 @@ const NAV_ITEMS = [
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { theme, toggleTheme, isQuantum } = useTheme();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -38,12 +40,10 @@ const Navbar = () => {
       }`}
     >
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        {/* Logo */}
         <a href="#" className="flex items-center gap-2 group" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
           <img src={logo} alt="MindTrace AI" className="h-9 w-auto" />
         </a>
 
-        {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-1">
           {NAV_ITEMS.map((item) => (
             <button
@@ -54,21 +54,34 @@ const Navbar = () => {
               {item.label}
             </button>
           ))}
+
+          {/* Theme toggle */}
+          <button
+            onClick={toggleTheme}
+            className={`ml-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-1.5 border ${
+              isQuantum
+                ? "border-primary/50 bg-primary/10 text-primary glow-quantum"
+                : "border-border/50 text-muted-foreground hover:text-foreground hover:border-primary/30"
+            }`}
+            title={`Switch to ${isQuantum ? "Neural" : "Quantum"} theme`}
+          >
+            <Atom className={`w-4 h-4 ${isQuantum ? "animate-spin" : ""}`} style={isQuantum ? { animationDuration: "3s" } : {}} />
+            <span className="text-xs">{isQuantum ? "Quantum" : "Neural"}</span>
+          </button>
+
           <button
             onClick={() => handleNav("#detector")}
-            className="ml-3 px-5 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:scale-105 transition-transform glow-cyan"
+            className={`ml-3 px-5 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:scale-105 transition-transform ${isQuantum ? "glow-quantum" : "glow-cyan"}`}
           >
             Analyze Text
           </button>
         </div>
 
-        {/* Mobile toggle */}
         <button className="md:hidden text-foreground" onClick={() => setMobileOpen(!mobileOpen)}>
           {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
       </div>
 
-      {/* Mobile menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -87,6 +100,13 @@ const Navbar = () => {
                   {item.label}
                 </button>
               ))}
+              <button
+                onClick={toggleTheme}
+                className="block w-full text-left px-4 py-3 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/50 transition-colors flex items-center gap-2"
+              >
+                <Atom className="w-4 h-4" />
+                {isQuantum ? "Switch to Neural" : "Switch to Quantum"}
+              </button>
               <button
                 onClick={() => handleNav("#detector")}
                 className="w-full mt-2 px-5 py-3 text-sm font-semibold bg-primary text-primary-foreground rounded-lg"
