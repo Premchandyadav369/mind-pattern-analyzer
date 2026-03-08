@@ -218,7 +218,7 @@ const STORAGE_KEY = "mindtrace-history";
         {/* Example prompts */}
         <div className="flex flex-wrap gap-2 mb-10">
           <span className="text-xs text-muted-foreground mr-1 self-center">Try:</span>
-          {EXAMPLE_TEXTS.map((ex, i) => (
+          {(EXAMPLE_TEXTS[selectedLanguage] || EXAMPLE_TEXTS.en).map((ex, i) => (
             <button
               key={i}
               onClick={() => setText(ex)}
