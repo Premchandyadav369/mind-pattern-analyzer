@@ -157,6 +157,13 @@ const STORAGE_KEY = "mindtrace-history";
 
         {/* Input */}
         <div className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-2xl p-6 mb-6 hover:border-primary/20 transition-colors`}>
+          <div className="flex items-center justify-between mb-4">
+            <LanguageSelector
+              selectedLanguage={selectedLanguage}
+              onLanguageChange={setSelectedLanguage}
+              isQuantum={isQuantum}
+            />
+          </div>
           <textarea
             ref={textareaRef}
             value={text}

@@ -7,6 +7,7 @@ import TechStackSection from "@/components/TechStackSection";
 import ApplicationsSection from "@/components/ApplicationsSection";
 import BiasDetector from "@/components/BiasDetector";
 import DebateAnalyzer from "@/components/DebateAnalyzer";
+import SystemArchitecture from "@/components/SystemArchitecture";
 import { ArrowUp } from "lucide-react";
 import logo from "@/assets/logo.png";
 
