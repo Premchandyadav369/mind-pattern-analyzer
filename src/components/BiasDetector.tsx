@@ -13,37 +13,40 @@ import BiasEvolutionTimeline from "./BiasEvolutionTimeline";
 import ReasoningGraph from "./ReasoningGraph";
 import AttentionHighlights from "./AttentionHighlights";
 import LanguageSelector from "./LanguageSelector";
+import SentimentAnalysis from "./SentimentAnalysis";
+import NLPMetricsPanel from "./NLPMetrics";
 import { useTheme } from "@/contexts/ThemeContext";
 
 const EXAMPLE_TEXTS: Record<string, string[]> = {
   en: [
-    "Everyone in that city is rude.",
-    "I failed this exam so I am completely useless.",
-    "I feel stupid, so I must be incompetent.",
-    "Successful entrepreneurs dropped out of college, so education is useless.",
-    "I knew this plan would fail because my ideas are always ignored.",
+    "Everyone in that city is rude. I knew it all along because my friend had one bad experience there.",
+    "I failed this exam so I am completely useless. My life is basically over and I'll never succeed at anything.",
+    "I feel stupid, so I must be incompetent. Everyone probably thinks I'm a joke.",
+    "Successful entrepreneurs dropped out of college, so education is useless. Everyone knows degrees don't matter anymore.",
+    "I knew this plan would fail because my ideas are always ignored. They probably think I'm not smart enough.",
+    "We've already invested $50,000 in this project. We can't stop now even though it's clearly not working.",
   ],
   hi: [
-    "उस शहर में सब लोग बदतमीज़ हैं।",
-    "मैं परीक्षा में फेल हो गया तो मैं पूरी तरह बेकार हूँ।",
-    "मुझे बेवकूफ़ लगता है, तो मैं नाकाबिल ज़रूर हूँ।",
+    "उस शहर में सब लोग बदतमीज़ हैं। मैंने हमेशा से यही सोचा था।",
+    "मैं परीक्षा में फेल हो गया तो मैं पूरी तरह बेकार हूँ। मेरी ज़िन्दगी ख़त्म है।",
+    "मुझे बेवकूफ़ लगता है, तो मैं नाकाबिल ज़रूर हूँ। सब मुझे मज़ाक समझते हैं।",
     "सफल उद्यमियों ने कॉलेज छोड़ दिया, इसलिए शिक्षा बेकार है।",
   ],
   bn: [
-    "ওই শহরের সবাই অভদ্র।",
+    "ওই শহরের সবাই অভদ্র। আমার বন্ধুর একটি খারাপ অভিজ্ঞতা হয়েছিল।",
     "আমি পরীক্ষায় ফেল করেছি তাই আমি সম্পূর্ণ অকেজো।",
     "আমার বোকা লাগছে, তাই আমি নিশ্চয়ই অযোগ্য।",
   ],
   ta: [
-    "அந்த நகரத்தில் எல்லோரும் முரட்டுத்தனமானவர்கள்.",
+    "அந்த நகரத்தில் எல்லோரும் முரட்டுத்தனமானவர்கள். நான் எப்போதும் இதை நினைத்தேன்.",
     "நான் தேர்வில் தோல்வியடைந்தேன் எனவே நான் முற்றிலும் பயனற்றவன்.",
   ],
   te: [
-    "ఆ నగరంలో అందరూ అమర్యాదగా ఉంటారు.",
+    "ఆ నగరంలో అందరూ అమర్యాదగా ఉంటారు. నాకు ఎప్పుడూ ఇలా అనిపించింది.",
     "నేను పరీక్షలో ఫెయిల్ అయ్యాను కాబట్టి నేను పూర్తిగా పనికిరానివాడిని.",
   ],
   mr: [
-    "त्या शहरातील सगळे लोक उद्धट आहेत.",
+    "त्या शहरातील सगळे लोक उद्धट आहेत. मला नेहमी असं वाटायचं.",
     "मी परीक्षेत नापास झालो म्हणजे मी पूर्णपणे निरुपयोगी आहे.",
   ],
 };
@@ -133,7 +136,7 @@ const BiasDetector = () => {
           className="text-center mb-12"
         >
           <span className="text-xs font-mono text-primary/70 uppercase tracking-widest mb-3 block">
-            {isQuantum ? "Quantum Analysis" : "Live Demo"}
+            {isQuantum ? "Quantum Analysis Engine" : "Live NLP Demo"}
           </span>
           <h2 className="font-display text-3xl md:text-5xl font-bold mb-4">
             <span className={isQuantum ? "text-gradient-quantum" : "text-gradient-cyan"}>
@@ -141,10 +144,10 @@ const BiasDetector = () => {
             </span>{" "}
             {isQuantum ? "Bias Detection" : "Your Text"}
           </h2>
-          <p className="text-muted-foreground text-base">
+          <p className="text-muted-foreground text-base max-w-lg mx-auto">
             {isQuantum
-              ? "Model cognitive biases as quantum superpositions. Observe the wavefunction collapse."
-              : "Paste any text to detect cognitive biases in the reasoning."}
+              ? "Model cognitive biases as quantum superpositions. Observe wavefunction collapse in real-time."
+              : "Paste any text to detect 20+ cognitive biases with AI-powered sentiment analysis and NLP metrics."}
           </p>
         </motion.div>
 
@@ -220,17 +223,17 @@ const BiasDetector = () => {
               </button>
             </div>
           </div>
-          <p className="text-[10px] text-muted-foreground/40 mt-2">Press ⌘+Enter to analyze</p>
+          <p className="text-[10px] text-muted-foreground/40 mt-2">Press ⌘+Enter to analyze · Powered by Transformer NLP</p>
         </div>
 
         {/* Example prompts */}
         <div className="flex flex-wrap gap-2 mb-10">
           <span className="text-xs text-muted-foreground mr-1 self-center">Try:</span>
-          {(EXAMPLE_TEXTS[selectedLanguage] || EXAMPLE_TEXTS.en).map((ex, i) => (
+          {(EXAMPLE_TEXTS[selectedLanguage] || EXAMPLE_TEXTS.en).slice(0, 4).map((ex, i) => (
             <button
               key={i}
               onClick={() => setText(ex)}
-              className="text-xs px-3 py-1.5 rounded-full border border-border/50 hover:border-primary/50 text-muted-foreground hover:text-foreground hover:bg-primary/5 transition-all truncate max-w-[220px]"
+              className="text-xs px-3 py-1.5 rounded-full border border-border/50 hover:border-primary/50 text-muted-foreground hover:text-foreground hover:bg-primary/5 transition-all truncate max-w-[260px]"
             >
               {ex}
             </button>
@@ -259,10 +262,12 @@ const BiasDetector = () => {
                 </div>
                 <div className="text-center">
                   <p className="text-sm font-display font-semibold text-foreground">
-                    {isQuantum ? "Preparing Quantum Measurement..." : "AI is Thinking..."}
+                    {isQuantum ? "Preparing Quantum Measurement..." : "Deep NLP Analysis Running..."}
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    {isQuantum ? "Modeling cognitive superposition states" : "Running deep bias pattern analysis"}
+                    {isQuantum
+                      ? "Modeling cognitive superposition states"
+                      : "Bias detection · Sentiment analysis · NLP metrics · Reasoning extraction"}
                   </p>
                 </div>
               </div>
@@ -297,12 +302,15 @@ const BiasDetector = () => {
                         {result.biases.length > 0
                           ? isQuantum
                             ? `${result.biases.length} Quantum State${result.biases.length > 1 ? "s" : ""} Detected`
-                            : `${result.biases.length} Bias${result.biases.length > 1 ? "es" : ""} Detected`
+                            : `${result.biases.length} Cognitive Bias${result.biases.length > 1 ? "es" : ""} Detected`
                           : "No Clear Bias Detected"}
                       </h3>
                       <p className="text-xs text-muted-foreground">
                         {isQuantum ? "Quantum measurement at " : "Analyzed at "}
                         {new Date(result.analyzedAt).toLocaleTimeString()}
+                        {result.biases.length > 0 && (
+                          <> · Avg confidence: {(result.biases.reduce((s, b) => s + b.confidence, 0) / result.biases.length * 100).toFixed(0)}%</>
+                        )}
                       </p>
                     </div>
                   </div>
@@ -322,6 +330,16 @@ const BiasDetector = () => {
                     </div>
                   )}
                 </div>
+
+                {/* NLP Metrics */}
+                {result.nlpMetrics && (
+                  <NLPMetricsPanel metrics={result.nlpMetrics} text={result.overallText} />
+                )}
+
+                {/* Sentiment Analysis */}
+                {result.sentiment && (
+                  <SentimentAnalysis sentiment={result.sentiment} />
+                )}
 
                 {/* Quantum visualizations */}
                 {isQuantum && result.biases.length > 0 && (
@@ -362,7 +380,7 @@ const BiasDetector = () => {
                     <div className="flex items-center gap-2 mb-3">
                       {isQuantum ? <Atom className="w-4 h-4 text-primary" /> : <Brain className="w-4 h-4 text-primary" />}
                       <p className="text-xs font-display font-semibold text-primary">
-                        {isQuantum ? "Quantum Insight" : "AI Insight"}
+                        {isQuantum ? "Quantum Psychological Insight" : "AI Psychological Insight"}
                       </p>
                     </div>
                     <p className="text-sm text-muted-foreground leading-relaxed">{result.overallInsight}</p>

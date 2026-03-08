@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import type { BiasResult } from "@/lib/biasAnalyzer";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const colorStyles: Record<string, { bar: string; badge: string; text: string }> = {
   cyan: { bar: "bg-primary", badge: "bg-primary/10 text-primary border-primary/30", text: "text-primary" },
@@ -9,20 +10,34 @@ const colorStyles: Record<string, { bar: string; badge: string; text: string }> 
   purple: { bar: "bg-ring", badge: "bg-ring/10 text-ring border-ring/30", text: "text-ring" },
 };
 
+const severityStyles: Record<string, string> = {
+  low: "bg-secondary/10 text-secondary border-secondary/20",
+  medium: "bg-accent/10 text-accent border-accent/20",
+  high: "bg-destructive/10 text-destructive border-destructive/20",
+};
+
 const BiasResultCard = ({ bias, index }: { bias: BiasResult; index: number }) => {
+  const { isQuantum } = useTheme();
   const styles = colorStyles[bias.color] || colorStyles.cyan;
 
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: index * 0.15 }}
-      className="glass-card rounded-2xl p-6 hover:border-primary/20 transition-colors"
+      transition={{ delay: index * 0.1 }}
+      className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-2xl p-6 hover:border-primary/20 transition-colors`}
     >
       <div className="flex items-start justify-between mb-4">
-        <span className={`inline-flex px-3 py-1.5 rounded-full text-xs font-semibold border ${styles.badge}`}>
-          {bias.biasType}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className={`inline-flex px-3 py-1.5 rounded-full text-xs font-semibold border ${styles.badge}`}>
+            {bias.biasType}
+          </span>
+          {bias.severity && (
+            <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold uppercase border ${severityStyles[bias.severity] || severityStyles.medium}`}>
+              {bias.severity}
+            </span>
+          )}
+        </div>
         <div className="text-right">
           <div className={`text-2xl font-display font-bold ${styles.text}`}>
             {(bias.confidence * 100).toFixed(0)}%
@@ -36,7 +51,7 @@ const BiasResultCard = ({ bias, index }: { bias: BiasResult; index: number }) =>
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${bias.confidence * 100}%` }}
-          transition={{ duration: 0.8, delay: 0.2 + index * 0.15 }}
+          transition={{ duration: 0.8, delay: 0.2 + index * 0.1 }}
           className={`h-full rounded-full ${styles.bar}`}
         />
       </div>
@@ -52,7 +67,7 @@ const BiasResultCard = ({ bias, index }: { bias: BiasResult; index: number }) =>
 
       {bias.reframe && (
         <div className="mb-4 p-4 rounded-xl bg-secondary/5 border border-secondary/20">
-          <p className="text-xs font-display font-semibold text-secondary mb-1.5">✨ Reframe</p>
+          <p className="text-xs font-display font-semibold text-secondary mb-1.5">✨ Healthier Reframe</p>
           <p className="text-sm text-muted-foreground leading-relaxed">{bias.reframe}</p>
         </div>
       )}

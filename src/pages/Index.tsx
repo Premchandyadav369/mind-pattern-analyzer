@@ -8,6 +8,7 @@ import ApplicationsSection from "@/components/ApplicationsSection";
 import BiasDetector from "@/components/BiasDetector";
 import DebateAnalyzer from "@/components/DebateAnalyzer";
 import SystemArchitecture from "@/components/SystemArchitecture";
+import ResearchSection from "@/components/ResearchSection";
 import { ArrowUp } from "lucide-react";
 import logo from "@/assets/logo.png";
 
@@ -23,7 +24,6 @@ const Index = () => {
       <Navbar />
       <HeroSection onStartAnalysis={scrollToDetector} />
       
-      {/* Divider glow */}
       <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       
       <HowItWorks />
@@ -44,6 +44,10 @@ const Index = () => {
       
       <SystemArchitecture />
       
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+      
+      <ResearchSection />
+      
       <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       
       <div ref={detectorRef}>
@@ -58,25 +62,28 @@ const Index = () => {
       <footer className="py-16 px-6 border-t border-border/30 bg-navy-deep/80">
         <div className="max-w-5xl mx-auto">
           <div className="grid md:grid-cols-3 gap-12 mb-12">
-            {/* Brand */}
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <img src={logo} alt="MindTrace AI" className="h-10 w-auto" />
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Research-grade cognitive bias detection powered by NLP, cognitive psychology, and explainable AI.
+                Research-grade cognitive bias detection powered by Transformer NLP, quantum cognition modeling, and explainable AI.
+              </p>
+              <p className="text-xs text-muted-foreground/50 mt-3">
+                20+ cognitive biases · 13 Indian languages · Sentiment analysis · Real-time NLP metrics
               </p>
             </div>
 
-            {/* Links */}
             <div>
               <h4 className="font-display font-semibold text-sm mb-4 text-foreground">Explore</h4>
               <div className="space-y-2">
                 {[
                   { label: "How It Works", href: "#how-it-works" },
                   { label: "Bias Types", href: "#bias-types" },
-                  { label: "Applications", href: "#applications" },
+                  { label: "Architecture", href: "#architecture" },
+                  { label: "Research", href: "#research" },
                   { label: "Try Detector", href: "#detector" },
+                  { label: "Debate Mode", href: "#debate" },
                 ].map((link) => (
                   <a
                     key={link.href}
@@ -89,13 +96,20 @@ const Index = () => {
               </div>
             </div>
 
-            {/* Tech */}
             <div>
               <h4 className="font-display font-semibold text-sm mb-4 text-foreground">Tech Stack</h4>
               <div className="flex flex-wrap gap-2">
-                {["RoBERTa", "SBERT", "FLAN-T5", "spaCy", "PyTorch", "SHAP"].map((tech) => (
+                {["RoBERTa", "SBERT", "FLAN-T5", "spaCy", "PyTorch", "SHAP", "NetworkX", "Transformers"].map((tech) => (
                   <span key={tech} className="text-[10px] font-mono px-2.5 py-1 rounded bg-muted/50 text-muted-foreground border border-border/50">
                     {tech}
+                  </span>
+                ))}
+              </div>
+              <h4 className="font-display font-semibold text-sm mt-6 mb-3 text-foreground">Research Areas</h4>
+              <div className="flex flex-wrap gap-2">
+                {["NLP", "Cognitive Psychology", "Quantum Cognition", "Explainable AI", "Multilingual NLP"].map((area) => (
+                  <span key={area} className="text-[10px] px-2.5 py-1 rounded bg-primary/10 text-primary border border-primary/20">
+                    {area}
                   </span>
                 ))}
               </div>
@@ -104,7 +118,7 @@ const Index = () => {
 
           <div className="flex items-center justify-between pt-8 border-t border-border/30">
             <p className="text-xs text-muted-foreground">
-              © {new Date().getFullYear()} MindTrace AI · NLP × Cognitive Psychology × Explainable AI
+              © {new Date().getFullYear()} MindTrace AI · Quantum-Inspired Cognitive Bias Detection using Transformer-based NLP
             </p>
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
