@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { label: "Bias Types", href: "#bias-types" },
   { label: "Applications", href: "#applications" },
   { label: "Detector", href: "#detector" },
+  { label: "Debate", href: "#debate" },
 ];
 
 const Navbar = () => {
