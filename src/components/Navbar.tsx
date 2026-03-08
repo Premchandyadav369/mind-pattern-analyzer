@@ -8,6 +8,7 @@ const NAV_ITEMS = [
   { label: "How It Works", href: "#how-it-works" },
   { label: "Bias Types", href: "#bias-types" },
   { label: "Architecture", href: "#architecture" },
+  { label: "Research", href: "#research" },
   { label: "Detector", href: "#detector" },
   { label: "Debate", href: "#debate" },
 ];
@@ -50,13 +51,12 @@ const Navbar = () => {
             <button
               key={item.href}
               onClick={() => handleNav(item.href)}
-              className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-muted/50"
+              className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-muted/50"
             >
               {item.label}
             </button>
           ))}
 
-          {/* Theme toggle */}
           <button
             onClick={toggleTheme}
             className={`ml-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-1.5 border ${

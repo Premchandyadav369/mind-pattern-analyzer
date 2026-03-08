@@ -18,24 +18,53 @@ Deno.serve(async (req) => {
       });
     }
 
-    const apiKey = Deno.env.get('K2_THINK_API_KEY');
-    if (!apiKey) {
-      return new Response(JSON.stringify({ error: 'API key not configured' }), {
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    if (!LOVABLE_API_KEY) {
+      return new Response(JSON.stringify({ error: 'LOVABLE_API_KEY is not configured' }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    const systemPrompt = `You are an expert cognitive bias analyst. Analyze the following text for cognitive biases.
+    const systemPrompt = `You are an expert cognitive bias analyst and NLP researcher specializing in cognitive psychology, behavioral economics, and critical thinking analysis.
 
-For each bias found, provide:
-1. The bias type (e.g., Overgeneralization, Black-and-White Thinking, Emotional Reasoning, Confirmation Bias, Survivorship Bias, Anchoring Bias, Bandwagon Effect, etc.)
-2. A confidence score from 0.0 to 1.0
-3. A detailed explanation of WHY this is biased and what might be the underlying reason the person feels/thinks this way
-4. The specific trigger words/phrases from the text
-5. A suggestion for how to reframe the thought more objectively
+Analyze the following text for ALL possible cognitive biases from this comprehensive taxonomy:
 
-Also provide a brief psychological insight into what might be causing the person to think this way (e.g., stress, past experiences, cognitive shortcuts).
+**CORE COGNITIVE BIASES:**
+1. Overgeneralization - Making broad conclusions from limited data
+2. Black-and-White Thinking (Splitting) - Viewing situations as extremes with no middle ground
+3. Emotional Reasoning - Treating emotions as factual evidence
+4. Confirmation Bias - Focusing only on information that supports existing beliefs
+5. Survivorship Bias - Ignoring failures while focusing only on successful cases
+6. Anchoring Bias - Over-relying on the first piece of information encountered
+7. Bandwagon Effect - Believing something because many others do
+8. Dunning-Kruger Effect - Overestimating one's own abilities or knowledge
+9. Sunk Cost Fallacy - Continuing investment because of previously invested resources
+10. Ad Hominem - Attacking the person rather than the argument
+11. Hasty Generalization - Drawing conclusions from insufficient evidence
+12. Appeal to Authority - Using authority as evidence without proper justification
+13. False Dichotomy - Presenting only two options when more exist
+14. Catastrophizing - Assuming the worst possible outcome
+15. Mind Reading - Assuming you know what others think
+16. Fortune Telling - Predicting negative outcomes without evidence
+17. Personalization - Taking excessive responsibility for external events
+18. Labeling - Assigning global negative labels based on single events
+19. Should Statements - Using rigid "should/must" rules
+20. Availability Heuristic - Judging probability by ease of recall
+
+For EACH bias found, provide:
+1. The exact bias type name
+2. A confidence score from 0.0 to 1.0 (be precise)
+3. A detailed explanation of WHY this is biased
+4. The psychological reasoning behind why the person thinks this way
+5. The specific trigger words/phrases from the text
+6. A constructive reframe for healthier thinking
+7. The severity level: "low", "medium", or "high"
+
+Also provide:
+- A comprehensive psychological insight about the overall thinking pattern
+- A sentiment analysis with: overall sentiment (positive/negative/neutral/mixed), valence score (-1.0 to 1.0), arousal score (0.0 to 1.0), dominance score (0.0 to 1.0)
+- NLP metrics: estimated reading level, emotional intensity (0-100), logical coherence (0-100), persuasion tactics detected
 
 Respond ONLY in this exact JSON format:
 {
@@ -43,46 +72,73 @@ Respond ONLY in this exact JSON format:
     {
       "biasType": "string",
       "confidence": number,
-      "explanation": "string - explain why this is biased",
-      "reasoning": "string - explain what might be causing this thinking pattern and why the person might feel this way",
+      "explanation": "string",
+      "reasoning": "string",
       "triggers": ["string"],
-      "reframe": "string - a healthier way to think about this",
+      "reframe": "string",
+      "severity": "low" | "medium" | "high",
       "color": "cyan" | "green" | "orange" | "red" | "purple"
     }
   ],
-  "overallInsight": "string - a compassionate psychological insight about the overall thinking pattern"
+  "overallInsight": "string - a compassionate, detailed psychological insight",
+  "sentiment": {
+    "overall": "positive" | "negative" | "neutral" | "mixed",
+    "valence": number,
+    "arousal": number,
+    "dominance": number,
+    "emotions": ["string"]
+  },
+  "nlpMetrics": {
+    "readingLevel": "string",
+    "emotionalIntensity": number,
+    "logicalCoherence": number,
+    "persuasionTactics": ["string"],
+    "cognitiveComplexity": "low" | "medium" | "high"
+  }
 }
 
-If no biases are detected, return: { "biases": [], "overallInsight": "The text appears to reflect balanced reasoning." }
+If no biases are detected, return empty biases array with balanced insight.
 
 Use these color mappings:
-- Overgeneralization → cyan
-- Confirmation Bias → green  
-- Emotional Reasoning → red
-- Black-and-White Thinking → orange
-- Survivorship Bias → purple
+- Overgeneralization, Hasty Generalization, Availability Heuristic → cyan
+- Confirmation Bias, Appeal to Authority, Anchoring Bias → green
+- Emotional Reasoning, Catastrophizing, Fortune Telling, Mind Reading → red
+- Black-and-White Thinking, False Dichotomy, Should Statements → orange
+- Survivorship Bias, Bandwagon Effect, Sunk Cost Fallacy, Dunning-Kruger → purple
+- Ad Hominem, Personalization, Labeling → red
 - Other biases → cyan`;
 
-    const response = await fetch('https://api.k2think.ai/v1/chat/completions', {
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'accept': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
+        Authorization: `Bearer ${LOVABLE_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'MBZUAI-IFM/K2-Think-v2',
+        model: 'google/gemini-2.5-flash',
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Analyze this text for cognitive biases:\n\n"${text}"` },
+          { role: 'user', content: `Analyze this text comprehensively for cognitive biases, sentiment, and NLP metrics:\n\n"${text}"` },
         ],
         stream: false,
       }),
     });
 
     if (!response.ok) {
+      if (response.status === 429) {
+        return new Response(JSON.stringify({ error: 'Rate limit exceeded, please try again later.' }), {
+          status: 429,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      if (response.status === 402) {
+        return new Response(JSON.stringify({ error: 'Payment required, please add credits.' }), {
+          status: 402,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
       const errorText = await response.text();
-      console.error('K2 API error:', response.status, errorText);
+      console.error('AI gateway error:', response.status, errorText);
       return new Response(JSON.stringify({ error: 'AI analysis failed', details: errorText }), {
         status: 502,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -92,24 +148,25 @@ Use these color mappings:
     const data = await response.json();
     const content = data.choices?.[0]?.message?.content || '';
 
-    // Strip thinking tags and extract JSON
+    // Extract JSON from response
     let jsonStr = content;
-    // Remove everything before </think> if present
+    
+    // Remove thinking tags
     const thinkEnd = jsonStr.lastIndexOf('</think>');
     if (thinkEnd !== -1) {
       jsonStr = jsonStr.substring(thinkEnd + 8).trim();
     }
+    
     // Extract from markdown code blocks
     const jsonMatch = jsonStr.match(/```(?:json)?\s*([\s\S]*?)```/);
     if (jsonMatch) {
       jsonStr = jsonMatch[1].trim();
     }
-    // Try to find JSON object - use the last occurrence to skip any in thinking
+    
+    // Find balanced JSON
     if (!jsonStr.startsWith('{')) {
-      // Find balanced JSON by locating last { and matching }
       const lastBrace = jsonStr.lastIndexOf('}');
       if (lastBrace !== -1) {
-        // Walk backwards to find matching opening brace
         let depth = 0;
         let startIdx = -1;
         for (let i = lastBrace; i >= 0; i--) {
@@ -128,11 +185,7 @@ Use these color mappings:
       parsed = JSON.parse(jsonStr);
     } catch {
       console.error('Failed to parse AI response:', content);
-      // Fallback: return the raw content as insight
-      parsed = {
-        biases: [],
-        overallInsight: content,
-      };
+      parsed = { biases: [], overallInsight: content };
     }
 
     return new Response(JSON.stringify(parsed), {

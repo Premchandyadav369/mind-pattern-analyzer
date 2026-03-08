@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Brain, Zap, Eye, Shield, ArrowDown, Atom } from "lucide-react";
+import { Brain, Zap, Eye, Shield, ArrowDown, Atom, Languages, BarChart3 } from "lucide-react";
 import NeuralBackground from "./NeuralBackground";
 import { useTheme } from "@/contexts/ThemeContext";
 import logo from "@/assets/logo.png";
@@ -51,7 +51,7 @@ const HeroSection = ({ onStartAnalysis }: { onStartAnalysis: () => void }) => {
             <span className="text-xs sm:text-sm text-primary font-medium tracking-wide">
               {isQuantum
                 ? "Quantum-Inspired Cognitive Bias Detection System"
-                : "NLP × Cognitive Psychology × Explainable AI"}
+                : "NLP × Cognitive Psychology × Quantum Cognition × Explainable AI"}
             </span>
           </motion.div>
 
@@ -64,7 +64,7 @@ const HeroSection = ({ onStartAnalysis }: { onStartAnalysis: () => void }) => {
               </>
             ) : (
               <>
-                Detect cognitive biases in text using advanced NLP.
+                Detect <em className="text-foreground/90 not-italic font-medium">20+ cognitive biases</em> in text using advanced NLP.
                 <br className="hidden sm:block" />
                 Understand <em className="text-foreground/90 not-italic font-medium">how</em> people think, not just <em className="text-foreground/90 not-italic font-medium">what</em> they say.
               </>
@@ -87,10 +87,10 @@ const HeroSection = ({ onStartAnalysis }: { onStartAnalysis: () => void }) => {
             <ArrowDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
           </button>
           <a
-            href="#how-it-works"
+            href="#research"
             className="px-8 py-4 rounded-xl border border-border/80 text-muted-foreground hover:text-foreground hover:border-primary/50 hover:bg-primary/5 transition-all duration-200 font-display font-medium"
           >
-            How It Works
+            Research Methodology
           </a>
         </motion.div>
 
@@ -98,20 +98,20 @@ const HeroSection = ({ onStartAnalysis }: { onStartAnalysis: () => void }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.7 }}
-          className="mt-24 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-2xl mx-auto"
+          className="mt-24 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-3xl mx-auto"
         >
           {(isQuantum
             ? [
-                { icon: Atom, label: "Superposition", value: "∞" },
+                { icon: Atom, label: "Quantum States", value: "∞" },
                 { icon: Zap, label: "Entanglement", value: "Live" },
                 { icon: Eye, label: "Collapse", value: "Real" },
                 { icon: Shield, label: "Quantum", value: "Safe" },
               ]
             : [
-                { icon: Brain, label: "Bias Types", value: "5+" },
-                { icon: Zap, label: "Real-time", value: "<1s" },
+                { icon: Brain, label: "Bias Types", value: "20+" },
+                { icon: Languages, label: "Languages", value: "13+" },
+                { icon: BarChart3, label: "Sentiment + NLP", value: "Full" },
                 { icon: Eye, label: "Explainable", value: "100%" },
-                { icon: Shield, label: "Privacy", value: "Local" },
               ]
           ).map(({ icon: Icon, label, value }, i) => (
             <motion.div

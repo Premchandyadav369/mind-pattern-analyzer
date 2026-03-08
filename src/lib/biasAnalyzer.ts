@@ -7,7 +7,24 @@ export interface BiasResult {
   reasoning?: string;
   reframe?: string;
   triggers: string[];
+  severity?: "low" | "medium" | "high";
   color: "cyan" | "green" | "orange" | "red" | "purple";
+}
+
+export interface SentimentData {
+  overall: "positive" | "negative" | "neutral" | "mixed";
+  valence: number;
+  arousal: number;
+  dominance: number;
+  emotions: string[];
+}
+
+export interface NLPMetrics {
+  readingLevel: string;
+  emotionalIntensity: number;
+  logicalCoherence: number;
+  persuasionTactics: string[];
+  cognitiveComplexity: "low" | "medium" | "high";
 }
 
 export interface AnalysisResult {
@@ -16,6 +33,8 @@ export interface AnalysisResult {
   translatedText?: string;
   originalLanguage?: string;
   overallInsight?: string;
+  sentiment?: SentimentData;
+  nlpMetrics?: NLPMetrics;
   analyzedAt: Date;
 }
 
@@ -39,7 +58,6 @@ async function translateText(text: string, sourceLanguage: string): Promise<stri
 
 export async function analyzeText(text: string, language: string = "en"): Promise<AnalysisResult> {
   try {
-    // Translate if needed
     const textToAnalyze = language !== "en" ? await translateText(text, language) : text;
 
     const { data, error } = await supabase.functions.invoke('analyze-bias', {
@@ -64,12 +82,15 @@ export async function analyzeText(text: string, language: string = "en"): Promis
         reasoning: b.reasoning,
         reframe: b.reframe,
         triggers: b.triggers || [],
+        severity: b.severity || "medium",
         color: b.color || "cyan",
       })),
       overallText: text,
       translatedText: language !== "en" ? textToAnalyze : undefined,
       originalLanguage: language !== "en" ? language : undefined,
       overallInsight: data.overallInsight,
+      sentiment: data.sentiment || undefined,
+      nlpMetrics: data.nlpMetrics || undefined,
       analyzedAt: new Date(),
     };
   } catch (err) {
@@ -78,35 +99,62 @@ export async function analyzeText(text: string, language: string = "en"): Promis
   }
 }
 
-// Fallback local analysis if AI is unavailable
 function fallbackAnalysis(text: string): AnalysisResult {
   const lower = text.toLowerCase();
   const biases: BiasResult[] = [];
 
-  const BIAS_PATTERNS: Record<string, { keywords: string[]; color: BiasResult["color"] }> = {
+  const BIAS_PATTERNS: Record<string, { keywords: string[]; color: BiasResult["color"]; severity: "low" | "medium" | "high" }> = {
     Overgeneralization: {
       keywords: ["everyone", "nobody", "always", "never", "all", "none", "every", "no one", "everything", "nothing"],
-      color: "cyan",
+      color: "cyan", severity: "medium",
     },
     "Black-and-White Thinking": {
       keywords: ["completely", "totally", "either", "absolutely", "impossible", "perfect", "failure", "useless", "worthless"],
-      color: "orange",
+      color: "orange", severity: "medium",
     },
     "Emotional Reasoning": {
       keywords: ["i feel", "i am", "must be", "i hate", "makes me feel", "so i must", "therefore i am"],
-      color: "red",
+      color: "red", severity: "high",
     },
     "Confirmation Bias": {
       keywords: ["i knew", "proves that", "just as i thought", "always ignored", "told you so"],
-      color: "green",
+      color: "green", severity: "medium",
     },
     "Survivorship Bias": {
       keywords: ["dropped out", "didn't need", "successful people", "education is useless", "without a degree"],
-      color: "purple",
+      color: "purple", severity: "medium",
+    },
+    "Catastrophizing": {
+      keywords: ["doomed", "end of the world", "disaster", "ruined", "worst thing", "life is over"],
+      color: "red", severity: "high",
+    },
+    "Ad Hominem": {
+      keywords: ["they're stupid", "idiot", "what do they know", "of course they'd say"],
+      color: "red", severity: "high",
+    },
+    "Bandwagon Effect": {
+      keywords: ["everyone thinks", "most people agree", "it's obvious that", "common knowledge"],
+      color: "purple", severity: "low",
+    },
+    "Anchoring Bias": {
+      keywords: ["first impression", "originally", "initially", "started at", "was told"],
+      color: "green", severity: "low",
+    },
+    "Sunk Cost Fallacy": {
+      keywords: ["already invested", "come this far", "too late to", "can't give up now", "wasted if"],
+      color: "purple", severity: "medium",
+    },
+    "Should Statements": {
+      keywords: ["should have", "must always", "ought to", "supposed to", "have to"],
+      color: "orange", severity: "medium",
+    },
+    "Mind Reading": {
+      keywords: ["they think", "they probably", "i know they", "they must think", "everyone thinks i"],
+      color: "red", severity: "medium",
     },
   };
 
-  for (const [biasType, { keywords, color }] of Object.entries(BIAS_PATTERNS)) {
+  for (const [biasType, { keywords, color, severity }] of Object.entries(BIAS_PATTERNS)) {
     const foundTriggers = keywords.filter((kw) => lower.includes(kw));
     if (foundTriggers.length > 0) {
       const confidence = Math.min(0.5 + foundTriggers.length * 0.15, 0.98);
@@ -115,6 +163,7 @@ function fallbackAnalysis(text: string): AnalysisResult {
         confidence: parseFloat(confidence.toFixed(2)),
         explanation: `Detected patterns: ${foundTriggers.map(t => `"${t}"`).join(", ")}`,
         triggers: foundTriggers,
+        severity,
         color,
       });
     }
@@ -124,6 +173,20 @@ function fallbackAnalysis(text: string): AnalysisResult {
     biases: biases.sort((a, b) => b.confidence - a.confidence),
     overallText: text,
     overallInsight: "Analysis performed using local pattern matching (AI unavailable).",
+    sentiment: {
+      overall: "neutral",
+      valence: 0,
+      arousal: 0.5,
+      dominance: 0.5,
+      emotions: ["uncertain"],
+    },
+    nlpMetrics: {
+      readingLevel: "General",
+      emotionalIntensity: 50,
+      logicalCoherence: 50,
+      persuasionTactics: [],
+      cognitiveComplexity: "medium",
+    },
     analyzedAt: new Date(),
   };
 }
@@ -163,5 +226,40 @@ export const BIAS_INFO = [
     example: '"Successful entrepreneurs dropped out, so education is useless."',
     icon: "🏆",
     color: "purple" as const,
+  },
+  {
+    name: "Catastrophizing",
+    description: "Assuming the worst possible outcome will happen.",
+    example: '"If I make one mistake, everything will be ruined."',
+    icon: "🌋",
+    color: "red" as const,
+  },
+  {
+    name: "Anchoring Bias",
+    description: "Over-relying on the first piece of information encountered.",
+    example: '"The first estimate was $500, so $400 seems like a great deal."',
+    icon: "⚓",
+    color: "green" as const,
+  },
+  {
+    name: "Bandwagon Effect",
+    description: "Believing something because many others do.",
+    example: '"Everyone is investing in crypto, so it must be smart."',
+    icon: "🎪",
+    color: "purple" as const,
+  },
+  {
+    name: "Sunk Cost Fallacy",
+    description: "Continuing investment because of previously invested resources.",
+    example: '"I\'ve already spent 3 years on this degree, I can\'t quit now."',
+    icon: "💰",
+    color: "purple" as const,
+  },
+  {
+    name: "Ad Hominem",
+    description: "Attacking the person rather than addressing the argument.",
+    example: '"You\'re too young to understand economics."',
+    icon: "🎯",
+    color: "red" as const,
   },
 ];
