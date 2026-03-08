@@ -51,6 +51,7 @@ const EXAMPLE_TEXTS: Record<string, string[]> = {
 const BiasDetector = () => {
   const { isQuantum } = useTheme();
   const [text, setText] = useState("");
+  const [selectedLanguage, setSelectedLanguage] = useState("en");
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [history, setHistory] = useState<AnalysisResult[]>([]);
