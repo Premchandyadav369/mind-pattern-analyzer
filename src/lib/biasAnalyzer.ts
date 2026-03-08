@@ -1,7 +1,11 @@
+import { supabase } from "@/integrations/supabase/client";
+
 export interface BiasResult {
   biasType: string;
   confidence: number;
   explanation: string;
+  reasoning?: string;
+  reframe?: string;
   triggers: string[];
   color: "cyan" | "green" | "orange" | "red" | "purple";
 }
@@ -9,35 +13,73 @@ export interface BiasResult {
 export interface AnalysisResult {
   biases: BiasResult[];
   overallText: string;
+  overallInsight?: string;
   analyzedAt: Date;
 }
 
-const BIAS_PATTERNS: Record<string, { keywords: string[]; color: BiasResult["color"] }> = {
-  Overgeneralization: {
-    keywords: ["everyone", "nobody", "always", "never", "all", "none", "every", "no one", "everything", "nothing", "entire", "whole"],
-    color: "cyan",
-  },
-  "Black-and-White Thinking": {
-    keywords: ["completely", "totally", "either", "or", "absolutely", "impossible", "perfect", "failure", "ruined", "useless", "worthless", "life is over"],
-    color: "orange",
-  },
-  "Emotional Reasoning": {
-    keywords: ["i feel", "i am", "must be", "i hate", "i love", "makes me feel", "so i must", "therefore i am"],
-    color: "red",
-  },
-  "Confirmation Bias": {
-    keywords: ["i knew", "proves that", "just as i thought", "see i was right", "always ignored", "told you so", "as expected"],
-    color: "green",
-  },
-  "Survivorship Bias": {
-    keywords: ["dropped out", "didn't need", "successful people", "who needs", "education is useless", "without a degree"],
-    color: "purple",
-  },
-};
+export async function analyzeText(text: string): Promise<AnalysisResult> {
+  try {
+    const { data, error } = await supabase.functions.invoke('analyze-bias', {
+      body: { text },
+    });
 
-export function analyzeText(text: string): AnalysisResult {
+    if (error) {
+      console.error('Edge function error:', error);
+      return fallbackAnalysis(text);
+    }
+
+    if (data?.error) {
+      console.error('Analysis error:', data.error);
+      return fallbackAnalysis(text);
+    }
+
+    return {
+      biases: (data.biases || []).map((b: any) => ({
+        biasType: b.biasType,
+        confidence: b.confidence,
+        explanation: b.explanation,
+        reasoning: b.reasoning,
+        reframe: b.reframe,
+        triggers: b.triggers || [],
+        color: b.color || "cyan",
+      })),
+      overallText: text,
+      overallInsight: data.overallInsight,
+      analyzedAt: new Date(),
+    };
+  } catch (err) {
+    console.error('Analysis failed:', err);
+    return fallbackAnalysis(text);
+  }
+}
+
+// Fallback local analysis if AI is unavailable
+function fallbackAnalysis(text: string): AnalysisResult {
   const lower = text.toLowerCase();
   const biases: BiasResult[] = [];
+
+  const BIAS_PATTERNS: Record<string, { keywords: string[]; color: BiasResult["color"] }> = {
+    Overgeneralization: {
+      keywords: ["everyone", "nobody", "always", "never", "all", "none", "every", "no one", "everything", "nothing"],
+      color: "cyan",
+    },
+    "Black-and-White Thinking": {
+      keywords: ["completely", "totally", "either", "absolutely", "impossible", "perfect", "failure", "useless", "worthless"],
+      color: "orange",
+    },
+    "Emotional Reasoning": {
+      keywords: ["i feel", "i am", "must be", "i hate", "makes me feel", "so i must", "therefore i am"],
+      color: "red",
+    },
+    "Confirmation Bias": {
+      keywords: ["i knew", "proves that", "just as i thought", "always ignored", "told you so"],
+      color: "green",
+    },
+    "Survivorship Bias": {
+      keywords: ["dropped out", "didn't need", "successful people", "education is useless", "without a degree"],
+      color: "purple",
+    },
+  };
 
   for (const [biasType, { keywords, color }] of Object.entries(BIAS_PATTERNS)) {
     const foundTriggers = keywords.filter((kw) => lower.includes(kw));
@@ -46,23 +88,9 @@ export function analyzeText(text: string): AnalysisResult {
       biases.push({
         biasType,
         confidence: parseFloat(confidence.toFixed(2)),
-        explanation: getExplanation(biasType, foundTriggers),
+        explanation: `Detected patterns: ${foundTriggers.map(t => `"${t}"`).join(", ")}`,
         triggers: foundTriggers,
         color,
-      });
-    }
-  }
-
-  // If no pattern match, check for general negativity / strong statements
-  if (biases.length === 0) {
-    const hasStrongLanguage = /!{2,}|[A-Z]{4,}/.test(text);
-    if (hasStrongLanguage) {
-      biases.push({
-        biasType: "Potential Bias Detected",
-        confidence: 0.35,
-        explanation: "The text contains strong language patterns that may indicate biased reasoning, but no specific cognitive bias pattern was clearly identified.",
-        triggers: [],
-        color: "cyan",
       });
     }
   }
@@ -70,27 +98,9 @@ export function analyzeText(text: string): AnalysisResult {
   return {
     biases: biases.sort((a, b) => b.confidence - a.confidence),
     overallText: text,
+    overallInsight: "Analysis performed using local pattern matching (AI unavailable).",
     analyzedAt: new Date(),
   };
-}
-
-function getExplanation(biasType: string, triggers: string[]): string {
-  const triggerList = triggers.map((t) => `"${t}"`).join(", ");
-  
-  switch (biasType) {
-    case "Overgeneralization":
-      return `The statement uses universal language (${triggerList}), making a broad conclusion that likely extends beyond available evidence.`;
-    case "Black-and-White Thinking":
-      return `The text contains extreme language (${triggerList}), framing the situation in absolute terms without acknowledging middle ground.`;
-    case "Emotional Reasoning":
-      return `The reasoning appears to treat emotional states as factual evidence (${triggerList}), conflating feelings with objective reality.`;
-    case "Confirmation Bias":
-      return `The statement selectively validates a pre-existing belief (${triggerList}), ignoring potential counterevidence.`;
-    case "Survivorship Bias":
-      return `The argument focuses on successful outliers (${triggerList}) while ignoring the larger population of cases that don't support the conclusion.`;
-    default:
-      return `Detected bias patterns: ${triggerList}`;
-  }
 }
 
 export const BIAS_INFO = [
