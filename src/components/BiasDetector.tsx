@@ -80,7 +80,7 @@ const BiasDetector = () => {
     setShowCollapse(false);
 
     try {
-      const analysis = await analyzeText(text);
+      const analysis = await analyzeText(text, selectedLanguage);
       setResult(analysis);
       if (isQuantum && analysis.biases.length > 1) {
         setShowCollapse(true);
