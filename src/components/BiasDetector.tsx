@@ -254,13 +254,21 @@ const BiasDetector = () => {
                 {/* Chart */}
                 {result.biases.length > 0 && <BiasChart biases={result.biases} />}
 
+                {/* Overall AI Insight */}
+                {result.overallInsight && (
+                  <div className="glass-card rounded-xl p-6">
+                    <p className="text-xs font-semibold text-primary mb-2">🧠 AI Insight</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{result.overallInsight}</p>
+                  </div>
+                )}
+
                 {/* No bias message */}
                 {result.biases.length === 0 && (
                   <div className="glass-card rounded-xl p-8 text-center">
                     <CheckCircle2 className="w-10 h-10 text-secondary mx-auto mb-4" />
                     <p className="font-display font-semibold mb-2">Clear Reasoning Detected</p>
                     <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                      The analyzed text doesn't show clear signs of common cognitive biases. Try analyzing text with stronger claims or emotional language.
+                      {result.overallInsight || "The analyzed text doesn't show clear signs of common cognitive biases."}
                     </p>
                   </div>
                 )}
