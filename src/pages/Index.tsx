@@ -7,6 +7,7 @@ import TechStackSection from "@/components/TechStackSection";
 import ApplicationsSection from "@/components/ApplicationsSection";
 import BiasDetector from "@/components/BiasDetector";
 import DebateAnalyzer from "@/components/DebateAnalyzer";
+import SystemArchitecture from "@/components/SystemArchitecture";
 import { ArrowUp } from "lucide-react";
 import logo from "@/assets/logo.png";
 
@@ -38,6 +39,10 @@ const Index = () => {
       <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
       
       <ApplicationsSection />
+      
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+      
+      <SystemArchitecture />
       
       <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       

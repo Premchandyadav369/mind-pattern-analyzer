@@ -13,14 +13,37 @@ export interface BiasResult {
 export interface AnalysisResult {
   biases: BiasResult[];
   overallText: string;
+  translatedText?: string;
+  originalLanguage?: string;
   overallInsight?: string;
   analyzedAt: Date;
 }
 
-export async function analyzeText(text: string): Promise<AnalysisResult> {
+async function translateText(text: string, sourceLanguage: string): Promise<string> {
+  if (sourceLanguage === "en") return text;
+
   try {
+    const { data, error } = await supabase.functions.invoke('translate-text', {
+      body: { text, sourceLanguage, targetLanguage: 'English' },
+    });
+    if (error || !data?.translatedText) {
+      console.warn('Translation failed, using original text:', error);
+      return text;
+    }
+    return data.translatedText;
+  } catch {
+    console.warn('Translation service unavailable');
+    return text;
+  }
+}
+
+export async function analyzeText(text: string, language: string = "en"): Promise<AnalysisResult> {
+  try {
+    // Translate if needed
+    const textToAnalyze = language !== "en" ? await translateText(text, language) : text;
+
     const { data, error } = await supabase.functions.invoke('analyze-bias', {
-      body: { text },
+      body: { text: textToAnalyze },
     });
 
     if (error) {
@@ -44,6 +67,8 @@ export async function analyzeText(text: string): Promise<AnalysisResult> {
         color: b.color || "cyan",
       })),
       overallText: text,
+      translatedText: language !== "en" ? textToAnalyze : undefined,
+      originalLanguage: language !== "en" ? language : undefined,
       overallInsight: data.overallInsight,
       analyzedAt: new Date(),
     };
