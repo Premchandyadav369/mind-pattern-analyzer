@@ -45,6 +45,20 @@ const BiasResultCard = ({ bias, index }: { bias: BiasResult; index: number }) =>
 
       <p className="text-sm text-muted-foreground leading-relaxed mb-4">{bias.explanation}</p>
 
+      {bias.reasoning && (
+        <div className="mb-4 p-3 rounded-lg bg-muted/30 border border-border/50">
+          <p className="text-xs font-semibold text-foreground mb-1">💡 Why you might think this way:</p>
+          <p className="text-sm text-muted-foreground leading-relaxed">{bias.reasoning}</p>
+        </div>
+      )}
+
+      {bias.reframe && (
+        <div className="mb-4 p-3 rounded-lg bg-secondary/5 border border-secondary/20">
+          <p className="text-xs font-semibold text-secondary mb-1">✨ Reframe:</p>
+          <p className="text-sm text-muted-foreground leading-relaxed">{bias.reframe}</p>
+        </div>
+      )}
+
       {bias.triggers.length > 0 && (
         <div className="flex flex-wrap gap-2">
           <span className="text-xs text-muted-foreground/70">Triggers:</span>
