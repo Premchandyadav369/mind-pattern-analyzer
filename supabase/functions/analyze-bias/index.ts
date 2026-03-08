@@ -94,20 +94,32 @@ Use these color mappings:
 
     // Strip thinking tags and extract JSON
     let jsonStr = content;
-    // Remove <think>...</think> blocks
-    jsonStr = jsonStr.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
-    // Remove </think> if think tag was split
-    jsonStr = jsonStr.replace(/<\/?think>/g, '').trim();
+    // Remove everything before </think> if present
+    const thinkEnd = jsonStr.lastIndexOf('</think>');
+    if (thinkEnd !== -1) {
+      jsonStr = jsonStr.substring(thinkEnd + 8).trim();
+    }
     // Extract from markdown code blocks
     const jsonMatch = jsonStr.match(/```(?:json)?\s*([\s\S]*?)```/);
     if (jsonMatch) {
       jsonStr = jsonMatch[1].trim();
     }
-    // Try to find JSON object directly
+    // Try to find JSON object - use the last occurrence to skip any in thinking
     if (!jsonStr.startsWith('{')) {
-      const objMatch = jsonStr.match(/\{[\s\S]*\}/);
-      if (objMatch) {
-        jsonStr = objMatch[0];
+      // Find balanced JSON by locating last { and matching }
+      const lastBrace = jsonStr.lastIndexOf('}');
+      if (lastBrace !== -1) {
+        // Walk backwards to find matching opening brace
+        let depth = 0;
+        let startIdx = -1;
+        for (let i = lastBrace; i >= 0; i--) {
+          if (jsonStr[i] === '}') depth++;
+          if (jsonStr[i] === '{') depth--;
+          if (depth === 0) { startIdx = i; break; }
+        }
+        if (startIdx !== -1) {
+          jsonStr = jsonStr.substring(startIdx, lastBrace + 1);
+        }
       }
     }
 
