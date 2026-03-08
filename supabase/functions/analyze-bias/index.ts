@@ -92,11 +92,23 @@ Use these color mappings:
     const data = await response.json();
     const content = data.choices?.[0]?.message?.content || '';
 
-    // Extract JSON from the response (handle markdown code blocks)
+    // Strip thinking tags and extract JSON
     let jsonStr = content;
-    const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/);
+    // Remove <think>...</think> blocks
+    jsonStr = jsonStr.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+    // Remove </think> if think tag was split
+    jsonStr = jsonStr.replace(/<\/?think>/g, '').trim();
+    // Extract from markdown code blocks
+    const jsonMatch = jsonStr.match(/```(?:json)?\s*([\s\S]*?)```/);
     if (jsonMatch) {
       jsonStr = jsonMatch[1].trim();
+    }
+    // Try to find JSON object directly
+    if (!jsonStr.startsWith('{')) {
+      const objMatch = jsonStr.match(/\{[\s\S]*\}/);
+      if (objMatch) {
+        jsonStr = objMatch[0];
+      }
     }
 
     let parsed;
