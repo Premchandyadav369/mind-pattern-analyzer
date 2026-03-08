@@ -19,7 +19,7 @@ const textColorMap: Record<string, string> = {
 
 const BiasTypesSection = () => {
   return (
-    <section className="py-24 px-6 bg-navy-deep/50">
+    <section id="bias-types" className="py-24 px-6 bg-navy-deep/50">
       <div className="max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
