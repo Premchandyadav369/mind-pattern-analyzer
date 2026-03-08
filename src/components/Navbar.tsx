@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Brain, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 const NAV_ITEMS = [
   { label: "How It Works", href: "#how-it-works" },
@@ -38,13 +39,8 @@ const Navbar = () => {
     >
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2.5 group" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
-          <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/30 flex items-center justify-center group-hover:glow-cyan transition-shadow">
-            <Brain className="w-4 h-4 text-primary" />
-          </div>
-          <span className="font-display font-bold text-lg">
-            Mind<span className="text-gradient-cyan">Trace</span>
-          </span>
+        <a href="#" className="flex items-center gap-2 group" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+          <img src={logo} alt="MindTrace AI" className="h-9 w-auto" />
         </a>
 
         {/* Desktop nav */}

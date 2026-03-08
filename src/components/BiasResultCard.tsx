@@ -17,24 +17,22 @@ const BiasResultCard = ({ bias, index }: { bias: BiasResult; index: number }) =>
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.15 }}
-      className="glass-card rounded-xl p-6"
+      className="glass-card rounded-2xl p-6 hover:border-primary/20 transition-colors"
     >
       <div className="flex items-start justify-between mb-4">
-        <div>
-          <span className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold border ${styles.badge}`}>
-            {bias.biasType}
-          </span>
-        </div>
+        <span className={`inline-flex px-3 py-1.5 rounded-full text-xs font-semibold border ${styles.badge}`}>
+          {bias.biasType}
+        </span>
         <div className="text-right">
           <div className={`text-2xl font-display font-bold ${styles.text}`}>
             {(bias.confidence * 100).toFixed(0)}%
           </div>
-          <div className="text-xs text-muted-foreground">confidence</div>
+          <div className="text-[10px] text-muted-foreground uppercase tracking-wider">confidence</div>
         </div>
       </div>
 
       {/* Confidence bar */}
-      <div className="w-full h-2 rounded-full bg-muted mb-4 overflow-hidden">
+      <div className="w-full h-2 rounded-full bg-muted/50 mb-5 overflow-hidden">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${bias.confidence * 100}%` }}
@@ -46,24 +44,24 @@ const BiasResultCard = ({ bias, index }: { bias: BiasResult; index: number }) =>
       <p className="text-sm text-muted-foreground leading-relaxed mb-4">{bias.explanation}</p>
 
       {bias.reasoning && (
-        <div className="mb-4 p-3 rounded-lg bg-muted/30 border border-border/50">
-          <p className="text-xs font-semibold text-foreground mb-1">💡 Why you might think this way:</p>
+        <div className="mb-4 p-4 rounded-xl bg-muted/20 border border-border/30">
+          <p className="text-xs font-display font-semibold text-foreground mb-1.5">💡 Why you might think this way</p>
           <p className="text-sm text-muted-foreground leading-relaxed">{bias.reasoning}</p>
         </div>
       )}
 
       {bias.reframe && (
-        <div className="mb-4 p-3 rounded-lg bg-secondary/5 border border-secondary/20">
-          <p className="text-xs font-semibold text-secondary mb-1">✨ Reframe:</p>
+        <div className="mb-4 p-4 rounded-xl bg-secondary/5 border border-secondary/20">
+          <p className="text-xs font-display font-semibold text-secondary mb-1.5">✨ Reframe</p>
           <p className="text-sm text-muted-foreground leading-relaxed">{bias.reframe}</p>
         </div>
       )}
 
       {bias.triggers.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          <span className="text-xs text-muted-foreground/70">Triggers:</span>
+        <div className="flex flex-wrap gap-2 items-center">
+          <span className="text-[10px] text-muted-foreground/60 uppercase tracking-wider">Triggers</span>
           {bias.triggers.map((t) => (
-            <span key={t} className="text-xs font-mono px-2 py-0.5 rounded bg-muted/50 text-foreground">
+            <span key={t} className="text-xs font-mono px-2.5 py-1 rounded-lg bg-muted/40 text-foreground border border-border/30">
               {t}
             </span>
           ))}

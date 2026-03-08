@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, AlertTriangle, CheckCircle2, Sparkles, History, RotateCcw } from "lucide-react";
+import { Loader2, AlertTriangle, CheckCircle2, Sparkles, History, RotateCcw, Brain } from "lucide-react";
 import { analyzeText, type AnalysisResult } from "@/lib/biasAnalyzer";
 import BiasResultCard from "./BiasResultCard";
 import BiasChart from "./BiasChart";
@@ -25,7 +25,6 @@ const BiasDetector = () => {
   const resultRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Load history
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -33,7 +32,6 @@ const BiasDetector = () => {
     } catch {}
   }, []);
 
-  // Save history
   useEffect(() => {
     if (history.length > 0) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(0, 20)));
@@ -81,23 +79,25 @@ const BiasDetector = () => {
   const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
 
   return (
-    <section id="detector" className="py-24 px-6">
-      <div className="max-w-3xl mx-auto">
+    <section id="detector" className="py-28 px-6 relative">
+      <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.02] via-transparent to-transparent pointer-events-none" />
+      
+      <div className="max-w-3xl mx-auto relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
+          <span className="text-xs font-mono text-primary/70 uppercase tracking-widest mb-3 block">Live Demo</span>
+          <h2 className="font-display text-3xl md:text-5xl font-bold mb-4">
             <span className="text-gradient-cyan">Analyze</span> Your Text
           </h2>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-base">
             Paste any text to detect cognitive biases in the reasoning.
           </p>
         </motion.div>
 
-        {/* History panel */}
         <AnalysisHistory
           history={history}
           onSelect={handleHistorySelect}
@@ -107,7 +107,7 @@ const BiasDetector = () => {
         />
 
         {/* Input */}
-        <div className="glass-card rounded-xl p-6 mb-6">
+        <div className="glass-card rounded-2xl p-6 mb-6 hover:border-primary/20 transition-colors">
           <textarea
             ref={textareaRef}
             value={text}
@@ -117,9 +117,9 @@ const BiasDetector = () => {
             }}
             placeholder="Enter text to analyze for cognitive biases..."
             rows={5}
-            className="w-full bg-transparent text-foreground placeholder:text-muted-foreground/50 resize-none outline-none font-sans text-base leading-relaxed"
+            className="w-full bg-transparent text-foreground placeholder:text-muted-foreground/40 resize-none outline-none font-sans text-base leading-relaxed"
           />
-          <div className="flex items-center justify-between mt-4 pt-4 border-t border-border/50">
+          <div className="flex items-center justify-between mt-4 pt-4 border-t border-border/30">
             <div className="flex items-center gap-4">
               <span className="text-xs text-muted-foreground font-mono">
                 {charCount} chars · {wordCount} words
@@ -147,7 +147,7 @@ const BiasDetector = () => {
               <button
                 onClick={handleAnalyze}
                 disabled={!text.trim() || isAnalyzing}
-                className="px-6 py-2.5 rounded-lg bg-primary text-primary-foreground font-display font-semibold glow-cyan hover:scale-105 transition-transform disabled:opacity-50 disabled:hover:scale-100 flex items-center gap-2"
+                className="px-6 py-2.5 rounded-xl bg-primary text-primary-foreground font-display font-semibold glow-cyan hover:scale-105 transition-transform disabled:opacity-50 disabled:hover:scale-100 flex items-center gap-2"
               >
                 {isAnalyzing ? (
                   <>
@@ -163,7 +163,7 @@ const BiasDetector = () => {
               </button>
             </div>
           </div>
-          <p className="text-[10px] text-muted-foreground/50 mt-2">Press ⌘+Enter to analyze</p>
+          <p className="text-[10px] text-muted-foreground/40 mt-2">Press ⌘+Enter to analyze</p>
         </div>
 
         {/* Example prompts */}
@@ -173,7 +173,7 @@ const BiasDetector = () => {
             <button
               key={i}
               onClick={() => setText(ex)}
-              className="text-xs px-3 py-1.5 rounded-full border border-border hover:border-primary/50 text-muted-foreground hover:text-foreground transition-colors truncate max-w-[220px]"
+              className="text-xs px-3 py-1.5 rounded-full border border-border/50 hover:border-primary/50 text-muted-foreground hover:text-foreground hover:bg-primary/5 transition-all truncate max-w-[220px]"
             >
               {ex}
             </button>
@@ -184,22 +184,22 @@ const BiasDetector = () => {
         <AnimatePresence>
           {isAnalyzing && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="glass-card rounded-xl p-8 mb-6"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="glass-card rounded-2xl p-10 mb-6"
             >
-              <div className="flex flex-col items-center gap-4">
-                <div className="relative w-16 h-16">
+              <div className="flex flex-col items-center gap-5">
+                <div className="relative w-20 h-20">
                   <div className="absolute inset-0 rounded-full border-2 border-primary/20 animate-ping" />
                   <div className="absolute inset-2 rounded-full border-2 border-t-primary border-r-transparent border-b-transparent border-l-transparent animate-spin" />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <Sparkles className="w-5 h-5 text-primary" />
+                    <Brain className="w-6 h-6 text-primary" />
                   </div>
                 </div>
                 <div className="text-center">
-                  <p className="text-sm font-display font-semibold text-foreground">Processing Text</p>
-                  <p className="text-xs text-muted-foreground mt-1">Running bias pattern analysis...</p>
+                  <p className="text-sm font-display font-semibold text-foreground">AI is Thinking...</p>
+                  <p className="text-xs text-muted-foreground mt-1">Running deep bias pattern analysis</p>
                 </div>
               </div>
             </motion.div>
@@ -217,15 +217,15 @@ const BiasDetector = () => {
                 className="space-y-6"
               >
                 {/* Summary */}
-                <div className="glass-card rounded-xl p-6">
+                <div className="glass-card rounded-2xl p-6">
                   <div className="flex items-center gap-3 mb-4">
                     {result.biases.length > 0 ? (
-                      <div className="w-8 h-8 rounded-lg bg-accent/10 border border-accent/30 flex items-center justify-center">
-                        <AlertTriangle className="w-4 h-4 text-accent" />
+                      <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/30 flex items-center justify-center">
+                        <AlertTriangle className="w-5 h-5 text-accent" />
                       </div>
                     ) : (
-                      <div className="w-8 h-8 rounded-lg bg-secondary/10 border border-secondary/30 flex items-center justify-center">
-                        <CheckCircle2 className="w-4 h-4 text-secondary" />
+                      <div className="w-10 h-10 rounded-xl bg-secondary/10 border border-secondary/30 flex items-center justify-center">
+                        <CheckCircle2 className="w-5 h-5 text-secondary" />
                       </div>
                     )}
                     <div>
@@ -240,33 +240,31 @@ const BiasDetector = () => {
                     </div>
                   </div>
 
-                  {/* Highlighted text */}
-                  <div className="bg-muted/30 rounded-lg p-4 font-mono text-sm leading-relaxed">
+                  <div className="bg-muted/20 rounded-xl p-4 font-mono text-sm leading-relaxed border border-border/30">
                     <HighlightedText text={result.overallText} triggers={result.biases.flatMap((b) => b.triggers)} />
                   </div>
                 </div>
 
-                {/* Bias cards */}
                 {result.biases.map((bias, i) => (
                   <BiasResultCard key={i} bias={bias} index={i} />
                 ))}
 
-                {/* Chart */}
                 {result.biases.length > 0 && <BiasChart biases={result.biases} />}
 
-                {/* Overall AI Insight */}
                 {result.overallInsight && (
-                  <div className="glass-card rounded-xl p-6">
-                    <p className="text-xs font-semibold text-primary mb-2">🧠 AI Insight</p>
+                  <div className="glass-card rounded-2xl p-6 border-primary/20">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Brain className="w-4 h-4 text-primary" />
+                      <p className="text-xs font-display font-semibold text-primary">AI Insight</p>
+                    </div>
                     <p className="text-sm text-muted-foreground leading-relaxed">{result.overallInsight}</p>
                   </div>
                 )}
 
-                {/* No bias message */}
                 {result.biases.length === 0 && (
-                  <div className="glass-card rounded-xl p-8 text-center">
-                    <CheckCircle2 className="w-10 h-10 text-secondary mx-auto mb-4" />
-                    <p className="font-display font-semibold mb-2">Clear Reasoning Detected</p>
+                  <div className="glass-card rounded-2xl p-10 text-center">
+                    <CheckCircle2 className="w-12 h-12 text-secondary mx-auto mb-4" />
+                    <p className="font-display font-semibold text-lg mb-2">Clear Reasoning Detected</p>
                     <p className="text-sm text-muted-foreground max-w-md mx-auto">
                       {result.overallInsight || "The analyzed text doesn't show clear signs of common cognitive biases."}
                     </p>

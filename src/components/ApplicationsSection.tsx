@@ -42,18 +42,21 @@ const APPLICATIONS = [
 
 const ApplicationsSection = () => {
   return (
-    <section id="applications" className="py-24 px-6">
-      <div className="max-w-6xl mx-auto">
+    <section id="applications" className="py-28 px-6 relative">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.02] to-transparent pointer-events-none" />
+      
+      <div className="max-w-6xl mx-auto relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
+          <span className="text-xs font-mono text-primary/70 uppercase tracking-widest mb-3 block">Use Cases</span>
+          <h2 className="font-display text-3xl md:text-5xl font-bold mb-4">
             Research <span className="text-gradient-cyan">Applications</span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-muted-foreground max-w-2xl mx-auto text-base">
             From clinical psychology to enterprise decision-making — cognitive bias detection has transformative applications across industries.
           </p>
         </motion.div>
@@ -66,17 +69,17 @@ const ApplicationsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
-              className="glass-card rounded-xl p-6 group hover:border-primary/40 transition-all duration-300"
+              className="glass-card rounded-2xl p-6 group hover:border-primary/40 transition-all duration-300 hover:-translate-y-1"
             >
               <div className="flex items-start justify-between mb-4">
-                <div className="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center group-hover:glow-cyan transition-shadow">
+                <div className="w-11 h-11 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center group-hover:glow-cyan transition-shadow">
                   <app.icon className="w-5 h-5 text-primary" />
                 </div>
-                <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground/60 bg-muted/40 px-2 py-1 rounded">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-primary/50 bg-primary/5 px-2.5 py-1 rounded-full border border-primary/10">
                   {app.tag}
                 </span>
               </div>
-              <h3 className="font-display font-semibold text-foreground mb-2">{app.title}</h3>
+              <h3 className="font-display font-semibold text-foreground mb-2 text-lg">{app.title}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{app.description}</p>
             </motion.div>
           ))}
