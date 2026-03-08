@@ -45,17 +45,18 @@ const BiasDetector = () => {
     setIsAnalyzing(true);
     setResult(null);
 
-    // Simulate processing delay for UX
-    await new Promise((r) => setTimeout(r, 600 + Math.random() * 800));
-
-    const analysis = analyzeText(text);
-    setResult(analysis);
-    setHistory((prev) => [analysis, ...prev].slice(0, 20));
-    setIsAnalyzing(false);
-
-    setTimeout(() => {
-      resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 100);
+    try {
+      const analysis = await analyzeText(text);
+      setResult(analysis);
+      setHistory((prev) => [analysis, ...prev].slice(0, 20));
+    } catch (err) {
+      console.error('Analysis failed:', err);
+    } finally {
+      setIsAnalyzing(false);
+      setTimeout(() => {
+        resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    }
   };
 
   const handleHistorySelect = (item: AnalysisResult) => {
