@@ -67,6 +67,8 @@ export async function analyzeText(text: string, language: string = "en"): Promis
         color: b.color || "cyan",
       })),
       overallText: text,
+      translatedText: language !== "en" ? textToAnalyze : undefined,
+      originalLanguage: language !== "en" ? language : undefined,
       overallInsight: data.overallInsight,
       analyzedAt: new Date(),
     };
