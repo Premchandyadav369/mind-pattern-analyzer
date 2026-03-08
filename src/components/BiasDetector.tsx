@@ -50,6 +50,7 @@ const EXAMPLE_TEXTS: Record<string, string[]> = {
 
 const STORAGE_KEY = "mindtrace-history";
 
+const BiasDetector = () => {
   const { isQuantum } = useTheme();
   const [text, setText] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("en");
