@@ -7,7 +7,7 @@ import logo from "@/assets/logo.png";
 const NAV_ITEMS = [
   { label: "How It Works", href: "#how-it-works" },
   { label: "Bias Types", href: "#bias-types" },
-  { label: "Applications", href: "#applications" },
+  { label: "Architecture", href: "#architecture" },
   { label: "Detector", href: "#detector" },
   { label: "Debate", href: "#debate" },
 ];

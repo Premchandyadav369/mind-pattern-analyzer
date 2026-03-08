@@ -40,6 +40,10 @@ const Index = () => {
       
       <ApplicationsSection />
       
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+      
+      <SystemArchitecture />
+      
       <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       
       <div ref={detectorRef}>
