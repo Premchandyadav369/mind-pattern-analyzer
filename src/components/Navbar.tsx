@@ -2,21 +2,15 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Atom } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/logo.png";
-
-const NAV_ITEMS = [
-  { label: "How It Works", href: "#how-it-works" },
-  { label: "Bias Types", href: "#bias-types" },
-  { label: "Architecture", href: "#architecture" },
-  { label: "Research", href: "#research" },
-  { label: "Detector", href: "#detector" },
-  { label: "Debate", href: "#debate" },
-];
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { theme, toggleTheme, isQuantum } = useTheme();
+  const { toggleTheme, isQuantum } = useTheme();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -26,8 +20,18 @@ const Navbar = () => {
 
   const handleNav = (href: string) => {
     setMobileOpen(false);
-    const el = document.querySelector(href);
-    el?.scrollIntoView({ behavior: "smooth" });
+    if (href.startsWith("/")) {
+      navigate(href);
+    } else {
+      if (location.pathname !== "/") {
+        navigate("/");
+        setTimeout(() => {
+          document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+        }, 300);
+      } else {
+        document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+      }
+    }
   };
 
   return (
@@ -42,20 +46,28 @@ const Navbar = () => {
       }`}
     >
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <a href="#" className="flex items-center gap-2 group" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+        <a
+          href="#"
+          className="flex items-center gap-2 group"
+          onClick={(e) => {
+            e.preventDefault();
+            if (location.pathname !== "/") navigate("/");
+            else window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+        >
           <img src={logo} alt="MindTrace AI" className="h-9 w-auto" />
         </a>
 
         <div className="hidden md:flex items-center gap-1">
-          {NAV_ITEMS.map((item) => (
-            <button
-              key={item.href}
-              onClick={() => handleNav(item.href)}
-              className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-muted/50"
-            >
-              {item.label}
-            </button>
-          ))}
+          <button onClick={() => handleNav("#detector")} className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-muted/50">
+            Detector
+          </button>
+          <button onClick={() => handleNav("#research")} className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-muted/50">
+            Research
+          </button>
+          <button onClick={() => handleNav("/about")} className={`px-3 py-2 text-sm transition-colors rounded-lg hover:bg-muted/50 ${location.pathname === "/about" ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}>
+            Why MindTrace
+          </button>
 
           <button
             onClick={toggleTheme}
@@ -92,18 +104,18 @@ const Navbar = () => {
             className="md:hidden bg-background/95 backdrop-blur-xl border-b border-border/50 overflow-hidden"
           >
             <div className="px-6 py-4 space-y-1">
-              {NAV_ITEMS.map((item) => (
-                <button
-                  key={item.href}
-                  onClick={() => handleNav(item.href)}
-                  className="block w-full text-left px-4 py-3 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/50 transition-colors"
-                >
-                  {item.label}
-                </button>
-              ))}
+              <button onClick={() => handleNav("#detector")} className="block w-full text-left px-4 py-3 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/50 transition-colors">
+                Detector
+              </button>
+              <button onClick={() => handleNav("#research")} className="block w-full text-left px-4 py-3 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/50 transition-colors">
+                Research
+              </button>
+              <button onClick={() => handleNav("/about")} className="block w-full text-left px-4 py-3 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/50 transition-colors">
+                Why MindTrace
+              </button>
               <button
                 onClick={toggleTheme}
-                className="block w-full text-left px-4 py-3 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/50 transition-colors flex items-center gap-2"
+                className="w-full text-left px-4 py-3 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/50 transition-colors flex items-center gap-2"
               >
                 <Atom className="w-4 h-4" />
                 {isQuantum ? "Switch to Neural" : "Switch to Quantum"}
