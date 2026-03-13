@@ -7,6 +7,7 @@ import TechStackSection from "@/components/TechStackSection";
 import ApplicationsSection from "@/components/ApplicationsSection";
 import BiasDetector from "@/components/BiasDetector";
 import DebateAnalyzer from "@/components/DebateAnalyzer";
+import BiasCorrectionAssistant from "@/components/BiasCorrectionAssistant";
 import SystemArchitecture from "@/components/SystemArchitecture";
 import ResearchSection from "@/components/ResearchSection";
 import { ArrowUp } from "lucide-react";
@@ -57,6 +58,10 @@ const Index = () => {
       <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       
       <DebateAnalyzer />
+
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+
+      <BiasCorrectionAssistant />
 
       {/* Footer */}
       <footer className="py-16 px-6 border-t border-border/30 bg-navy-deep/80">
