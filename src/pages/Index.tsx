@@ -59,6 +59,10 @@ const Index = () => {
       
       <DebateAnalyzer />
 
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+
+      <BiasCorrectionAssistant />
+
       {/* Footer */}
       <footer className="py-16 px-6 border-t border-border/30 bg-navy-deep/80">
         <div className="max-w-5xl mx-auto">
