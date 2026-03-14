@@ -280,7 +280,7 @@ const PDFExport = ({ analysisResult, correctionResult }: PDFExportProps) => {
         doc.setPage(p);
         doc.setFontSize(7);
         doc.setTextColor(150);
-        doc.text(`MindTrace AI — Quantum-Inspired Cognitive Bias Detection | Page ${p}/${pageCount}`, w / 2, 290, { align: "center" });
+        doc.text(`MindTrace AI - Quantum-Inspired Cognitive Bias Detection | Page ${p}/${pageCount}`, w / 2, 290, { align: "center" });
       }
 
       doc.save(`MindTrace-Report-${new Date().toISOString().slice(0, 10)}.pdf`);
