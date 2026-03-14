@@ -10,6 +10,7 @@ import DebateAnalyzer from "@/components/DebateAnalyzer";
 import BiasCorrectionAssistant from "@/components/BiasCorrectionAssistant";
 import SystemArchitecture from "@/components/SystemArchitecture";
 import ResearchSection from "@/components/ResearchSection";
+import TeamCredits from "@/components/TeamCredits";
 import { ArrowUp } from "lucide-react";
 import logo from "@/assets/logo.png";
 
@@ -62,6 +63,10 @@ const Index = () => {
       <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
       <BiasCorrectionAssistant />
+
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+
+      <TeamCredits />
 
       {/* Footer */}
       <footer className="py-16 px-6 border-t border-border/30 bg-navy-deep/80">

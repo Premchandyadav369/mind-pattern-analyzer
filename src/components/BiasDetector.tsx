@@ -15,6 +15,7 @@ import AttentionHighlights from "./AttentionHighlights";
 import LanguageSelector from "./LanguageSelector";
 import SentimentAnalysis from "./SentimentAnalysis";
 import NLPMetricsPanel from "./NLPMetrics";
+import PDFExport from "./PDFExport";
 import { useTheme } from "@/contexts/ThemeContext";
 
 const EXAMPLE_TEXTS: Record<string, string[]> = {
@@ -386,6 +387,11 @@ const BiasDetector = () => {
                     <p className="text-sm text-muted-foreground leading-relaxed">{result.overallInsight}</p>
                   </div>
                 )}
+
+                {/* PDF Export */}
+                <div className="flex justify-end">
+                  <PDFExport analysisResult={result} />
+                </div>
 
                 {/* No bias message */}
                 {result.biases.length === 0 && (
