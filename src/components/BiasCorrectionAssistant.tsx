@@ -4,7 +4,6 @@ import { Sparkles, ArrowRight, Loader2, AlertTriangle, CheckCircle2, ChevronDown
 import { supabase } from "@/integrations/supabase/client";
 import { useTheme } from "@/contexts/ThemeContext";
 import { toast } from "@/hooks/use-toast";
-import PDFExport from "./PDFExport";
 
 interface BiasChange {
   original_phrase: string;
