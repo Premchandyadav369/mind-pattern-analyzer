@@ -15,6 +15,7 @@ import AttentionHighlights from "./AttentionHighlights";
 import LanguageSelector from "./LanguageSelector";
 import SentimentAnalysis from "./SentimentAnalysis";
 import NLPMetricsPanel from "./NLPMetrics";
+import PDFExport from "./PDFExport";
 import { useTheme } from "@/contexts/ThemeContext";
 
 const EXAMPLE_TEXTS: Record<string, string[]> = {
