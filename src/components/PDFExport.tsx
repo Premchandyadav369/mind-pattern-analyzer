@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FileDown, Loader2 } from "lucide-react";
-import jsPDF from "jspdf";
+import { jsPDF } from "jspdf";
 import { type AnalysisResult } from "@/lib/biasAnalyzer";
 import { useTheme } from "@/contexts/ThemeContext";
 
