@@ -244,11 +244,6 @@ const BiasCorrectionAssistant = () => {
                 <h3 className="text-xs font-mono text-muted-foreground uppercase tracking-wider mb-3">Analysis Summary</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{result.summary}</p>
               </div>
-
-              {/* PDF Export */}
-              <div className="flex justify-end">
-                <PDFExport correctionResult={result} />
-              </div>
             </motion.div>
           )}
         </AnimatePresence>
