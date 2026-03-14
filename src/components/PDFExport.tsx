@@ -37,7 +37,7 @@ const PDFExport = ({ analysisResult, correctionResult }: PDFExportProps) => {
       // Title
       doc.setFontSize(22);
       doc.setFont("helvetica", "bold");
-      doc.text("MindTrace AI — Research Report", w / 2, y, { align: "center" });
+      doc.text("MindTrace AI - Research Report", w / 2, y, { align: "center" });
       y += 10;
 
       doc.setFontSize(9);
