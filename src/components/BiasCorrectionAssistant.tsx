@@ -4,7 +4,6 @@ import { Sparkles, ArrowRight, Loader2, AlertTriangle, CheckCircle2, ChevronDown
 import { supabase } from "@/integrations/supabase/client";
 import { useTheme } from "@/contexts/ThemeContext";
 import { toast } from "@/hooks/use-toast";
-import PDFExport from "./PDFExport";
 
 interface BiasChange {
   original_phrase: string;
@@ -244,11 +243,6 @@ const BiasCorrectionAssistant = () => {
               <div className="glass-card rounded-2xl p-6">
                 <h3 className="text-xs font-mono text-muted-foreground uppercase tracking-wider mb-3">Analysis Summary</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{result.summary}</p>
-              </div>
-
-              {/* PDF Export */}
-              <div className="flex justify-end">
-                <PDFExport correctionResult={result} />
               </div>
             </motion.div>
           )}
