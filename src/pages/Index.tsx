@@ -10,6 +10,7 @@ import DebateAnalyzer from "@/components/DebateAnalyzer";
 import BiasCorrectionAssistant from "@/components/BiasCorrectionAssistant";
 import SystemArchitecture from "@/components/SystemArchitecture";
 import ResearchSection from "@/components/ResearchSection";
+import TeamCredits from "@/components/TeamCredits";
 import { ArrowUp } from "lucide-react";
 import logo from "@/assets/logo.png";
 
