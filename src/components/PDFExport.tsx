@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FileDown, Loader2 } from "lucide-react";
-import jsPDF from "jspdf";
+import { jsPDF } from "jspdf";
 import { type AnalysisResult } from "@/lib/biasAnalyzer";
 import { useTheme } from "@/contexts/ThemeContext";
 
@@ -37,7 +37,7 @@ const PDFExport = ({ analysisResult, correctionResult }: PDFExportProps) => {
       // Title
       doc.setFontSize(22);
       doc.setFont("helvetica", "bold");
-      doc.text("MindTrace AI — Research Report", w / 2, y, { align: "center" });
+      doc.text("MindTrace AI - Research Report", w / 2, y, { align: "center" });
       y += 10;
 
       doc.setFontSize(9);
@@ -245,7 +245,7 @@ const PDFExport = ({ analysisResult, correctionResult }: PDFExportProps) => {
             checkPage(18);
             doc.setFontSize(9);
             doc.setFont("helvetica", "bold");
-            doc.text(`${i + 1}. "${ch.original_phrase}" → "${ch.corrected_phrase}"`, 22, y);
+            doc.text(`${i + 1}. "${ch.original_phrase}" -> "${ch.corrected_phrase}"`, 22, y);
             y += 4;
             doc.setFont("helvetica", "normal");
             doc.setTextColor(80);
@@ -280,7 +280,7 @@ const PDFExport = ({ analysisResult, correctionResult }: PDFExportProps) => {
         doc.setPage(p);
         doc.setFontSize(7);
         doc.setTextColor(150);
-        doc.text(`MindTrace AI — Quantum-Inspired Cognitive Bias Detection | Page ${p}/${pageCount}`, w / 2, 290, { align: "center" });
+        doc.text(`MindTrace AI - Quantum-Inspired Cognitive Bias Detection | Page ${p}/${pageCount}`, w / 2, 290, { align: "center" });
       }
 
       doc.save(`MindTrace-Report-${new Date().toISOString().slice(0, 10)}.pdf`);
