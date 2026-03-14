@@ -388,6 +388,11 @@ const BiasDetector = () => {
                   </div>
                 )}
 
+                {/* PDF Export */}
+                <div className="flex justify-end">
+                  <PDFExport analysisResult={result} />
+                </div>
+
                 {/* No bias message */}
                 {result.biases.length === 0 && (
                   <div className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-2xl p-10 text-center`}>
