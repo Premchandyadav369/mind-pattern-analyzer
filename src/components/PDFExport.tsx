@@ -245,7 +245,7 @@ const PDFExport = ({ analysisResult, correctionResult }: PDFExportProps) => {
             checkPage(18);
             doc.setFontSize(9);
             doc.setFont("helvetica", "bold");
-            doc.text(`${i + 1}. "${ch.original_phrase}" → "${ch.corrected_phrase}"`, 22, y);
+            doc.text(`${i + 1}. "${ch.original_phrase}" -> "${ch.corrected_phrase}"`, 22, y);
             y += 4;
             doc.setFont("helvetica", "normal");
             doc.setTextColor(80);
