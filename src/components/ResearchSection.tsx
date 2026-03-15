@@ -31,36 +31,56 @@ const REFERENCES = [
     year: "1974",
     title: "Judgment under Uncertainty: Heuristics and Biases",
     journal: "Science, 185(4157), 1124-1131",
+    url: "https://doi.org/10.1126/science.185.4157.1124",
   },
   {
     authors: "Busemeyer, J. R. & Bruza, P. D.",
     year: "2012",
     title: "Quantum Models of Cognition and Decision",
     journal: "Cambridge University Press",
+    url: "https://doi.org/10.1017/CBO9780511997716",
   },
   {
     authors: "Liu, Y. et al.",
     year: "2019",
     title: "RoBERTa: A Robustly Optimized BERT Pretraining Approach",
     journal: "arXiv:1907.11692",
+    url: "https://arxiv.org/abs/1907.11692",
   },
   {
     authors: "Reimers, N. & Gurevych, I.",
     year: "2019",
     title: "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
     journal: "EMNLP 2019",
+    url: "https://arxiv.org/abs/1908.10084",
   },
   {
     authors: "Beck, A. T.",
     year: "1976",
     title: "Cognitive Therapy and the Emotional Disorders",
     journal: "International Universities Press",
+    url: "https://books.google.com/books?id=L-rgAAAAMAAJ",
   },
   {
     authors: "Lundberg, S. M. & Lee, S.",
     year: "2017",
     title: "A Unified Approach to Interpreting Model Predictions",
     journal: "NeurIPS 2017",
+    url: "https://arxiv.org/abs/1705.07874",
+  },
+  {
+    authors: "Vaswani, A. et al.",
+    year: "2017",
+    title: "Attention Is All You Need",
+    journal: "NeurIPS 2017",
+    url: "https://arxiv.org/abs/1706.03762",
+  },
+  {
+    authors: "Devlin, J. et al.",
+    year: "2019",
+    title: "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+    journal: "NAACL 2019",
+    url: "https://arxiv.org/abs/1810.04805",
   },
 ];
 
@@ -222,7 +242,7 @@ const ResearchSection = () => {
                   className="flex items-start gap-3 p-2 rounded-lg hover:bg-muted/20 transition-colors"
                 >
                   <Quote className="w-3 h-3 text-primary/50 mt-1 shrink-0" />
-                  <div>
+                  <div className="flex-1">
                     <p className="text-xs text-foreground">
                       <span className="font-semibold">{ref.authors}</span>
                       <span className="text-muted-foreground"> ({ref.year}). </span>
@@ -230,6 +250,17 @@ const ResearchSection = () => {
                       <span className="text-muted-foreground">{ref.journal}</span>
                     </p>
                   </div>
+                  {ref.url && (
+                    <a
+                      href={ref.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="shrink-0 ml-2 text-primary/50 hover:text-primary transition-colors"
+                      title="View paper"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  )}
                 </motion.div>
               ))}
             </div>
