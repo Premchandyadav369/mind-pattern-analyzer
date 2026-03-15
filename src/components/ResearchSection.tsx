@@ -242,7 +242,7 @@ const ResearchSection = () => {
                   className="flex items-start gap-3 p-2 rounded-lg hover:bg-muted/20 transition-colors"
                 >
                   <Quote className="w-3 h-3 text-primary/50 mt-1 shrink-0" />
-                  <div>
+                  <div className="flex-1">
                     <p className="text-xs text-foreground">
                       <span className="font-semibold">{ref.authors}</span>
                       <span className="text-muted-foreground"> ({ref.year}). </span>
@@ -250,6 +250,17 @@ const ResearchSection = () => {
                       <span className="text-muted-foreground">{ref.journal}</span>
                     </p>
                   </div>
+                  {ref.url && (
+                    <a
+                      href={ref.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="shrink-0 ml-2 text-primary/50 hover:text-primary transition-colors"
+                      title="View paper"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  )}
                 </motion.div>
               ))}
             </div>
