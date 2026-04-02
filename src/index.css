@@ -215,3 +215,9 @@
     radial-gradient(circle at 75% 75%, hsl(var(--quantum-secondary) / 0.03) 1px, transparent 1px);
   background-size: 40px 40px, 60px 60px;
 }
+
+/* Light theme glass card override */
+[data-theme="light"] .glass-card {
+  background: hsl(var(--card) / 0.9);
+  box-shadow: 0 1px 3px hsl(var(--foreground) / 0.06), 0 1px 2px hsl(var(--foreground) / 0.04);
+}
