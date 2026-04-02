@@ -74,12 +74,14 @@ const Navbar = () => {
             className={`ml-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-1.5 border ${
               isQuantum
                 ? "border-primary/50 bg-primary/10 text-primary glow-quantum"
+                : isLight
+                ? "border-primary/50 bg-primary/10 text-primary"
                 : "border-border/50 text-muted-foreground hover:text-foreground hover:border-primary/30"
             }`}
-            title={`Switch to ${isQuantum ? "Neural" : "Quantum"} theme`}
+            title={`Switch theme`}
           >
-            <Atom className={`w-4 h-4 ${isQuantum ? "animate-spin" : ""}`} style={isQuantum ? { animationDuration: "3s" } : {}} />
-            <span className="text-xs">{isQuantum ? "Quantum" : "Neural"}</span>
+            {isQuantum ? <Atom className="w-4 h-4 animate-spin" style={{ animationDuration: "3s" }} /> : isLight ? <Sun className="w-4 h-4" /> : <Brain className="w-4 h-4" />}
+            <span className="text-xs">{theme === "neural" ? "Neural" : theme === "quantum" ? "Quantum" : "Light"}</span>
           </button>
 
           <button
