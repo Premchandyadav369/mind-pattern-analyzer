@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Atom } from "lucide-react";
+import { Menu, X, Atom, Sun, Brain } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/logo.png";
@@ -8,7 +8,7 @@ import logo from "@/assets/logo.png";
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { toggleTheme, isQuantum } = useTheme();
+  const { theme, toggleTheme, isQuantum, isLight } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -74,12 +74,14 @@ const Navbar = () => {
             className={`ml-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-1.5 border ${
               isQuantum
                 ? "border-primary/50 bg-primary/10 text-primary glow-quantum"
+                : isLight
+                ? "border-primary/50 bg-primary/10 text-primary"
                 : "border-border/50 text-muted-foreground hover:text-foreground hover:border-primary/30"
             }`}
-            title={`Switch to ${isQuantum ? "Neural" : "Quantum"} theme`}
+            title={`Switch theme`}
           >
-            <Atom className={`w-4 h-4 ${isQuantum ? "animate-spin" : ""}`} style={isQuantum ? { animationDuration: "3s" } : {}} />
-            <span className="text-xs">{isQuantum ? "Quantum" : "Neural"}</span>
+            {isQuantum ? <Atom className="w-4 h-4 animate-spin" style={{ animationDuration: "3s" }} /> : isLight ? <Sun className="w-4 h-4" /> : <Brain className="w-4 h-4" />}
+            <span className="text-xs">{theme === "neural" ? "Neural" : theme === "quantum" ? "Quantum" : "Light"}</span>
           </button>
 
           <button
@@ -117,8 +119,8 @@ const Navbar = () => {
                 onClick={toggleTheme}
                 className="w-full text-left px-4 py-3 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/50 transition-colors flex items-center gap-2"
               >
-                <Atom className="w-4 h-4" />
-                {isQuantum ? "Switch to Neural" : "Switch to Quantum"}
+                {isQuantum ? <Atom className="w-4 h-4" /> : isLight ? <Sun className="w-4 h-4" /> : <Brain className="w-4 h-4" />}
+                Switch to {theme === "neural" ? "Quantum" : theme === "quantum" ? "Light" : "Neural"}
               </button>
               <button
                 onClick={() => handleNav("#detector")}

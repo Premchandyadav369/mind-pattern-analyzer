@@ -100,7 +100,53 @@
     --sidebar-border: 260 30% 20%;
     --sidebar-ring: 270 70% 60%;
   }
-}
+
+  /* Light theme */
+  [data-theme="light"] {
+    --background: 0 0% 98%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 199 89% 48%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 142 60% 40%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 220 14% 92%;
+    --muted-foreground: 220 9% 46%;
+
+    --accent: 24 95% 53%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 87%;
+    --input: 220 13% 87%;
+    --ring: 199 89% 48%;
+
+    --cyan-glow: 199 89% 48%;
+    --green-glow: 142 60% 40%;
+    --orange-glow: 24 95% 53%;
+    --navy-deep: 220 14% 96%;
+    --navy-surface: 0 0% 100%;
+    --navy-elevated: 220 14% 92%;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 199 89% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 92%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 220 13% 87%;
+    --sidebar-ring: 199 89% 48%;
+  }
 
 @layer base {
   * {
@@ -168,4 +214,10 @@
     radial-gradient(circle at 25% 25%, hsl(var(--quantum-primary) / 0.05) 1px, transparent 1px),
     radial-gradient(circle at 75% 75%, hsl(var(--quantum-secondary) / 0.03) 1px, transparent 1px);
   background-size: 40px 40px, 60px 60px;
+}
+
+/* Light theme glass card override */
+[data-theme="light"] .glass-card {
+  background: hsl(var(--card) / 0.9);
+  box-shadow: 0 1px 3px hsl(var(--foreground) / 0.06), 0 1px 2px hsl(var(--foreground) / 0.04);
 }
