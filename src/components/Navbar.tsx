@@ -8,7 +8,7 @@ import logo from "@/assets/logo.png";
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { toggleTheme, isQuantum } = useTheme();
+  const { theme, toggleTheme, isQuantum, isLight } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
 
