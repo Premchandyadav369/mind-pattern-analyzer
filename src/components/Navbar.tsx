@@ -119,8 +119,9 @@ const Navbar = () => {
                 onClick={toggleTheme}
                 className="w-full text-left px-4 py-3 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/50 transition-colors flex items-center gap-2"
               >
-                <Atom className="w-4 h-4" />
-                {isQuantum ? "Switch to Neural" : "Switch to Quantum"}
+                {isQuantum ? <Atom className="w-4 h-4" /> : isLight ? <Sun className="w-4 h-4" /> : <Brain className="w-4 h-4" />}
+                Switch to {theme === "neural" ? "Quantum" : theme === "quantum" ? "Light" : "Neural"}
+              </button>
               </button>
               <button
                 onClick={() => handleNav("#detector")}
