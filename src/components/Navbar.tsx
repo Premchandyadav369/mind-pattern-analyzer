@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Atom } from "lucide-react";
+import { Menu, X, Atom, Sun, Brain } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/logo.png";
