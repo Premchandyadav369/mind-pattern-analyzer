@@ -1,4 +1,6 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import type { BiasResult } from "@/lib/biasAnalyzer";
 import { useTheme } from "@/contexts/ThemeContext";
 
@@ -19,6 +21,7 @@ const severityStyles: Record<string, string> = {
 const BiasResultCard = ({ bias, index }: { bias: BiasResult; index: number }) => {
   const { isQuantum } = useTheme();
   const styles = colorStyles[bias.color] || colorStyles.cyan;
+  const [showExplanation, setShowExplanation] = useState(true);
 
   return (
     <motion.div
