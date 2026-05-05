@@ -236,6 +236,9 @@ const BiasDetector = () => {
           <p className="text-[10px] text-muted-foreground/40 mt-2">Press ⌘+Enter to analyze · Powered by Transformer NLP</p>
         </div>
 
+        {/* Live bias suggestions */}
+        <LiveSuggestions suggestions={liveSuggestions} />
+
         {/* Example prompts */}
         <div className="flex flex-wrap gap-2 mb-10">
           <span className="text-xs text-muted-foreground mr-1 self-center">Try:</span>
