@@ -375,6 +375,9 @@ const BiasDetector = () => {
                 {/* Cognitive Clarity Score */}
                 <ClarityScore result={result} />
 
+                {/* Bias Knowledge Graph */}
+                {result.biases.length > 0 && <BiasKnowledgeGraph biases={result.biases} />}
+
                 {/* NLP Metrics */}
                 {result.nlpMetrics && (
                   <NLPMetricsPanel metrics={result.nlpMetrics} text={result.overallText} />
