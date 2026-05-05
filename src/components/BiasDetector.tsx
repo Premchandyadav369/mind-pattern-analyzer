@@ -302,7 +302,7 @@ const BiasDetector = () => {
                         <CheckCircle2 className="w-5 h-5 text-secondary" />
                       </div>
                     )}
-                    <div>
+                    <div className="flex-1">
                       <h3 className="font-display font-semibold text-lg">
                         {result.biases.length > 0
                           ? isQuantum
@@ -317,6 +317,34 @@ const BiasDetector = () => {
                           <> · Avg confidence: {(result.biases.reduce((s, b) => s + b.confidence, 0) / result.biases.length * 100).toFixed(0)}%</>
                         )}
                       </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={async () => {
+                          try {
+                            await copyReport(result);
+                            toast.success("Report copied to clipboard");
+                          } catch {
+                            toast.error("Copy failed");
+                          }
+                        }}
+                        className="px-3 py-1.5 rounded-lg text-xs border border-border/50 hover:border-primary/40 text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
+                        title="Copy markdown report"
+                      >
+                        <Copy className="w-3 h-3" />
+                        Copy
+                      </button>
+                      <button
+                        onClick={() => {
+                          downloadReport(result);
+                          toast.success("Report downloaded");
+                        }}
+                        className="px-3 py-1.5 rounded-lg text-xs bg-primary/10 border border-primary/40 text-primary hover:bg-primary/20 transition-colors flex items-center gap-1.5"
+                        title="Download markdown report"
+                      >
+                        <Download className="w-3 h-3" />
+                        Export
+                      </button>
                     </div>
                   </div>
 
