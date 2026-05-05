@@ -59,21 +59,42 @@ const BiasResultCard = ({ bias, index }: { bias: BiasResult; index: number }) =>
         />
       </div>
 
-      <p className="text-sm text-muted-foreground leading-relaxed mb-4">{bias.explanation}</p>
+      <div className="flex items-center justify-between mb-3">
+        <button
+          onClick={() => setShowExplanation((s) => !s)}
+          className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
+        >
+          {showExplanation ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+          {showExplanation ? "Hide explanation" : "Show explanation"}
+        </button>
+      </div>
 
-      {bias.reasoning && (
-        <div className="mb-4 p-4 rounded-xl bg-muted/20 border border-border/30">
-          <p className="text-xs font-display font-semibold text-foreground mb-1.5">💡 Why you might think this way</p>
-          <p className="text-sm text-muted-foreground leading-relaxed">{bias.reasoning}</p>
-        </div>
-      )}
+      <AnimatePresence initial={false}>
+        {showExplanation && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="overflow-hidden"
+          >
+            <p className="text-sm text-muted-foreground leading-relaxed mb-4">{bias.explanation}</p>
 
-      {bias.reframe && (
-        <div className="mb-4 p-4 rounded-xl bg-secondary/5 border border-secondary/20">
-          <p className="text-xs font-display font-semibold text-secondary mb-1.5">✨ Healthier Reframe</p>
-          <p className="text-sm text-muted-foreground leading-relaxed">{bias.reframe}</p>
-        </div>
-      )}
+            {bias.reasoning && (
+              <div className="mb-4 p-4 rounded-xl bg-muted/20 border border-border/30">
+                <p className="text-xs font-display font-semibold text-foreground mb-1.5">💡 Why you might think this way</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{bias.reasoning}</p>
+              </div>
+            )}
+
+            {bias.reframe && (
+              <div className="mb-4 p-4 rounded-xl bg-secondary/5 border border-secondary/20">
+                <p className="text-xs font-display font-semibold text-secondary mb-1.5">✨ Healthier Reframe</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{bias.reframe}</p>
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {bias.triggers.length > 0 && (
         <div className="flex flex-wrap gap-2 items-center">
