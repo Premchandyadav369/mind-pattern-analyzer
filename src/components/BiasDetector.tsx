@@ -1,8 +1,11 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, AlertTriangle, CheckCircle2, Sparkles, History, RotateCcw, Brain, Atom, Languages, Download, Copy } from "lucide-react";
 import { analyzeText, type AnalysisResult } from "@/lib/biasAnalyzer";
 import { downloadReport, copyReport } from "@/lib/exportReport";
+import { getLiveSuggestions } from "@/lib/liveSuggestions";
+import LiveSuggestions from "./LiveSuggestions";
+import BiasKnowledgeGraph from "./BiasKnowledgeGraph";
 import VoiceInputButton from "./VoiceInputButton";
 import ClarityScore from "./ClarityScore";
 import { toast } from "sonner";
@@ -68,6 +71,8 @@ const BiasDetector = () => {
   const [showCollapse, setShowCollapse] = useState(false);
   const resultRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const liveSuggestions = useMemo(() => getLiveSuggestions(text), [text]);
 
   useEffect(() => {
     try {
@@ -231,6 +236,9 @@ const BiasDetector = () => {
           <p className="text-[10px] text-muted-foreground/40 mt-2">Press ⌘+Enter to analyze · Powered by Transformer NLP</p>
         </div>
 
+        {/* Live bias suggestions */}
+        <LiveSuggestions suggestions={liveSuggestions} />
+
         {/* Example prompts */}
         <div className="flex flex-wrap gap-2 mb-10">
           <span className="text-xs text-muted-foreground mr-1 self-center">Try:</span>
@@ -366,6 +374,9 @@ const BiasDetector = () => {
 
                 {/* Cognitive Clarity Score */}
                 <ClarityScore result={result} />
+
+                {/* Bias Knowledge Graph */}
+                {result.biases.length > 0 && <BiasKnowledgeGraph biases={result.biases} />}
 
                 {/* NLP Metrics */}
                 {result.nlpMetrics && (
