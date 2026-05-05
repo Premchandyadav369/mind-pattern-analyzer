@@ -1,7 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, AlertTriangle, CheckCircle2, Sparkles, History, RotateCcw, Brain, Atom, Languages } from "lucide-react";
+import { Loader2, AlertTriangle, CheckCircle2, Sparkles, History, RotateCcw, Brain, Atom, Languages, Download, Copy } from "lucide-react";
 import { analyzeText, type AnalysisResult } from "@/lib/biasAnalyzer";
+import { downloadReport, copyReport } from "@/lib/exportReport";
+import VoiceInputButton from "./VoiceInputButton";
+import ClarityScore from "./ClarityScore";
+import { toast } from "sonner";
 import BiasResultCard from "./BiasResultCard";
 import BiasChart from "./BiasChart";
 import AnalysisHistory from "./AnalysisHistory";
@@ -161,12 +165,13 @@ const BiasDetector = () => {
 
         {/* Input */}
         <div className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-2xl p-6 mb-6 hover:border-primary/20 transition-colors`}>
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-4 gap-2 flex-wrap">
             <LanguageSelector
               selectedLanguage={selectedLanguage}
               onLanguageChange={setSelectedLanguage}
               isQuantum={isQuantum}
             />
+            <VoiceInputButton onTranscript={setText} language={selectedLanguage} />
           </div>
           <textarea
             ref={textareaRef}
