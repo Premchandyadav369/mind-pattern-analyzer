@@ -1,11 +1,16 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, AlertTriangle, CheckCircle2, Sparkles, History, RotateCcw, Brain, Atom, Languages, Download, Copy } from "lucide-react";
+import { Loader2, AlertTriangle, CheckCircle2, Sparkles, History, RotateCcw, Brain, Atom, Languages, Download, Copy, Focus, Eye } from "lucide-react";
 import { analyzeText, type AnalysisResult } from "@/lib/biasAnalyzer";
 import { downloadReport, copyReport } from "@/lib/exportReport";
 import { getLiveSuggestions } from "@/lib/liveSuggestions";
 import LiveSuggestions from "./LiveSuggestions";
 import BiasKnowledgeGraph from "./BiasKnowledgeGraph";
+import BiasRadarChart from "./BiasRadarChart";
+import StatsDashboard from "./StatsDashboard";
+import AchievementBadges from "./AchievementBadges";
+import KeyboardShortcuts from "./KeyboardShortcuts";
+import ShareButton from "./ShareButton";
 import VoiceInputButton from "./VoiceInputButton";
 import ClarityScore from "./ClarityScore";
 import { toast } from "sonner";
