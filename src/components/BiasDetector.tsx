@@ -453,6 +453,14 @@ const BiasDetector = () => {
                         <Download className="w-3 h-3" />
                         Export
                       </button>
+                      <button
+                        onClick={handlePrint}
+                        className="px-3 py-1.5 rounded-lg text-xs border border-border/50 hover:border-primary/40 text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
+                        title="Print report"
+                      >
+                        <Printer className="w-3 h-3" />
+                        Print
+                      </button>
                     </div>
                   </div>
 
