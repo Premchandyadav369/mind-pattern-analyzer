@@ -537,11 +537,14 @@ const BiasDetector = () => {
                 {/* Overall AI Insight */}
                 {result.overallInsight && (
                   <div className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-2xl p-6 border-primary/20`}>
-                    <div className="flex items-center gap-2 mb-3">
-                      {isQuantum ? <Atom className="w-4 h-4 text-primary" /> : <Brain className="w-4 h-4 text-primary" />}
-                      <p className="text-xs font-display font-semibold text-primary">
-                        {isQuantum ? "Quantum Psychological Insight" : "AI Psychological Insight"}
-                      </p>
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <div className="flex items-center gap-2">
+                        {isQuantum ? <Atom className="w-4 h-4 text-primary" /> : <Brain className="w-4 h-4 text-primary" />}
+                        <p className="text-xs font-display font-semibold text-primary">
+                          {isQuantum ? "Quantum Psychological Insight" : "AI Psychological Insight"}
+                        </p>
+                      </div>
+                      <ReadAloudButton text={result.overallInsight} lang={result.language || "en"} />
                     </div>
                     <p className="text-sm text-muted-foreground leading-relaxed">{result.overallInsight}</p>
                   </div>
