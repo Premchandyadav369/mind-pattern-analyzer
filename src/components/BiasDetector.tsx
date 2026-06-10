@@ -544,7 +544,7 @@ const BiasDetector = () => {
                           {isQuantum ? "Quantum Psychological Insight" : "AI Psychological Insight"}
                         </p>
                       </div>
-                      <ReadAloudButton text={result.overallInsight} lang={result.language || "en"} />
+                      <ReadAloudButton text={result.overallInsight} lang={selectedLanguage} />
                     </div>
                     <p className="text-sm text-muted-foreground leading-relaxed">{result.overallInsight}</p>
                   </div>
