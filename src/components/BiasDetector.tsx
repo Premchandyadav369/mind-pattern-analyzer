@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, AlertTriangle, CheckCircle2, Sparkles, History, RotateCcw, Brain, Atom, Languages, Download, Copy, Focus, Eye } from "lucide-react";
+import { Loader2, AlertTriangle, CheckCircle2, Sparkles, History, RotateCcw, Brain, Atom, Languages, Download, Copy, Focus, Eye, BookOpen, Printer, Command } from "lucide-react";
 import { analyzeText, type AnalysisResult } from "@/lib/biasAnalyzer";
 import { downloadReport, copyReport } from "@/lib/exportReport";
 import { getLiveSuggestions } from "@/lib/liveSuggestions";
@@ -13,6 +13,9 @@ import KeyboardShortcuts from "./KeyboardShortcuts";
 import ShareButton from "./ShareButton";
 import VoiceInputButton from "./VoiceInputButton";
 import ClarityScore from "./ClarityScore";
+import CommandPalette, { type CommandItem } from "./CommandPalette";
+import BiasGlossary from "./BiasGlossary";
+import ReadAloudButton from "./ReadAloudButton";
 import { toast } from "sonner";
 import BiasResultCard from "./BiasResultCard";
 import BiasChart from "./BiasChart";
@@ -75,6 +78,8 @@ const BiasDetector = () => {
   const [showHistory, setShowHistory] = useState(false);
   const [showCollapse, setShowCollapse] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const [glossaryOpen, setGlossaryOpen] = useState(false);
   const resultRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -139,6 +144,40 @@ const BiasDetector = () => {
   const charCount = text.length;
   const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
 
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "p") {
+        e.preventDefault();
+        setPaletteOpen((v) => !v);
+      } else if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "g") {
+        e.preventDefault();
+        setGlossaryOpen((v) => !v);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const commands: CommandItem[] = [
+    { id: "analyze", label: "Analyze current text", hint: "⌘↵", icon: Sparkles, action: handleAnalyze, keywords: "run detect" },
+    { id: "focus-input", label: "Focus input field", hint: "⌘K", icon: Focus, action: () => textareaRef.current?.focus() },
+    { id: "reset", label: "Reset & clear", icon: RotateCcw, action: handleReset, keywords: "clear new" },
+    { id: "history", label: "Toggle history", hint: "⌘B", icon: History, action: () => setShowHistory((v) => !v) },
+    { id: "focus-mode", label: focusMode ? "Exit focus mode" : "Enter focus mode", hint: "⌘/", icon: Eye, action: () => setFocusMode((v) => !v) },
+    { id: "glossary", label: "Open bias glossary", hint: "⌘G", icon: BookOpen, action: () => setGlossaryOpen(true), keywords: "dictionary learn" },
+    { id: "print", label: "Print report", icon: Printer, action: handlePrint, keywords: "pdf export paper" },
+    ...(result
+      ? [
+          { id: "copy", label: "Copy report", icon: Copy, action: async () => { try { await copyReport(result); toast.success("Copied"); } catch { toast.error("Copy failed"); } } },
+          { id: "download", label: "Download markdown report", icon: Download, action: () => { downloadReport(result); toast.success("Downloaded"); } },
+        ]
+      : []),
+  ];
+
   return (
     <section id="detector" className="py-28 px-6 relative">
       <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.02] via-transparent to-transparent pointer-events-none" />
@@ -180,6 +219,9 @@ const BiasDetector = () => {
           onToggleFocus={() => setFocusMode((v) => !v)}
         />
 
+        <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} commands={commands} />
+        <BiasGlossary open={glossaryOpen} onClose={() => setGlossaryOpen(false)} />
+
         {!focusMode && history.length >= 2 && (
           <>
             <StatsDashboard history={history} />
@@ -202,7 +244,24 @@ const BiasDetector = () => {
               onLanguageChange={setSelectedLanguage}
               isQuantum={isQuantum}
             />
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                onClick={() => setPaletteOpen(true)}
+                className="px-3 py-1.5 rounded-lg text-xs border border-border/50 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors flex items-center gap-1.5"
+                title="Command palette (⌘P)"
+              >
+                <Command className="w-3 h-3" />
+                <span className="hidden sm:inline">Commands</span>
+                <kbd className="text-[9px] font-mono opacity-60">⌘P</kbd>
+              </button>
+              <button
+                onClick={() => setGlossaryOpen(true)}
+                className="px-3 py-1.5 rounded-lg text-xs border border-border/50 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors flex items-center gap-1.5"
+                title="Bias glossary (⌘G)"
+              >
+                <BookOpen className="w-3 h-3" />
+                <span className="hidden sm:inline">Glossary</span>
+              </button>
               <button
                 onClick={() => setFocusMode((v) => !v)}
                 className={`px-3 py-1.5 rounded-lg text-xs border transition-colors flex items-center gap-1.5 ${
@@ -394,6 +453,14 @@ const BiasDetector = () => {
                         <Download className="w-3 h-3" />
                         Export
                       </button>
+                      <button
+                        onClick={handlePrint}
+                        className="px-3 py-1.5 rounded-lg text-xs border border-border/50 hover:border-primary/40 text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
+                        title="Print report"
+                      >
+                        <Printer className="w-3 h-3" />
+                        Print
+                      </button>
                     </div>
                   </div>
 
@@ -470,11 +537,14 @@ const BiasDetector = () => {
                 {/* Overall AI Insight */}
                 {result.overallInsight && (
                   <div className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-2xl p-6 border-primary/20`}>
-                    <div className="flex items-center gap-2 mb-3">
-                      {isQuantum ? <Atom className="w-4 h-4 text-primary" /> : <Brain className="w-4 h-4 text-primary" />}
-                      <p className="text-xs font-display font-semibold text-primary">
-                        {isQuantum ? "Quantum Psychological Insight" : "AI Psychological Insight"}
-                      </p>
+                    <div className="flex items-center justify-between gap-2 mb-3">
+                      <div className="flex items-center gap-2">
+                        {isQuantum ? <Atom className="w-4 h-4 text-primary" /> : <Brain className="w-4 h-4 text-primary" />}
+                        <p className="text-xs font-display font-semibold text-primary">
+                          {isQuantum ? "Quantum Psychological Insight" : "AI Psychological Insight"}
+                        </p>
+                      </div>
+                      <ReadAloudButton text={result.overallInsight} lang={selectedLanguage} />
                     </div>
                     <p className="text-sm text-muted-foreground leading-relaxed">{result.overallInsight}</p>
                   </div>
