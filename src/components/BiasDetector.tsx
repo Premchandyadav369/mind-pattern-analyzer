@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, AlertTriangle, CheckCircle2, Sparkles, History, RotateCcw, Brain, Atom, Languages, Download, Copy, Focus, Eye } from "lucide-react";
+import { Loader2, AlertTriangle, CheckCircle2, Sparkles, History, RotateCcw, Brain, Atom, Languages, Download, Copy, Focus, Eye, BookOpen, Printer, Command } from "lucide-react";
 import { analyzeText, type AnalysisResult } from "@/lib/biasAnalyzer";
 import { downloadReport, copyReport } from "@/lib/exportReport";
 import { getLiveSuggestions } from "@/lib/liveSuggestions";
@@ -13,6 +13,9 @@ import KeyboardShortcuts from "./KeyboardShortcuts";
 import ShareButton from "./ShareButton";
 import VoiceInputButton from "./VoiceInputButton";
 import ClarityScore from "./ClarityScore";
+import CommandPalette, { type CommandItem } from "./CommandPalette";
+import BiasGlossary from "./BiasGlossary";
+import ReadAloudButton from "./ReadAloudButton";
 import { toast } from "sonner";
 import BiasResultCard from "./BiasResultCard";
 import BiasChart from "./BiasChart";
