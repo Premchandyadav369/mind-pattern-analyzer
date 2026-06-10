@@ -219,6 +219,9 @@ const BiasDetector = () => {
           onToggleFocus={() => setFocusMode((v) => !v)}
         />
 
+        <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} commands={commands} />
+        <BiasGlossary open={glossaryOpen} onClose={() => setGlossaryOpen(false)} />
+
         {!focusMode && history.length >= 2 && (
           <>
             <StatsDashboard history={history} />
