@@ -78,6 +78,8 @@ const BiasDetector = () => {
   const [showHistory, setShowHistory] = useState(false);
   const [showCollapse, setShowCollapse] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const [glossaryOpen, setGlossaryOpen] = useState(false);
   const resultRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
