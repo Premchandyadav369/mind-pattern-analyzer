@@ -202,7 +202,21 @@ const BiasDetector = () => {
               onLanguageChange={setSelectedLanguage}
               isQuantum={isQuantum}
             />
-            <VoiceInputButton onTranscript={setText} language={selectedLanguage} />
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setFocusMode((v) => !v)}
+                className={`px-3 py-1.5 rounded-lg text-xs border transition-colors flex items-center gap-1.5 ${
+                  focusMode
+                    ? "border-primary/50 text-primary bg-primary/10"
+                    : "border-border/50 text-muted-foreground hover:text-foreground"
+                }`}
+                title="Toggle focus mode (⌘/)"
+              >
+                <Focus className="w-3 h-3" />
+                Focus
+              </button>
+              <VoiceInputButton onTranscript={setText} language={selectedLanguage} />
+            </div>
           </div>
           <textarea
             ref={textareaRef}
