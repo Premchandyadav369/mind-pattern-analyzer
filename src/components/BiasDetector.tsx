@@ -144,6 +144,40 @@ const BiasDetector = () => {
   const charCount = text.length;
   const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
 
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "p") {
+        e.preventDefault();
+        setPaletteOpen((v) => !v);
+      } else if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "g") {
+        e.preventDefault();
+        setGlossaryOpen((v) => !v);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const commands: CommandItem[] = [
+    { id: "analyze", label: "Analyze current text", hint: "⌘↵", icon: Sparkles, action: handleAnalyze, keywords: "run detect" },
+    { id: "focus-input", label: "Focus input field", hint: "⌘K", icon: Focus, action: () => textareaRef.current?.focus() },
+    { id: "reset", label: "Reset & clear", icon: RotateCcw, action: handleReset, keywords: "clear new" },
+    { id: "history", label: "Toggle history", hint: "⌘B", icon: History, action: () => setShowHistory((v) => !v) },
+    { id: "focus-mode", label: focusMode ? "Exit focus mode" : "Enter focus mode", hint: "⌘/", icon: Eye, action: () => setFocusMode((v) => !v) },
+    { id: "glossary", label: "Open bias glossary", hint: "⌘G", icon: BookOpen, action: () => setGlossaryOpen(true), keywords: "dictionary learn" },
+    { id: "print", label: "Print report", icon: Printer, action: handlePrint, keywords: "pdf export paper" },
+    ...(result
+      ? [
+          { id: "copy", label: "Copy report", icon: Copy, action: async () => { try { await copyReport(result); toast.success("Copied"); } catch { toast.error("Copy failed"); } } },
+          { id: "download", label: "Download markdown report", icon: Download, action: () => { downloadReport(result); toast.success("Downloaded"); } },
+        ]
+      : []),
+  ];
+
   return (
     <section id="detector" className="py-28 px-6 relative">
       <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.02] via-transparent to-transparent pointer-events-none" />
