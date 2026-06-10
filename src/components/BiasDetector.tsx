@@ -174,6 +174,26 @@ const BiasDetector = () => {
           onClose={() => setShowHistory(false)}
         />
 
+        <KeyboardShortcuts
+          onFocusInput={() => textareaRef.current?.focus()}
+          onToggleHistory={() => setShowHistory((v) => !v)}
+          onToggleFocus={() => setFocusMode((v) => !v)}
+        />
+
+        {!focusMode && history.length >= 2 && (
+          <>
+            <StatsDashboard history={history} />
+            <AchievementBadges history={history} />
+          </>
+        )}
+
+        {focusMode && (
+          <div className="mb-4 flex items-center justify-center gap-2 text-xs text-muted-foreground">
+            <Eye className="w-3 h-3" />
+            Focus mode active — extra panels hidden
+          </div>
+        )}
+
         {/* Input */}
         <div className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-2xl p-6 mb-6 hover:border-primary/20 transition-colors`}>
           <div className="flex items-center justify-between mb-4 gap-2 flex-wrap">
