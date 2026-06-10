@@ -1,11 +1,16 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, AlertTriangle, CheckCircle2, Sparkles, History, RotateCcw, Brain, Atom, Languages, Download, Copy } from "lucide-react";
+import { Loader2, AlertTriangle, CheckCircle2, Sparkles, History, RotateCcw, Brain, Atom, Languages, Download, Copy, Focus, Eye } from "lucide-react";
 import { analyzeText, type AnalysisResult } from "@/lib/biasAnalyzer";
 import { downloadReport, copyReport } from "@/lib/exportReport";
 import { getLiveSuggestions } from "@/lib/liveSuggestions";
 import LiveSuggestions from "./LiveSuggestions";
 import BiasKnowledgeGraph from "./BiasKnowledgeGraph";
+import BiasRadarChart from "./BiasRadarChart";
+import StatsDashboard from "./StatsDashboard";
+import AchievementBadges from "./AchievementBadges";
+import KeyboardShortcuts from "./KeyboardShortcuts";
+import ShareButton from "./ShareButton";
 import VoiceInputButton from "./VoiceInputButton";
 import ClarityScore from "./ClarityScore";
 import { toast } from "sonner";
@@ -69,6 +74,7 @@ const BiasDetector = () => {
   const [history, setHistory] = useState<AnalysisResult[]>([]);
   const [showHistory, setShowHistory] = useState(false);
   const [showCollapse, setShowCollapse] = useState(false);
+  const [focusMode, setFocusMode] = useState(false);
   const resultRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -168,6 +174,26 @@ const BiasDetector = () => {
           onClose={() => setShowHistory(false)}
         />
 
+        <KeyboardShortcuts
+          onFocusInput={() => textareaRef.current?.focus()}
+          onToggleHistory={() => setShowHistory((v) => !v)}
+          onToggleFocus={() => setFocusMode((v) => !v)}
+        />
+
+        {!focusMode && history.length >= 2 && (
+          <>
+            <StatsDashboard history={history} />
+            <AchievementBadges history={history} />
+          </>
+        )}
+
+        {focusMode && (
+          <div className="mb-4 flex items-center justify-center gap-2 text-xs text-muted-foreground">
+            <Eye className="w-3 h-3" />
+            Focus mode active — extra panels hidden
+          </div>
+        )}
+
         {/* Input */}
         <div className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-2xl p-6 mb-6 hover:border-primary/20 transition-colors`}>
           <div className="flex items-center justify-between mb-4 gap-2 flex-wrap">
@@ -176,7 +202,21 @@ const BiasDetector = () => {
               onLanguageChange={setSelectedLanguage}
               isQuantum={isQuantum}
             />
-            <VoiceInputButton onTranscript={setText} language={selectedLanguage} />
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setFocusMode((v) => !v)}
+                className={`px-3 py-1.5 rounded-lg text-xs border transition-colors flex items-center gap-1.5 ${
+                  focusMode
+                    ? "border-primary/50 text-primary bg-primary/10"
+                    : "border-border/50 text-muted-foreground hover:text-foreground"
+                }`}
+                title="Toggle focus mode (⌘/)"
+              >
+                <Focus className="w-3 h-3" />
+                Focus
+              </button>
+              <VoiceInputButton onTranscript={setText} language={selectedLanguage} />
+            </div>
           </div>
           <textarea
             ref={textareaRef}
@@ -326,7 +366,8 @@ const BiasDetector = () => {
                         )}
                       </p>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <ShareButton result={result} />
                       <button
                         onClick={async () => {
                           try {
@@ -375,8 +416,13 @@ const BiasDetector = () => {
                 {/* Cognitive Clarity Score */}
                 <ClarityScore result={result} />
 
-                {/* Bias Knowledge Graph */}
-                {result.biases.length > 0 && <BiasKnowledgeGraph biases={result.biases} />}
+                {/* Bias Knowledge Graph + Radar */}
+                {result.biases.length > 0 && !focusMode && (
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <BiasKnowledgeGraph biases={result.biases} />
+                    <BiasRadarChart biases={result.biases} />
+                  </div>
+                )}
 
                 {/* NLP Metrics */}
                 {result.nlpMetrics && (
