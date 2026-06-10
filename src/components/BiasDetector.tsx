@@ -244,7 +244,24 @@ const BiasDetector = () => {
               onLanguageChange={setSelectedLanguage}
               isQuantum={isQuantum}
             />
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                onClick={() => setPaletteOpen(true)}
+                className="px-3 py-1.5 rounded-lg text-xs border border-border/50 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors flex items-center gap-1.5"
+                title="Command palette (⌘P)"
+              >
+                <Command className="w-3 h-3" />
+                <span className="hidden sm:inline">Commands</span>
+                <kbd className="text-[9px] font-mono opacity-60">⌘P</kbd>
+              </button>
+              <button
+                onClick={() => setGlossaryOpen(true)}
+                className="px-3 py-1.5 rounded-lg text-xs border border-border/50 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors flex items-center gap-1.5"
+                title="Bias glossary (⌘G)"
+              >
+                <BookOpen className="w-3 h-3" />
+                <span className="hidden sm:inline">Glossary</span>
+              </button>
               <button
                 onClick={() => setFocusMode((v) => !v)}
                 className={`px-3 py-1.5 rounded-lg text-xs border transition-colors flex items-center gap-1.5 ${
