@@ -93,6 +93,18 @@ const BiasDetector = () => {
   }, []);
 
   useEffect(() => {
+    const handler = (e: Event) => {
+      const ce = e as CustomEvent<string>;
+      if (typeof ce.detail === "string") {
+        setText(ce.detail);
+        setTimeout(() => textareaRef.current?.focus(), 100);
+      }
+    };
+    window.addEventListener("mindtrace:loadSample", handler);
+    return () => window.removeEventListener("mindtrace:loadSample", handler);
+  }, []);
+
+  useEffect(() => {
     if (history.length > 0) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(0, 20)));
     }

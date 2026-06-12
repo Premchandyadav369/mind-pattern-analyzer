@@ -11,6 +11,12 @@ import BiasCorrectionAssistant from "@/components/BiasCorrectionAssistant";
 import SystemArchitecture from "@/components/SystemArchitecture";
 import ResearchSection from "@/components/ResearchSection";
 import TeamCredits from "@/components/TeamCredits";
+import SampleTextLibrary from "@/components/SampleTextLibrary";
+import BiasQuiz from "@/components/BiasQuiz";
+import CognitiveChecklist from "@/components/CognitiveChecklist";
+import DailyInsight from "@/components/DailyInsight";
+import TextAnalyzerMini from "@/components/TextAnalyzerMini";
+import ScrollProgress from "@/components/ScrollProgress";
 import { ArrowUp } from "lucide-react";
 import logo from "@/assets/logo.png";
 
@@ -23,8 +29,12 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <ScrollProgress />
       <Navbar />
       <HeroSection onStartAnalysis={scrollToDetector} />
+
+      <DailyInsight />
+
       
       <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       
@@ -55,9 +65,13 @@ const Index = () => {
       <div ref={detectorRef}>
         <BiasDetector />
       </div>
-      
+
       <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-      
+
+      <SampleTextLibrary />
+
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+
       <DebateAnalyzer />
 
       <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
@@ -66,7 +80,21 @@ const Index = () => {
 
       <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
+      <TextAnalyzerMini />
+
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+
+      <CognitiveChecklist />
+
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+
+      <BiasQuiz />
+
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+
       <TeamCredits />
+
+
 
       {/* Footer */}
       <footer className="py-16 px-6 border-t border-border/30 bg-navy-deep/80">
@@ -81,6 +109,9 @@ const Index = () => {
               </p>
               <p className="text-xs text-muted-foreground/50 mt-3">
                 20+ cognitive biases · 13 Indian languages · Sentiment analysis · Real-time NLP metrics
+              </p>
+              <p className="text-xs text-primary/70 mt-3 font-mono">
+                Built by V C Premchand Yadav · 23BCE7167
               </p>
             </div>
 
