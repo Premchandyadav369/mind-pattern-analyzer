@@ -1,53 +1,39 @@
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Lightbulb, Calendar } from "lucide-react";
+import { Lightbulb, Calendar, Flame, Bookmark, Eye, BookmarkCheck } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
-
-const INSIGHTS = [
-  {
-    title: "The Spotlight Effect",
-    body: "People notice you about 50% less than you think. The 'spotlight' on you is mostly imagined — most observers are absorbed in their own internal narrative.",
-    source: "Gilovich, Medvec & Savitsky (2000)",
-  },
-  {
-    title: "Negativity Asymmetry",
-    body: "One negative event carries roughly 3–5x the cognitive weight of an equivalent positive event. Counteract by deliberately re-cataloguing positives.",
-    source: "Baumeister et al. (2001)",
-  },
-  {
-    title: "The Planning Fallacy",
-    body: "Humans underestimate task duration by ~40% on average — even after being told about the planning fallacy. Use reference-class forecasting instead of intuition.",
-    source: "Kahneman & Tversky (1979)",
-  },
-  {
-    title: "Affective Forecasting Error",
-    body: "We systematically overestimate how long emotions — both joy and grief — will last. Hedonic adaptation kicks in faster than we predict.",
-    source: "Wilson & Gilbert (2003)",
-  },
-  {
-    title: "Quantum Indeterminacy of Beliefs",
-    body: "Per quantum cognition models, a held belief is often a superposition collapsed by the question's framing — not a stable prior. Rephrase the question, get a different answer.",
-    source: "Busemeyer & Bruza (2012)",
-  },
-  {
-    title: "The Backfire Effect",
-    body: "Correcting misinformation can sometimes strengthen the original belief. Lead with the truth as the headline, never as the rebuttal.",
-    source: "Nyhan & Reifler (2010)",
-  },
-  {
-    title: "Decision Fatigue",
-    body: "Self-control depletes with each decision. Sequence high-stakes choices early; automate the trivial ones.",
-    source: "Vohs et al. (2008)",
-  },
-];
+import {
+  INSIGHTS,
+  epochDay,
+  insightForDay,
+  loadState,
+  recordVisit,
+  saveState,
+  toggleBookmark,
+  type InsightState,
+} from "@/lib/dailyInsight";
 
 const DailyInsight = () => {
   const { isQuantum } = useTheme();
+  const [state, setState] = useState<InsightState | null>(null);
 
-  const insight = useMemo(() => {
-    const day = Math.floor(Date.now() / 86_400_000);
-    return INSIGHTS[day % INSIGHTS.length];
+  useEffect(() => {
+    const today = epochDay();
+    const initial = recordVisit(loadState(), today);
+    setState(initial);
+    saveState(initial);
   }, []);
+
+  const today = epochDay();
+  const insight = insightForDay(today);
+  const bookmarked = state?.bookmarks.includes(insight.title) ?? false;
+
+  const handleBookmark = () => {
+    if (!state) return;
+    const next = toggleBookmark(state, insight.title);
+    setState(next);
+    saveState(next);
+  };
 
   return (
     <section className="py-20 px-6">
@@ -73,16 +59,48 @@ const DailyInsight = () => {
           className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-3xl p-8 md:p-10 relative overflow-hidden`}
         >
           <div className="absolute -top-12 -right-12 w-40 h-40 rounded-full bg-primary/10 blur-3xl" />
-          <Lightbulb className="w-8 h-8 text-primary mb-4" />
+          <div className="flex items-start justify-between gap-4 mb-4">
+            <Lightbulb className="w-8 h-8 text-primary" />
+            <button
+              onClick={handleBookmark}
+              aria-label={bookmarked ? "Remove bookmark" : "Bookmark this insight"}
+              className="text-xs font-mono px-3 py-1.5 rounded-lg border border-border/50 hover:border-primary/40 text-muted-foreground hover:text-primary flex items-center gap-1.5 transition"
+            >
+              {bookmarked ? <BookmarkCheck className="w-3.5 h-3.5" /> : <Bookmark className="w-3.5 h-3.5" />}
+              {bookmarked ? "Saved" : "Save"}
+            </button>
+          </div>
           <h3 className="font-display text-2xl md:text-3xl font-bold mb-4">{insight.title}</h3>
           <p className="text-base md:text-lg text-muted-foreground leading-relaxed mb-6">{insight.body}</p>
           <p className="text-xs font-mono text-primary/70 border-t border-border/40 pt-4">
             Source: {insight.source}
           </p>
         </motion.div>
+
+        {state && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="grid grid-cols-3 gap-3 mt-5"
+          >
+            <Stat icon={<Flame className="w-4 h-4" />} label="Day Streak" value={state.streak} />
+            <Stat icon={<Eye className="w-4 h-4" />} label="Insights Read" value={`${state.seenTitles.length} / ${INSIGHTS.length}`} />
+            <Stat icon={<Bookmark className="w-4 h-4" />} label="Bookmarked" value={state.bookmarks.length} />
+          </motion.div>
+        )}
       </div>
     </section>
   );
 };
+
+const Stat = ({ icon, label, value }: { icon: React.ReactNode; label: string; value: string | number }) => (
+  <div className="rounded-xl border border-border/50 bg-muted/20 p-3 text-center">
+    <div className="flex items-center justify-center gap-1.5 text-[10px] font-mono text-muted-foreground uppercase tracking-wide mb-1">
+      {icon}
+      {label}
+    </div>
+    <div className="font-display text-xl font-bold text-primary">{value}</div>
+  </div>
+);
 
 export default DailyInsight;
