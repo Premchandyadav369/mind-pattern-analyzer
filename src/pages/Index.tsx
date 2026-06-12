@@ -110,6 +110,9 @@ const Index = () => {
               <p className="text-xs text-muted-foreground/50 mt-3">
                 20+ cognitive biases · 13 Indian languages · Sentiment analysis · Real-time NLP metrics
               </p>
+              <p className="text-xs text-primary/70 mt-3 font-mono">
+                Built by V C Premchand Yadav · 23BCE7167
+              </p>
             </div>
 
             <div>
