@@ -29,8 +29,12 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <ScrollProgress />
       <Navbar />
       <HeroSection onStartAnalysis={scrollToDetector} />
+
+      <DailyInsight />
+
       
       <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
       
