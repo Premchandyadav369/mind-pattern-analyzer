@@ -11,6 +11,12 @@ import BiasCorrectionAssistant from "@/components/BiasCorrectionAssistant";
 import SystemArchitecture from "@/components/SystemArchitecture";
 import ResearchSection from "@/components/ResearchSection";
 import TeamCredits from "@/components/TeamCredits";
+import SampleTextLibrary from "@/components/SampleTextLibrary";
+import BiasQuiz from "@/components/BiasQuiz";
+import CognitiveChecklist from "@/components/CognitiveChecklist";
+import DailyInsight from "@/components/DailyInsight";
+import TextAnalyzerMini from "@/components/TextAnalyzerMini";
+import ScrollProgress from "@/components/ScrollProgress";
 import { ArrowUp } from "lucide-react";
 import logo from "@/assets/logo.png";
 
