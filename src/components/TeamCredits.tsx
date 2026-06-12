@@ -12,18 +12,11 @@ interface Member {
 }
 
 const THEORY_TEAM: Member[] = [
-  { name: "V C Premchand Yadav", regNo: "23BCE7167", role: "Project Lead & Architect" },
-  { name: "Sembilli Hemanth", regNo: "23BCE20054", role: "NLP Pipeline Engineer" },
-  { name: "Suryeswara Reddy P", regNo: "23BCE7050", role: "Bias Classification Researcher" },
-  { name: "Bandi Saana Dinesh Reddy", regNo: "23BCE20182", role: "Quantum Cognition Modeler" },
+  { name: "V C Premchand Yadav", regNo: "23BCE7167", role: "Project Lead, Architect & Sole Researcher" },
 ];
 
 const LAB_TEAM: Member[] = [
-  { name: "V C Premchand Yadav", regNo: "23BCE7167", role: "Lead Developer & System Integrator" },
-  { name: "Y Liel Stephen", regNo: "23BCE20073", role: "Frontend & Visualization Engineer" },
-  { name: "Swapnil Mondal", regNo: "23BCE9239", role: "Edge Function & API Developer" },
-  { name: "P Gomathi Krishna", regNo: "23BCE7981", role: "ML Model & Data Pipeline Engineer" },
-  { name: "Riya Pawar", regNo: "23BCE8282", role: "UI/UX Designer & Testing Lead" },
+  { name: "V C Premchand Yadav", regNo: "23BCE7167", role: "Lead Developer, System Integrator & Designer" },
 ];
 
 const TeamCredits = () => {
