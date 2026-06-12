@@ -65,9 +65,13 @@ const Index = () => {
       <div ref={detectorRef}>
         <BiasDetector />
       </div>
-      
+
       <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-      
+
+      <SampleTextLibrary />
+
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+
       <DebateAnalyzer />
 
       <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
@@ -76,7 +80,21 @@ const Index = () => {
 
       <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
+      <TextAnalyzerMini />
+
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+
+      <CognitiveChecklist />
+
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+
+      <BiasQuiz />
+
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+
       <TeamCredits />
+
+
 
       {/* Footer */}
       <footer className="py-16 px-6 border-t border-border/30 bg-navy-deep/80">
