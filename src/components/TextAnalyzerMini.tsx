@@ -2,47 +2,14 @@ import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Type, BarChart3, Eye, Brain } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
+import { computeTextStats } from "@/lib/textStats";
 
 const TextAnalyzerMini = () => {
   const { isQuantum } = useTheme();
   const [text, setText] = useState("");
 
-  const stats = useMemo(() => {
-    const words = text.trim() ? text.trim().split(/\s+/) : [];
-    const sentences = text.split(/[.!?]+/).filter((s) => s.trim()).length;
-    const chars = text.length;
-    const charsNoSpace = text.replace(/\s/g, "").length;
-    const avgWord = words.length ? (charsNoSpace / words.length).toFixed(1) : "0";
-    const readingMin = Math.max(1, Math.round(words.length / 200));
-    const speakingMin = Math.max(1, Math.round(words.length / 130));
+  const stats = useMemo(() => computeTextStats(text), [text]);
 
-    // Flesch reading ease (approx)
-    const syllables = words.reduce((acc, w) => {
-      const s = w.toLowerCase().replace(/[^a-z]/g, "").replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, "").match(/[aeiouy]{1,2}/g);
-      return acc + Math.max(1, s ? s.length : 0);
-    }, 0);
-    const flesch = words.length && sentences
-      ? 206.835 - 1.015 * (words.length / sentences) - 84.6 * (syllables / words.length)
-      : 0;
-    const fleschClamped = Math.max(0, Math.min(100, flesch));
-
-    // Cognitive load: lexical density via unique/total
-    const lower = words.map((w) => w.toLowerCase().replace(/[^a-z]/g, ""));
-    const unique = new Set(lower.filter(Boolean)).size;
-    const lexDensity = words.length ? Math.round((unique / words.length) * 100) : 0;
-
-    return {
-      words: words.length,
-      sentences,
-      chars,
-      charsNoSpace,
-      avgWord,
-      readingMin,
-      speakingMin,
-      flesch: Math.round(fleschClamped),
-      lexDensity,
-    };
-  }, [text]);
 
   const fleschLabel =
     stats.flesch >= 80 ? "Very Easy" :
