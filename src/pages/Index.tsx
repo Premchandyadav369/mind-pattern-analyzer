@@ -10,6 +10,7 @@ import DebateAnalyzer from "@/components/DebateAnalyzer";
 import BiasCorrectionAssistant from "@/components/BiasCorrectionAssistant";
 import SystemArchitecture from "@/components/SystemArchitecture";
 import ResearchSection from "@/components/ResearchSection";
+import BatchEvaluation from "@/components/BatchEvaluation";
 import TeamCredits from "@/components/TeamCredits";
 import SampleTextLibrary from "@/components/SampleTextLibrary";
 import BiasQuiz from "@/components/BiasQuiz";
