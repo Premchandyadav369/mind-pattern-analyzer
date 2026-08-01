@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
 import { useTheme } from "@/contexts/ThemeContext";
 import { BookOpen, FlaskConical, GraduationCap, Lightbulb, Quote, ExternalLink } from "lucide-react";
+import ResearchBenchmarks from "./ResearchBenchmarks";
+import ResearchAppendix from "./ResearchAppendix";
+import CitationExport from "./CitationExport";
 
 const RESEARCH_CONTRIBUTIONS = [
   {

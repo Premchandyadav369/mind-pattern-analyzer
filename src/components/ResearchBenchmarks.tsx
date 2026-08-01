@@ -12,14 +12,14 @@ import {
 
 const pct = (n: number) => (n * 100).toFixed(1);
 
-const Bar = ({ value, tone = "primary" }: { value: number; tone?: string }) => (
+const Bar = ({ value, tone = "primary" }: { value: number; tone?: "primary" | "secondary" }) => (
   <div className="h-1.5 w-full rounded-full bg-muted/30 overflow-hidden">
     <motion.div
       initial={{ width: 0 }}
       whileInView={{ width: `${value * 100}%` }}
       viewport={{ once: true }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className={`h-full rounded-full bg-${tone}`}
+      className={`h-full rounded-full ${tone === "secondary" ? "bg-secondary" : "bg-primary"}`}
     />
   </div>
 );
