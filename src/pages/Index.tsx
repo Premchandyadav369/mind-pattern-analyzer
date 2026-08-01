@@ -73,6 +73,10 @@ const Index = () => {
 
       <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
+      <BatchEvaluation />
+
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+
       <DebateAnalyzer />
 
       <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
@@ -125,6 +129,7 @@ const Index = () => {
                   { label: "Architecture", href: "#architecture" },
                   { label: "Research", href: "#research" },
                   { label: "Try Detector", href: "#detector" },
+                  { label: "Batch Evaluation", href: "#batch" },
                   { label: "Debate Mode", href: "#debate" },
                 ].map((link) => (
                   <a
