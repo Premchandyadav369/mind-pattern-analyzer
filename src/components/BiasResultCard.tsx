@@ -3,6 +3,7 @@ import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import type { BiasResult } from "@/lib/biasAnalyzer";
 import { useTheme } from "@/contexts/ThemeContext";
+import FeedbackControls from "./FeedbackControls";
 
 const colorStyles: Record<string, { bar: string; badge: string; text: string }> = {
   cyan: { bar: "bg-primary", badge: "bg-primary/10 text-primary border-primary/30", text: "text-primary" },
@@ -113,6 +114,14 @@ const BiasResultCard = ({
             </span>
           ))}
         </div>
+      )}
+
+      {sourceText && (
+        <FeedbackControls
+          biasType={bias.biasType}
+          confidence={bias.confidence}
+          excerpt={sourceText.slice(0, 400)}
+        />
       )}
     </motion.div>
   );
