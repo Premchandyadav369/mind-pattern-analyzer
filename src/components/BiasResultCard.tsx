@@ -3,6 +3,7 @@ import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import type { BiasResult } from "@/lib/biasAnalyzer";
 import { useTheme } from "@/contexts/ThemeContext";
+import FeedbackControls from "./FeedbackControls";
 
 const colorStyles: Record<string, { bar: string; badge: string; text: string }> = {
   cyan: { bar: "bg-primary", badge: "bg-primary/10 text-primary border-primary/30", text: "text-primary" },
@@ -18,7 +19,15 @@ const severityStyles: Record<string, string> = {
   high: "bg-destructive/10 text-destructive border-destructive/20",
 };
 
-const BiasResultCard = ({ bias, index }: { bias: BiasResult; index: number }) => {
+const BiasResultCard = ({
+  bias,
+  index,
+  sourceText,
+}: {
+  bias: BiasResult;
+  index: number;
+  sourceText?: string;
+}) => {
   const { isQuantum } = useTheme();
   const styles = colorStyles[bias.color] || colorStyles.cyan;
   const [showExplanation, setShowExplanation] = useState(true);
@@ -105,6 +114,14 @@ const BiasResultCard = ({ bias, index }: { bias: BiasResult; index: number }) =>
             </span>
           ))}
         </div>
+      )}
+
+      {sourceText && (
+        <FeedbackControls
+          biasType={bias.biasType}
+          confidence={bias.confidence}
+          excerpt={sourceText.slice(0, 400)}
+        />
       )}
     </motion.div>
   );

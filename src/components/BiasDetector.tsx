@@ -540,7 +540,7 @@ const BiasDetector = () => {
 
                 {/* Bias cards */}
                 {result.biases.map((bias, i) => (
-                  <BiasResultCard key={i} bias={bias} index={i} />
+                  <BiasResultCard key={i} bias={bias} index={i} sourceText={result.overallText} />
                 ))}
 
                 {/* Chart */}
