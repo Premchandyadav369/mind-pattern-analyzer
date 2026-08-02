@@ -4,6 +4,8 @@ import { BookOpen, FlaskConical, GraduationCap, Lightbulb, Quote, ExternalLink }
 import ResearchBenchmarks from "./ResearchBenchmarks";
 import ResearchAppendix from "./ResearchAppendix";
 import CitationExport from "./CitationExport";
+import ConfusionHeatmap from "./ConfusionHeatmap";
+import FeedbackDashboard from "./FeedbackDashboard";
 
 const RESEARCH_CONTRIBUTIONS = [
   {
@@ -231,6 +233,17 @@ const ResearchSection = () => {
         <div className="mb-16">
           <ResearchBenchmarks />
         </div>
+
+        {/* Confusion heatmap */}
+        <div className="mb-16">
+          <ConfusionHeatmap />
+        </div>
+
+        {/* Human feedback loop */}
+        <div className="mb-16">
+          <FeedbackDashboard />
+        </div>
+
 
         {/* Dataset, reproducibility, limitations */}
         <div className="mb-16">
