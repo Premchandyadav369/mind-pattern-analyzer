@@ -18,7 +18,15 @@ const severityStyles: Record<string, string> = {
   high: "bg-destructive/10 text-destructive border-destructive/20",
 };
 
-const BiasResultCard = ({ bias, index }: { bias: BiasResult; index: number }) => {
+const BiasResultCard = ({
+  bias,
+  index,
+  sourceText,
+}: {
+  bias: BiasResult;
+  index: number;
+  sourceText?: string;
+}) => {
   const { isQuantum } = useTheme();
   const styles = colorStyles[bias.color] || colorStyles.cyan;
   const [showExplanation, setShowExplanation] = useState(true);
