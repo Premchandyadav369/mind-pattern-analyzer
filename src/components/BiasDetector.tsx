@@ -554,10 +554,18 @@ const BiasDetector = () => {
                   <BiasEvolutionTimeline biases={result.biases} text={result.overallText} />
                 )}
 
-                {/* Bias cards */}
-                {result.biases.map((bias, i) => (
+                {/* Bias cards (filtered by the active decision threshold) */}
+                {visibleBiases.map((bias, i) => (
                   <BiasResultCard key={i} bias={bias} index={i} sourceText={result.overallText} />
                 ))}
+
+                {suppressedCount > 0 && (
+                  <div className="text-[10px] font-mono text-muted-foreground/70 text-center py-2">
+                    {suppressedCount} low-confidence prediction{suppressedCount > 1 ? "s" : ""} suppressed at
+                    τ = {threshold.toFixed(2)} · tune it in Research → Decision Threshold
+                  </div>
+                )}
+
 
                 {/* Chart */}
                 {result.biases.length > 0 && <BiasChart biases={result.biases} />}
