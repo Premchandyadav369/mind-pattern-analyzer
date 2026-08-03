@@ -6,6 +6,9 @@ import ResearchAppendix from "./ResearchAppendix";
 import CitationExport from "./CitationExport";
 import ConfusionHeatmap from "./ConfusionHeatmap";
 import FeedbackDashboard from "./FeedbackDashboard";
+import CalibrationPanel from "./CalibrationPanel";
+import ThresholdTuner from "./ThresholdTuner";
+import DisagreementDeepDive from "./DisagreementDeepDive";
 
 const RESEARCH_CONTRIBUTIONS = [
   {
@@ -243,6 +246,22 @@ const ResearchSection = () => {
         <div className="mb-16">
           <FeedbackDashboard />
         </div>
+
+        {/* Confidence calibration */}
+        <div className="mb-16">
+          <CalibrationPanel />
+        </div>
+
+        {/* Decision threshold tuning */}
+        <div className="mb-16">
+          <ThresholdTuner />
+        </div>
+
+        {/* Disagreement deep dive */}
+        <div className="mb-16">
+          <DisagreementDeepDive />
+        </div>
+
 
 
         {/* Dataset, reproducibility, limitations */}

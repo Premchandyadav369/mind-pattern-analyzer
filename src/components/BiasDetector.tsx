@@ -31,6 +31,7 @@ import LanguageSelector from "./LanguageSelector";
 import SentimentAnalysis from "./SentimentAnalysis";
 import NLPMetricsPanel from "./NLPMetrics";
 import { useTheme } from "@/contexts/ThemeContext";
+import { loadThreshold, DEFAULT_THRESHOLD } from "@/lib/calibration";
 
 const EXAMPLE_TEXTS: Record<string, string[]> = {
   en: [
@@ -80,10 +81,25 @@ const BiasDetector = () => {
   const [focusMode, setFocusMode] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [glossaryOpen, setGlossaryOpen] = useState(false);
+  const [threshold, setThreshold] = useState(DEFAULT_THRESHOLD);
   const resultRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  useEffect(() => {
+    setThreshold(loadThreshold());
+    const onThreshold = (e: Event) => setThreshold((e as CustomEvent<number>).detail);
+    window.addEventListener("mindtrace:threshold", onThreshold);
+    return () => window.removeEventListener("mindtrace:threshold", onThreshold);
+  }, []);
+
+  const visibleBiases = useMemo(
+    () => (result?.biases ?? []).filter((b) => b.confidence >= threshold),
+    [result, threshold]
+  );
+  const suppressedCount = (result?.biases.length ?? 0) - visibleBiases.length;
+
   const liveSuggestions = useMemo(() => getLiveSuggestions(text), [text]);
+
 
   useEffect(() => {
     try {
@@ -538,10 +554,18 @@ const BiasDetector = () => {
                   <BiasEvolutionTimeline biases={result.biases} text={result.overallText} />
                 )}
 
-                {/* Bias cards */}
-                {result.biases.map((bias, i) => (
+                {/* Bias cards (filtered by the active decision threshold) */}
+                {visibleBiases.map((bias, i) => (
                   <BiasResultCard key={i} bias={bias} index={i} sourceText={result.overallText} />
                 ))}
+
+                {suppressedCount > 0 && (
+                  <div className="text-[10px] font-mono text-muted-foreground/70 text-center py-2">
+                    {suppressedCount} low-confidence prediction{suppressedCount > 1 ? "s" : ""} suppressed at
+                    τ = {threshold.toFixed(2)} · tune it in Research → Decision Threshold
+                  </div>
+                )}
+
 
                 {/* Chart */}
                 {result.biases.length > 0 && <BiasChart biases={result.biases} />}
