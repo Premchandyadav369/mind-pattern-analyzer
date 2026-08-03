@@ -14,7 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      annotations: {
+        Row: {
+          bias_type: string
+          confidence: number
+          corrected_label: string | null
+          created_at: string
+          excerpt: string
+          id: string
+          note: string | null
+          session_id: string
+          verdict: string
+        }
+        Insert: {
+          bias_type: string
+          confidence?: number
+          corrected_label?: string | null
+          created_at?: string
+          excerpt: string
+          id?: string
+          note?: string | null
+          session_id: string
+          verdict: string
+        }
+        Update: {
+          bias_type?: string
+          confidence?: number
+          corrected_label?: string | null
+          created_at?: string
+          excerpt?: string
+          id?: string
+          note?: string | null
+          session_id?: string
+          verdict?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
