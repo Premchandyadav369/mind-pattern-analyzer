@@ -31,6 +31,7 @@ import LanguageSelector from "./LanguageSelector";
 import SentimentAnalysis from "./SentimentAnalysis";
 import NLPMetricsPanel from "./NLPMetrics";
 import { useTheme } from "@/contexts/ThemeContext";
+import { loadThreshold, DEFAULT_THRESHOLD } from "@/lib/calibration";
 
 const EXAMPLE_TEXTS: Record<string, string[]> = {
   en: [
@@ -80,10 +81,25 @@ const BiasDetector = () => {
   const [focusMode, setFocusMode] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [glossaryOpen, setGlossaryOpen] = useState(false);
+  const [threshold, setThreshold] = useState(DEFAULT_THRESHOLD);
   const resultRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  useEffect(() => {
+    setThreshold(loadThreshold());
+    const onThreshold = (e: Event) => setThreshold((e as CustomEvent<number>).detail);
+    window.addEventListener("mindtrace:threshold", onThreshold);
+    return () => window.removeEventListener("mindtrace:threshold", onThreshold);
+  }, []);
+
+  const visibleBiases = useMemo(
+    () => (result?.biases ?? []).filter((b) => b.confidence >= threshold),
+    [result, threshold]
+  );
+  const suppressedCount = (result?.biases.length ?? 0) - visibleBiases.length;
+
   const liveSuggestions = useMemo(() => getLiveSuggestions(text), [text]);
+
 
   useEffect(() => {
     try {

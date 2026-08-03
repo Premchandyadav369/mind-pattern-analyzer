@@ -6,6 +6,7 @@ import {
   makeFeedbackId,
   type FeedbackVerdict,
 } from "@/lib/feedback";
+import { pushAnnotation } from "@/lib/feedbackCloud";
 import { BIAS_INFO } from "@/lib/biasAnalyzer";
 
 interface Props {
@@ -38,14 +39,16 @@ const FeedbackControls = ({ biasType, confidence, excerpt }: Props) => {
 
   const persist = (v: FeedbackVerdict, label = corrected, n = note) => {
     setVerdict(v);
-    recordFeedback({
+    const payload = {
       biasType,
       verdict: v,
       confidence,
       excerpt,
       correctedLabel: label || undefined,
       note: n || undefined,
-    });
+    };
+    recordFeedback(payload);
+    void pushAnnotation({ ...payload, id: makeFeedbackId(biasType, excerpt), createdAt: new Date().toISOString() });
     setSaved(true);
     window.dispatchEvent(new CustomEvent("mindtrace:feedback"));
     setTimeout(() => setSaved(false), 1600);
