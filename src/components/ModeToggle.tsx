@@ -1,5 +1,6 @@
 import { Sparkles, FlaskConical } from "lucide-react";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 import { useAppMode } from "@/contexts/AppModeContext";
 
 const ModeToggle = ({ compact = false }: { compact?: boolean }) => {
@@ -9,6 +10,22 @@ const ModeToggle = ({ compact = false }: { compact?: boolean }) => {
     { key: "user" as const, label: "Simple", icon: Sparkles, hint: "Guided, everyday view" },
     { key: "research" as const, label: "Research", icon: FlaskConical, hint: "Full metrics & evaluation" },
   ];
+
+  const handleSelect = (key: "user" | "research") => {
+    if (key === mode) return;
+    setMode(key);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    toast.success(
+      key === "research" ? "Research mode on" : "Simple mode on",
+      {
+        description:
+          key === "research"
+            ? "Architecture, benchmarks, calibration and batch evaluation are now visible."
+            : "Streamlined view: quick start, detector and everyday tools.",
+      }
+    );
+  };
+
 
   return (
     <div
