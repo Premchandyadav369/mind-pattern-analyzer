@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Atom, Sun, Brain } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useAppMode } from "@/contexts/AppModeContext";
+import ModeToggle from "@/components/ModeToggle";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/logo.png";
 
