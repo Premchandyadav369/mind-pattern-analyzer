@@ -42,70 +42,82 @@ const Index = () => {
       <HeroSection onStartAnalysis={scrollToDetector} />
 
 
+      {isUser && <QuickStartGuide onStart={scrollToDetector} />}
+
+      {isUser && (
+        <>
+          <Divider />
+          <div ref={detectorRef}>
+            <BiasDetector />
+          </div>
+          <Divider />
+          <SampleTextLibrary />
+          <Divider />
+        </>
+      )}
+
       <DailyInsight />
 
-      
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-      
+      <Divider />
+
       <HowItWorks />
-      
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-      
+
+      <Divider />
+
       <BiasTypesSection />
-      
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-      
-      <TechStackSection />
-      
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-      
-      <ApplicationsSection />
-      
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-      
-      <SystemArchitecture />
-      
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-      
-      <ResearchSection />
-      
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-      
-      <div ref={detectorRef}>
-        <BiasDetector />
-      </div>
 
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      {isResearch && (
+        <>
+          <Divider />
+          <TechStackSection />
+          <Divider />
+          <ApplicationsSection />
+          <Divider />
+          <SystemArchitecture />
+          <Divider />
+          <ResearchSection />
+          <Divider />
+          <div ref={detectorRef}>
+            <BiasDetector />
+          </div>
+          <Divider />
+          <SampleTextLibrary />
+          <Divider />
+          <BatchEvaluation />
+        </>
+      )}
 
-      <SampleTextLibrary />
-
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-
-      <BatchEvaluation />
-
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      <Divider />
 
       <DebateAnalyzer />
 
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      <Divider />
 
       <BiasCorrectionAssistant />
 
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      <Divider />
 
       <TextAnalyzerMini />
 
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      <Divider />
 
       <CognitiveChecklist />
 
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      <Divider />
 
       <BiasQuiz />
 
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      {isUser && (
+        <>
+          <Divider />
+          <ApplicationsSection />
+        </>
+      )}
+
+      <Divider />
 
       <TeamCredits />
+
 
 
 
