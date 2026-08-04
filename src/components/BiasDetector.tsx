@@ -69,6 +69,15 @@ const EXAMPLE_TEXTS: Record<string, string[]> = {
 
 const STORAGE_KEY = "mindtrace-history";
 
+type ResultTab = "overview" | "biases" | "language" | "visuals";
+
+const RESULT_TABS: { key: ResultTab; label: string; icon: typeof Brain }[] = [
+  { key: "overview", label: "Overview", icon: Sparkles },
+  { key: "biases", label: "Biases", icon: AlertTriangle },
+  { key: "language", label: "Language", icon: Languages },
+  { key: "visuals", label: "Visuals", icon: Eye },
+];
+
 const BiasDetector = () => {
   const { isQuantum } = useTheme();
   const [text, setText] = useState("");
@@ -82,6 +91,7 @@ const BiasDetector = () => {
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [glossaryOpen, setGlossaryOpen] = useState(false);
   const [threshold, setThreshold] = useState(DEFAULT_THRESHOLD);
+  const [tab, setTab] = useState<ResultTab>("overview");
   const resultRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -573,7 +583,7 @@ const BiasDetector = () => {
                                 onClick={() => setTab("biases")}
                                 className="flex items-center justify-between gap-3 p-3 rounded-lg bg-muted/20 border border-border/30 hover:border-primary/40 transition-colors text-left"
                               >
-                                <span className="text-sm text-foreground truncate">{b.type}</span>
+                                <span className="text-sm text-foreground truncate">{b.biasType}</span>
                                 <span className="text-[10px] font-mono text-primary shrink-0">
                                   {(b.confidence * 100).toFixed(0)}%
                                 </span>
