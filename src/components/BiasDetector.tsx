@@ -140,11 +140,13 @@ const BiasDetector = () => {
     if (!text.trim()) return;
     setIsAnalyzing(true);
     setResult(null);
+    setTab("overview");
     setShowCollapse(false);
 
     try {
       const analysis = await analyzeText(text, selectedLanguage);
       setResult(analysis);
+    setTab("overview");
       if (isQuantum && analysis.biases.length > 1) {
         setShowCollapse(true);
       }
@@ -162,6 +164,7 @@ const BiasDetector = () => {
   const handleHistorySelect = (item: AnalysisResult) => {
     setText(item.overallText);
     setResult(item);
+    setTab("overview");
     setShowHistory(false);
     setShowCollapse(false);
   };
