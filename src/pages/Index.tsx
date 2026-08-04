@@ -146,11 +146,15 @@ const Index = () => {
                 {[
                   { label: "How It Works", href: "#how-it-works" },
                   { label: "Bias Types", href: "#bias-types" },
-                  { label: "Architecture", href: "#architecture" },
-                  { label: "Research", href: "#research" },
                   { label: "Try Detector", href: "#detector" },
-                  { label: "Batch Evaluation", href: "#batch" },
                   { label: "Debate Mode", href: "#debate" },
+                  ...(isResearch
+                    ? [
+                        { label: "Architecture", href: "#architecture" },
+                        { label: "Research", href: "#research" },
+                        { label: "Batch Evaluation", href: "#batch" },
+                      ]
+                    : []),
                 ].map((link) => (
                   <a
                     key={link.href}
