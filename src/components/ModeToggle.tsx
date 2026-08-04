@@ -40,7 +40,7 @@ const ModeToggle = ({ compact = false }: { compact?: boolean }) => {
         return (
           <button
             key={opt.key}
-            onClick={() => setMode(opt.key)}
+            onClick={() => handleSelect(opt.key)}
             title={opt.hint}
             aria-pressed={active}
             className={`relative flex-1 flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors ${
