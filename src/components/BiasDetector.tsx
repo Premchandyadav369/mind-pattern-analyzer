@@ -69,6 +69,15 @@ const EXAMPLE_TEXTS: Record<string, string[]> = {
 
 const STORAGE_KEY = "mindtrace-history";
 
+type ResultTab = "overview" | "biases" | "language" | "visuals";
+
+const RESULT_TABS: { key: ResultTab; label: string; icon: typeof Brain }[] = [
+  { key: "overview", label: "Overview", icon: Sparkles },
+  { key: "biases", label: "Biases", icon: AlertTriangle },
+  { key: "language", label: "Language", icon: Languages },
+  { key: "visuals", label: "Visuals", icon: Eye },
+];
+
 const BiasDetector = () => {
   const { isQuantum } = useTheme();
   const [text, setText] = useState("");
@@ -82,6 +91,7 @@ const BiasDetector = () => {
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [glossaryOpen, setGlossaryOpen] = useState(false);
   const [threshold, setThreshold] = useState(DEFAULT_THRESHOLD);
+  const [tab, setTab] = useState<ResultTab>("overview");
   const resultRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -130,11 +140,13 @@ const BiasDetector = () => {
     if (!text.trim()) return;
     setIsAnalyzing(true);
     setResult(null);
+    setTab("overview");
     setShowCollapse(false);
 
     try {
       const analysis = await analyzeText(text, selectedLanguage);
       setResult(analysis);
+    setTab("overview");
       if (isQuantum && analysis.biases.length > 1) {
         setShowCollapse(true);
       }
@@ -152,6 +164,7 @@ const BiasDetector = () => {
   const handleHistorySelect = (item: AnalysisResult) => {
     setText(item.overallText);
     setResult(item);
+    setTab("overview");
     setShowHistory(false);
     setShowCollapse(false);
   };
@@ -511,93 +524,137 @@ const BiasDetector = () => {
                 {/* Cognitive Clarity Score */}
                 <ClarityScore result={result} />
 
-                {/* Bias Knowledge Graph + Radar */}
-                {result.biases.length > 0 && !focusMode && (
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <BiasKnowledgeGraph biases={result.biases} />
-                    <BiasRadarChart biases={result.biases} />
-                  </div>
-                )}
+                {/* Results tabs */}
+                <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl border border-border/40 bg-muted/10">
+                  {RESULT_TABS.map((t) => {
+                    const count =
+                      t.key === "biases"
+                        ? visibleBiases.length
+                        : t.key === "visuals"
+                        ? result.biases.length > 0
+                          ? undefined
+                          : 0
+                        : undefined;
+                    const disabled = t.key !== "overview" && result.biases.length === 0 && t.key !== "language";
+                    return (
+                      <button
+                        key={t.key}
+                        onClick={() => !disabled && setTab(t.key)}
+                        disabled={disabled}
+                        className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-medium transition-colors disabled:opacity-40 ${
+                          tab === t.key
+                            ? "bg-primary text-primary-foreground"
+                            : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                        }`}
+                      >
+                        <t.icon className="w-3.5 h-3.5" />
+                        {t.label}
+                        {count !== undefined && (
+                          <span className="text-[10px] font-mono opacity-70">{count}</span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
 
-                {/* NLP Metrics */}
-                {result.nlpMetrics && (
-                  <NLPMetricsPanel metrics={result.nlpMetrics} text={result.overallText} />
-                )}
+                {tab === "overview" && (
+                  <div className="space-y-6">
+                    {/* Overall AI Insight */}
+                    {result.overallInsight && (
+                      <div className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-2xl p-6 border-primary/20`}>
+                        <div className="flex items-center justify-between gap-2 mb-3">
+                          <div className="flex items-center gap-2">
+                            {isQuantum ? <Atom className="w-4 h-4 text-primary" /> : <Brain className="w-4 h-4 text-primary" />}
+                            <p className="text-xs font-display font-semibold text-primary">
+                              {isQuantum ? "Quantum Psychological Insight" : "AI Psychological Insight"}
+                            </p>
+                          </div>
+                          <ReadAloudButton text={result.overallInsight} lang={selectedLanguage} />
+                        </div>
+                        <p className="text-sm text-muted-foreground leading-relaxed">{result.overallInsight}</p>
+                      </div>
+                    )}
 
-                {/* Sentiment Analysis */}
-                {result.sentiment && (
-                  <SentimentAnalysis sentiment={result.sentiment} />
-                )}
-
-                {/* Quantum visualizations */}
-                {isQuantum && result.biases.length > 0 && (
-                  <>
-                    <QuantumSuperposition biases={result.biases} />
-                    {showCollapse && <QuantumCollapse biases={result.biases} />}
-                    {result.biases.length > 1 && <BiasEntanglementGraph biases={result.biases} />}
-                    <BiasHeatmap biases={result.biases} text={result.overallText} />
-                  </>
-                )}
-
-                {/* Attention Highlights */}
-                {result.biases.length > 0 && (
-                  <AttentionHighlights biases={result.biases} text={result.overallText} />
-                )}
-
-                {/* Reasoning Graph */}
-                {result.biases.length > 0 && (
-                  <ReasoningGraph biases={result.biases} text={result.overallText} />
-                )}
-
-                {/* Bias Evolution Timeline */}
-                {result.biases.length > 0 && (
-                  <BiasEvolutionTimeline biases={result.biases} text={result.overallText} />
-                )}
-
-                {/* Bias cards (filtered by the active decision threshold) */}
-                {visibleBiases.map((bias, i) => (
-                  <BiasResultCard key={i} bias={bias} index={i} sourceText={result.overallText} />
-                ))}
-
-                {suppressedCount > 0 && (
-                  <div className="text-[10px] font-mono text-muted-foreground/70 text-center py-2">
-                    {suppressedCount} low-confidence prediction{suppressedCount > 1 ? "s" : ""} suppressed at
-                    τ = {threshold.toFixed(2)} · tune it in Research → Decision Threshold
-                  </div>
-                )}
-
-
-                {/* Chart */}
-                {result.biases.length > 0 && <BiasChart biases={result.biases} />}
-
-                {/* Overall AI Insight */}
-                {result.overallInsight && (
-                  <div className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-2xl p-6 border-primary/20`}>
-                    <div className="flex items-center justify-between gap-2 mb-3">
-                      <div className="flex items-center gap-2">
-                        {isQuantum ? <Atom className="w-4 h-4 text-primary" /> : <Brain className="w-4 h-4 text-primary" />}
-                        <p className="text-xs font-display font-semibold text-primary">
-                          {isQuantum ? "Quantum Psychological Insight" : "AI Psychological Insight"}
+                    {result.biases.length > 0 ? (
+                      <>
+                        <div className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-2xl p-5`}>
+                          <p className="text-xs font-display font-semibold text-foreground mb-3">Detected at a glance</p>
+                          <div className="grid sm:grid-cols-2 gap-2">
+                            {visibleBiases.map((b, i) => (
+                              <button
+                                key={i}
+                                onClick={() => setTab("biases")}
+                                className="flex items-center justify-between gap-3 p-3 rounded-lg bg-muted/20 border border-border/30 hover:border-primary/40 transition-colors text-left"
+                              >
+                                <span className="text-sm text-foreground truncate">{b.biasType}</span>
+                                <span className="text-[10px] font-mono text-primary shrink-0">
+                                  {(b.confidence * 100).toFixed(0)}%
+                                </span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                        <BiasChart biases={result.biases} />
+                      </>
+                    ) : (
+                      <div className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-2xl p-10 text-center`}>
+                        <CheckCircle2 className="w-12 h-12 text-secondary mx-auto mb-4" />
+                        <p className="font-display font-semibold text-lg mb-2">
+                          {isQuantum ? "Quantum State: Neutral" : "Clear Reasoning Detected"}
+                        </p>
+                        <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                          {result.overallInsight || "The analyzed text doesn't show clear signs of common cognitive biases."}
                         </p>
                       </div>
-                      <ReadAloudButton text={result.overallInsight} lang={selectedLanguage} />
-                    </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{result.overallInsight}</p>
+                    )}
                   </div>
                 )}
 
-                {/* No bias message */}
-                {result.biases.length === 0 && (
-                  <div className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-2xl p-10 text-center`}>
-                    <CheckCircle2 className="w-12 h-12 text-secondary mx-auto mb-4" />
-                    <p className="font-display font-semibold text-lg mb-2">
-                      {isQuantum ? "Quantum State: Neutral" : "Clear Reasoning Detected"}
-                    </p>
-                    <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                      {result.overallInsight || "The analyzed text doesn't show clear signs of common cognitive biases."}
-                    </p>
+                {tab === "biases" && result.biases.length > 0 && (
+                  <div className="space-y-6">
+                    {visibleBiases.map((bias, i) => (
+                      <BiasResultCard key={i} bias={bias} index={i} sourceText={result.overallText} />
+                    ))}
+
+                    {suppressedCount > 0 && (
+                      <div className="text-[10px] font-mono text-muted-foreground/70 text-center py-2">
+                        {suppressedCount} low-confidence prediction{suppressedCount > 1 ? "s" : ""} suppressed at
+                        τ = {threshold.toFixed(2)} · tune it in Research → Decision Threshold
+                      </div>
+                    )}
+
+                    <AttentionHighlights biases={result.biases} text={result.overallText} />
                   </div>
                 )}
+
+                {tab === "language" && (
+                  <div className="space-y-6">
+                    {result.nlpMetrics && <NLPMetricsPanel metrics={result.nlpMetrics} text={result.overallText} />}
+                    {result.sentiment && <SentimentAnalysis sentiment={result.sentiment} />}
+                  </div>
+                )}
+
+                {tab === "visuals" && result.biases.length > 0 && (
+                  <div className="space-y-6">
+                    {!focusMode && (
+                      <div className="grid md:grid-cols-2 gap-6">
+                        <BiasKnowledgeGraph biases={result.biases} />
+                        <BiasRadarChart biases={result.biases} />
+                      </div>
+                    )}
+                    {isQuantum && (
+                      <>
+                        <QuantumSuperposition biases={result.biases} />
+                        {showCollapse && <QuantumCollapse biases={result.biases} />}
+                        {result.biases.length > 1 && <BiasEntanglementGraph biases={result.biases} />}
+                        <BiasHeatmap biases={result.biases} text={result.overallText} />
+                      </>
+                    )}
+                    <ReasoningGraph biases={result.biases} text={result.overallText} />
+                    <BiasEvolutionTimeline biases={result.biases} text={result.overallText} />
+                  </div>
+                )}
+
               </motion.div>
             )}
           </AnimatePresence>

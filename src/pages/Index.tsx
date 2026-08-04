@@ -39,10 +39,20 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <ScrollProgress />
       <Navbar />
+      <div className="relative z-30 pt-20 px-6">
+        <div className="max-w-6xl mx-auto flex items-center gap-2 text-[11px] font-mono text-muted-foreground bg-background/60 backdrop-blur-sm rounded-full border border-border/40 px-3 py-1.5 w-fit">
+          <span className={`inline-block w-1.5 h-1.5 rounded-full ${isResearch ? "bg-accent" : "bg-primary"}`} />
+          {isResearch
+            ? "Research mode · architecture, benchmarks, calibration & batch evaluation enabled"
+            : "Simple mode · guided view with the essentials"}
+        </div>
+      </div>
+
       <HeroSection onStartAnalysis={scrollToDetector} />
 
 
       {isUser && <QuickStartGuide onStart={scrollToDetector} />}
+
 
       {isUser && (
         <>
