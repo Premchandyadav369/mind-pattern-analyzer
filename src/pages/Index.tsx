@@ -18,21 +18,29 @@ import CognitiveChecklist from "@/components/CognitiveChecklist";
 import DailyInsight from "@/components/DailyInsight";
 import TextAnalyzerMini from "@/components/TextAnalyzerMini";
 import ScrollProgress from "@/components/ScrollProgress";
+import QuickStartGuide from "@/components/QuickStartGuide";
+import { useAppMode } from "@/contexts/AppModeContext";
 import { ArrowUp } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 const Index = () => {
   const detectorRef = useRef<HTMLDivElement>(null);
+  const { isResearch, isUser } = useAppMode();
 
   const scrollToDetector = () => {
     detectorRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+
+  const Divider = () => (
+    <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+  );
 
   return (
     <div className="min-h-screen bg-background">
       <ScrollProgress />
       <Navbar />
       <HeroSection onStartAnalysis={scrollToDetector} />
+
 
       <DailyInsight />
 
