@@ -18,15 +18,22 @@ import CognitiveChecklist from "@/components/CognitiveChecklist";
 import DailyInsight from "@/components/DailyInsight";
 import TextAnalyzerMini from "@/components/TextAnalyzerMini";
 import ScrollProgress from "@/components/ScrollProgress";
+import QuickStartGuide from "@/components/QuickStartGuide";
+import { useAppMode } from "@/contexts/AppModeContext";
 import { ArrowUp } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 const Index = () => {
   const detectorRef = useRef<HTMLDivElement>(null);
+  const { isResearch, isUser } = useAppMode();
 
   const scrollToDetector = () => {
     detectorRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+
+  const Divider = () => (
+    <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+  );
 
   return (
     <div className="min-h-screen bg-background">
@@ -34,70 +41,83 @@ const Index = () => {
       <Navbar />
       <HeroSection onStartAnalysis={scrollToDetector} />
 
+
+      {isUser && <QuickStartGuide onStart={scrollToDetector} />}
+
+      {isUser && (
+        <>
+          <Divider />
+          <div ref={detectorRef}>
+            <BiasDetector />
+          </div>
+          <Divider />
+          <SampleTextLibrary />
+          <Divider />
+        </>
+      )}
+
       <DailyInsight />
 
-      
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-      
+      <Divider />
+
       <HowItWorks />
-      
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-      
+
+      <Divider />
+
       <BiasTypesSection />
-      
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-      
-      <TechStackSection />
-      
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-      
-      <ApplicationsSection />
-      
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-      
-      <SystemArchitecture />
-      
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-      
-      <ResearchSection />
-      
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-      
-      <div ref={detectorRef}>
-        <BiasDetector />
-      </div>
 
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      {isResearch && (
+        <>
+          <Divider />
+          <TechStackSection />
+          <Divider />
+          <ApplicationsSection />
+          <Divider />
+          <SystemArchitecture />
+          <Divider />
+          <ResearchSection />
+          <Divider />
+          <div ref={detectorRef}>
+            <BiasDetector />
+          </div>
+          <Divider />
+          <SampleTextLibrary />
+          <Divider />
+          <BatchEvaluation />
+        </>
+      )}
 
-      <SampleTextLibrary />
-
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-
-      <BatchEvaluation />
-
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      <Divider />
 
       <DebateAnalyzer />
 
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      <Divider />
 
       <BiasCorrectionAssistant />
 
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      <Divider />
 
       <TextAnalyzerMini />
 
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      <Divider />
 
       <CognitiveChecklist />
 
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      <Divider />
 
       <BiasQuiz />
 
-      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      {isUser && (
+        <>
+          <Divider />
+          <ApplicationsSection />
+        </>
+      )}
+
+      <Divider />
 
       <TeamCredits />
+
 
 
 
@@ -126,11 +146,15 @@ const Index = () => {
                 {[
                   { label: "How It Works", href: "#how-it-works" },
                   { label: "Bias Types", href: "#bias-types" },
-                  { label: "Architecture", href: "#architecture" },
-                  { label: "Research", href: "#research" },
                   { label: "Try Detector", href: "#detector" },
-                  { label: "Batch Evaluation", href: "#batch" },
                   { label: "Debate Mode", href: "#debate" },
+                  ...(isResearch
+                    ? [
+                        { label: "Architecture", href: "#architecture" },
+                        { label: "Research", href: "#research" },
+                        { label: "Batch Evaluation", href: "#batch" },
+                      ]
+                    : []),
                 ].map((link) => (
                   <a
                     key={link.href}

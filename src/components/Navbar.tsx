@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Atom, Sun, Brain } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useAppMode } from "@/contexts/AppModeContext";
+import ModeToggle from "@/components/ModeToggle";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/logo.png";
 
@@ -9,6 +11,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { theme, toggleTheme, isQuantum, isLight } = useTheme();
+  const { isResearch } = useAppMode();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -62,12 +65,19 @@ const Navbar = () => {
           <button onClick={() => handleNav("#detector")} className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-muted/50">
             Detector
           </button>
-          <button onClick={() => handleNav("#research")} className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-muted/50">
-            Research
-          </button>
+          {isResearch && (
+            <button onClick={() => handleNav("#research")} className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-muted/50">
+              Research
+            </button>
+          )}
           <button onClick={() => handleNav("/about")} className={`px-3 py-2 text-sm transition-colors rounded-lg hover:bg-muted/50 ${location.pathname === "/about" ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}>
             Why MindTrace
           </button>
+
+          <div className="ml-2 w-[172px]">
+            <ModeToggle />
+          </div>
+
 
           <button
             onClick={toggleTheme}
@@ -106,12 +116,17 @@ const Navbar = () => {
             className="md:hidden bg-background/95 backdrop-blur-xl border-b border-border/50 overflow-hidden"
           >
             <div className="px-6 py-4 space-y-1">
+              <div className="pb-2">
+                <ModeToggle compact />
+              </div>
               <button onClick={() => handleNav("#detector")} className="block w-full text-left px-4 py-3 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/50 transition-colors">
                 Detector
               </button>
-              <button onClick={() => handleNav("#research")} className="block w-full text-left px-4 py-3 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/50 transition-colors">
-                Research
-              </button>
+              {isResearch && (
+                <button onClick={() => handleNav("#research")} className="block w-full text-left px-4 py-3 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/50 transition-colors">
+                  Research
+                </button>
+              )}
               <button onClick={() => handleNav("/about")} className="block w-full text-left px-4 py-3 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/50 transition-colors">
                 Why MindTrace
               </button>
