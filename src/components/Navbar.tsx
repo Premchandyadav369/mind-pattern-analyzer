@@ -11,6 +11,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { theme, toggleTheme, isQuantum, isLight } = useTheme();
+  const { isResearch } = useAppMode();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -64,12 +65,19 @@ const Navbar = () => {
           <button onClick={() => handleNav("#detector")} className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-muted/50">
             Detector
           </button>
-          <button onClick={() => handleNav("#research")} className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-muted/50">
-            Research
-          </button>
+          {isResearch && (
+            <button onClick={() => handleNav("#research")} className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-muted/50">
+              Research
+            </button>
+          )}
           <button onClick={() => handleNav("/about")} className={`px-3 py-2 text-sm transition-colors rounded-lg hover:bg-muted/50 ${location.pathname === "/about" ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}>
             Why MindTrace
           </button>
+
+          <div className="ml-2 w-[172px]">
+            <ModeToggle />
+          </div>
+
 
           <button
             onClick={toggleTheme}
