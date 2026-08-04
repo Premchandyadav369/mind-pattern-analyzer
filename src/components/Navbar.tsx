@@ -116,12 +116,17 @@ const Navbar = () => {
             className="md:hidden bg-background/95 backdrop-blur-xl border-b border-border/50 overflow-hidden"
           >
             <div className="px-6 py-4 space-y-1">
+              <div className="pb-2">
+                <ModeToggle compact />
+              </div>
               <button onClick={() => handleNav("#detector")} className="block w-full text-left px-4 py-3 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/50 transition-colors">
                 Detector
               </button>
-              <button onClick={() => handleNav("#research")} className="block w-full text-left px-4 py-3 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/50 transition-colors">
-                Research
-              </button>
+              {isResearch && (
+                <button onClick={() => handleNav("#research")} className="block w-full text-left px-4 py-3 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/50 transition-colors">
+                  Research
+                </button>
+              )}
               <button onClick={() => handleNav("/about")} className="block w-full text-left px-4 py-3 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/50 transition-colors">
                 Why MindTrace
               </button>
