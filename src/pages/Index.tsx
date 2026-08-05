@@ -112,6 +112,10 @@ const Index = () => {
 
       <Divider />
 
+      <ABComparison />
+
+      <Divider />
+
       <CognitiveProfile />
 
       <Divider />
