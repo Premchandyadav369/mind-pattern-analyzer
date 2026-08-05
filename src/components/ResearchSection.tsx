@@ -247,6 +247,12 @@ const ResearchSection = () => {
           <FeedbackDashboard />
         </div>
 
+        {/* Shared annotation corpus */}
+        <div className="mb-16">
+          <CorpusExplorer />
+        </div>
+
+
         {/* Confidence calibration */}
         <div className="mb-16">
           <CalibrationPanel />
