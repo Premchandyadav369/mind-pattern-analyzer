@@ -6,6 +6,7 @@ import ResearchAppendix from "./ResearchAppendix";
 import CitationExport from "./CitationExport";
 import ConfusionHeatmap from "./ConfusionHeatmap";
 import FeedbackDashboard from "./FeedbackDashboard";
+import CorpusExplorer from "./CorpusExplorer";
 import CalibrationPanel from "./CalibrationPanel";
 import ThresholdTuner from "./ThresholdTuner";
 import DisagreementDeepDive from "./DisagreementDeepDive";
