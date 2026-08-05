@@ -133,6 +133,7 @@ const BiasDetector = () => {
   useEffect(() => {
     if (history.length > 0) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(0, 20)));
+      window.dispatchEvent(new CustomEvent("mindtrace:analysis"));
     }
   }, [history]);
 
