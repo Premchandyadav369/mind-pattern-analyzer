@@ -15,6 +15,7 @@ import TeamCredits from "@/components/TeamCredits";
 import SampleTextLibrary from "@/components/SampleTextLibrary";
 import BiasQuiz from "@/components/BiasQuiz";
 import CognitiveChecklist from "@/components/CognitiveChecklist";
+import CognitiveProfile from "@/components/CognitiveProfile";
 import DailyInsight from "@/components/DailyInsight";
 import TextAnalyzerMini from "@/components/TextAnalyzerMini";
 import ScrollProgress from "@/components/ScrollProgress";
