@@ -6,6 +6,7 @@ import ResearchAppendix from "./ResearchAppendix";
 import CitationExport from "./CitationExport";
 import ConfusionHeatmap from "./ConfusionHeatmap";
 import FeedbackDashboard from "./FeedbackDashboard";
+import CorpusExplorer from "./CorpusExplorer";
 import CalibrationPanel from "./CalibrationPanel";
 import ThresholdTuner from "./ThresholdTuner";
 import DisagreementDeepDive from "./DisagreementDeepDive";
@@ -246,6 +247,12 @@ const ResearchSection = () => {
         <div className="mb-16">
           <FeedbackDashboard />
         </div>
+
+        {/* Shared annotation corpus */}
+        <div className="mb-16">
+          <CorpusExplorer />
+        </div>
+
 
         {/* Confidence calibration */}
         <div className="mb-16">
