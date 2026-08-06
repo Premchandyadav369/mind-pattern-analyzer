@@ -174,6 +174,7 @@ const Index = () => {
               <h4 className="font-display font-semibold text-sm mb-4 text-foreground">Explore</h4>
               <div className="space-y-2">
                 {[
+                  { label: "All Features", href: "/features" },
                   { label: "How It Works", href: "#how-it-works" },
                   { label: "Bias Types", href: "#bias-types" },
                   { label: "Try Detector", href: "#detector" },
