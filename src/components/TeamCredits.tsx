@@ -85,7 +85,7 @@ const TeamCredits = () => {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: i * 0.06 }}
-                className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-2xl p-5 text-center hover:border-primary/30 transition-colors`}
+                className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-2xl p-6 text-center hover:border-primary/30 transition-colors w-full max-w-xs mx-auto`}
               >
                 <div className="w-12 h-12 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-3">
                   <Users className="w-5 h-5 text-primary" />
