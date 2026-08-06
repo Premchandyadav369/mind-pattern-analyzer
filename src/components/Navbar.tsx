@@ -70,6 +70,9 @@ const Navbar = () => {
               Research
             </button>
           )}
+          <button onClick={() => handleNav("/features")} className={`px-3 py-2 text-sm transition-colors rounded-lg hover:bg-muted/50 ${location.pathname === "/features" ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}>
+            Features
+          </button>
           <button onClick={() => handleNav("/about")} className={`px-3 py-2 text-sm transition-colors rounded-lg hover:bg-muted/50 ${location.pathname === "/about" ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}>
             Why MindTrace
           </button>
