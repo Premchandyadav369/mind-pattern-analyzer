@@ -20,6 +20,7 @@ import ABComparison from "@/components/ABComparison";
 import DailyInsight from "@/components/DailyInsight";
 import TextAnalyzerMini from "@/components/TextAnalyzerMini";
 import ScrollProgress from "@/components/ScrollProgress";
+import FeatureShowcase from "@/components/FeatureShowcase";
 import QuickStartGuide from "@/components/QuickStartGuide";
 import { useAppMode } from "@/contexts/AppModeContext";
 import { ArrowUp } from "lucide-react";
@@ -137,7 +138,12 @@ const Index = () => {
 
       <Divider />
 
+      <FeatureShowcase />
+
+      <Divider />
+
       <TeamCredits />
+
 
 
 
@@ -159,12 +165,16 @@ const Index = () => {
               <p className="text-xs text-primary/70 mt-3 font-mono">
                 Built by V C Premchand Yadav · 23BCE7167
               </p>
+              <p className="text-xs text-muted-foreground/60 mt-2 font-mono">
+                Made by humans on Earth 🌍
+              </p>
             </div>
 
             <div>
               <h4 className="font-display font-semibold text-sm mb-4 text-foreground">Explore</h4>
               <div className="space-y-2">
                 {[
+                  { label: "All Features", href: "/features" },
                   { label: "How It Works", href: "#how-it-works" },
                   { label: "Bias Types", href: "#bias-types" },
                   { label: "Try Detector", href: "#detector" },

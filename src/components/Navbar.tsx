@@ -70,6 +70,9 @@ const Navbar = () => {
               Research
             </button>
           )}
+          <button onClick={() => handleNav("/features")} className={`px-3 py-2 text-sm transition-colors rounded-lg hover:bg-muted/50 ${location.pathname === "/features" ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}>
+            Features
+          </button>
           <button onClick={() => handleNav("/about")} className={`px-3 py-2 text-sm transition-colors rounded-lg hover:bg-muted/50 ${location.pathname === "/about" ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}>
             Why MindTrace
           </button>
@@ -127,6 +130,9 @@ const Navbar = () => {
                   Research
                 </button>
               )}
+              <button onClick={() => handleNav("/features")} className="block w-full text-left px-4 py-3 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/50 transition-colors">
+                Features
+              </button>
               <button onClick={() => handleNav("/about")} className="block w-full text-left px-4 py-3 text-sm text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/50 transition-colors">
                 Why MindTrace
               </button>

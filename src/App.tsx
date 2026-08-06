@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import { AppModeProvider } from "@/contexts/AppModeContext";
 import Index from "./pages/Index";
 import About from "./pages/About";
+import Features from "./pages/Features";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,7 +22,9 @@ const App = () => (
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/features" element={<Features />} />
               <Route path="/about" element={<About />} />
+
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
