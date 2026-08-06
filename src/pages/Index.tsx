@@ -165,6 +165,9 @@ const Index = () => {
               <p className="text-xs text-primary/70 mt-3 font-mono">
                 Built by V C Premchand Yadav · 23BCE7167
               </p>
+              <p className="text-xs text-muted-foreground/60 mt-2 font-mono">
+                Made by humans on Earth 🌍
+              </p>
             </div>
 
             <div>
