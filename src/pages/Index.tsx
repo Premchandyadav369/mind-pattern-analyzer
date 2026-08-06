@@ -20,6 +20,7 @@ import ABComparison from "@/components/ABComparison";
 import DailyInsight from "@/components/DailyInsight";
 import TextAnalyzerMini from "@/components/TextAnalyzerMini";
 import ScrollProgress from "@/components/ScrollProgress";
+import FeatureShowcase from "@/components/FeatureShowcase";
 import QuickStartGuide from "@/components/QuickStartGuide";
 import { useAppMode } from "@/contexts/AppModeContext";
 import { ArrowUp } from "lucide-react";
