@@ -138,7 +138,12 @@ const Index = () => {
 
       <Divider />
 
+      <FeatureShowcase />
+
+      <Divider />
+
       <TeamCredits />
+
 
 
 
