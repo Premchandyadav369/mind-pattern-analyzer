@@ -77,7 +77,7 @@ const TeamCredits = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.25 }}
-            className={`grid gap-4 ${team.length <= 4 ? "md:grid-cols-2 lg:grid-cols-4" : "md:grid-cols-3 lg:grid-cols-5"}`}
+            className="flex flex-wrap justify-center gap-4"
           >
             {team.map((member, i) => (
               <motion.div
