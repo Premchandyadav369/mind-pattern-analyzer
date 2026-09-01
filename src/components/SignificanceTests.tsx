@@ -21,13 +21,19 @@ const SignificanceTests = () => {
 
   const rows = useMemo(() => {
     const ourScores = syntheticScores(OURS.macroF1, N_ITEMS, 101);
+    // Bernoulli correctness draws with per-item score as success probability.
+    const draw = (scores: number[], seed: number) => {
+      const r = seededRandom(seed);
+      return scores.map((s) => (r() < s ? 1 : 0));
+    };
+    const ourCorrect = draw(ourScores, 555);
     const raw = BASELINES.filter((b) => !b.ours).map((b, i) => {
       const scores = syntheticScores(b.macroF1, N_ITEMS, 200 + i * 13);
       const ci = bootstrapCI(scores, iterations, 0.05, 300 + i);
       const perm = permutationTest(ourScores, scores, iterations, 400 + i);
-      const correct = (s: number[]) => s.filter((v) => v >= 0.5).length;
-      const bOnly = ourScores.filter((v, k) => v >= 0.5 && scores[k] < 0.5).length;
-      const cOnly = ourScores.filter((v, k) => v < 0.5 && scores[k] >= 0.5).length;
+      const theirCorrect = draw(scores, 900 + i * 7);
+      const bOnly = ourCorrect.filter((v, k) => v === 1 && theirCorrect[k] === 0).length;
+      const cOnly = ourCorrect.filter((v, k) => v === 0 && theirCorrect[k] === 1).length;
       const mcn = mcNemarTest(bOnly, cOnly);
       return {
         model: b.model,
@@ -37,9 +43,10 @@ const SignificanceTests = () => {
         perm,
         mcn,
         d: cohensD(ourScores, scores),
-        acc: correct(scores) / N_ITEMS,
+        acc: theirCorrect.reduce((s, v) => s + v, 0) / N_ITEMS,
       };
     });
+
     const adjusted = benjaminiHochberg(raw.map((r) => r.perm.pValue));
     return raw.map((r, i) => ({ ...r, qValue: adjusted[i] }));
   }, [iterations]);
