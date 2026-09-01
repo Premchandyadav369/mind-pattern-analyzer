@@ -10,6 +10,8 @@ import CorpusExplorer from "./CorpusExplorer";
 import CalibrationPanel from "./CalibrationPanel";
 import ThresholdTuner from "./ThresholdTuner";
 import DisagreementDeepDive from "./DisagreementDeepDive";
+import SignificanceTests from "./SignificanceTests";
+import NeuralEmbeddingLab from "./NeuralEmbeddingLab";
 
 const RESEARCH_CONTRIBUTIONS = [
   {
@@ -237,6 +239,18 @@ const ResearchSection = () => {
         <div className="mb-16">
           <ResearchBenchmarks />
         </div>
+
+        {/* On-device embedding lab */}
+        <div className="mb-16">
+          <NeuralEmbeddingLab />
+        </div>
+
+        {/* Statistical significance */}
+        <div className="mb-16">
+          <SignificanceTests />
+        </div>
+
+
 
         {/* Confusion heatmap */}
         <div className="mb-16">
