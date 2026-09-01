@@ -240,6 +240,18 @@ const ResearchSection = () => {
           <ResearchBenchmarks />
         </div>
 
+        {/* On-device embedding lab */}
+        <div className="mb-16">
+          <NeuralEmbeddingLab />
+        </div>
+
+        {/* Statistical significance */}
+        <div className="mb-16">
+          <SignificanceTests />
+        </div>
+
+
+
         {/* Confusion heatmap */}
         <div className="mb-16">
           <ConfusionHeatmap />
