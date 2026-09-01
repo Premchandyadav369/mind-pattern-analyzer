@@ -10,6 +10,8 @@ import CorpusExplorer from "./CorpusExplorer";
 import CalibrationPanel from "./CalibrationPanel";
 import ThresholdTuner from "./ThresholdTuner";
 import DisagreementDeepDive from "./DisagreementDeepDive";
+import SignificanceTests from "./SignificanceTests";
+import NeuralEmbeddingLab from "./NeuralEmbeddingLab";
 
 const RESEARCH_CONTRIBUTIONS = [
   {
