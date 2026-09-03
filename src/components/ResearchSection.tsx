@@ -12,6 +12,8 @@ import ThresholdTuner from "./ThresholdTuner";
 import DisagreementDeepDive from "./DisagreementDeepDive";
 import SignificanceTests from "./SignificanceTests";
 import NeuralEmbeddingLab from "./NeuralEmbeddingLab";
+import AgreementLab from "./AgreementLab";
+import PowerAnalysisPanel from "./PowerAnalysisPanel";
 
 const RESEARCH_CONTRIBUTIONS = [
   {
@@ -249,6 +251,17 @@ const ResearchSection = () => {
         <div className="mb-16">
           <SignificanceTests />
         </div>
+
+        {/* Power & sample size planning */}
+        <div className="mb-16">
+          <PowerAnalysisPanel />
+        </div>
+
+        {/* Inter-annotator agreement */}
+        <div className="mb-16">
+          <AgreementLab />
+        </div>
+
 
 
 
