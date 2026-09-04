@@ -17,12 +17,12 @@ const PowerAnalysisPanel = () => {
   const ours = BASELINES.find((b) => (b as { ours?: boolean }).ours) ?? BASELINES[BASELINES.length - 1];
   const others = BASELINES.filter((b) => b !== ours);
 
-  const [baselineName, setBaselineName] = useState(others[others.length - 1]?.name ?? others[0]?.name);
+  const [baselineModel, setBaselineName] = useState(others[others.length - 1]?.name ?? others[0]?.name);
   const [alpha, setAlpha] = useState(0.05);
   const [power, setPower] = useState(0.8);
   const [n, setN] = useState(428);
 
-  const baseline = others.find((b) => b.name === baselineName) ?? others[0];
+  const baseline = others.find((b) => b.model === baselineModel) ?? others[0];
   const p1 = baseline?.macroF1 ?? 0.8;
   const p2 = ours?.macroF1 ?? 0.821;
 
@@ -40,7 +40,7 @@ const PowerAnalysisPanel = () => {
   const exportCsv = () => {
     const rows = [
       "field,value",
-      `baseline,${baseline?.name}`,
+      `baseline,${baseline?.model}`,
       `baseline_macro_f1,${p1}`,
       `mindtrace_macro_f1,${p2}`,
       `alpha,${alpha}`,
@@ -93,13 +93,13 @@ const PowerAnalysisPanel = () => {
         <label className="block">
           <span className="text-[11px] font-mono text-muted-foreground">Baseline</span>
           <select
-            value={baselineName}
+            value={baselineModel}
             onChange={(e) => setBaselineName(e.target.value)}
             className="w-full mt-1 text-xs bg-muted/20 border border-border/40 rounded-lg px-2 py-1.5 text-foreground"
           >
             {others.map((b) => (
-              <option key={b.name} value={b.name}>
-                {b.name} ({b.macroF1.toFixed(3)})
+              <option key={b.model} value={b.model}>
+                {b.model} ({b.macroF1.toFixed(3)})
               </option>
             ))}
           </select>
@@ -146,8 +146,8 @@ const PowerAnalysisPanel = () => {
 
       <div className="p-4 rounded-xl bg-muted/10 border border-border/20 text-xs text-muted-foreground leading-relaxed">
         <span className="text-foreground font-medium">Reading:</span> comparing{" "}
-        <span className="text-primary font-mono">{ours?.name}</span> ({p2.toFixed(3)}) against{" "}
-        <span className="text-primary font-mono">{baseline?.name}</span> ({p1.toFixed(3)}), a held-out split of{" "}
+        <span className="text-primary font-mono">{ours?.model}</span> ({p2.toFixed(3)}) against{" "}
+        <span className="text-primary font-mono">{baseline?.model}</span> ({p1.toFixed(3)}), a held-out split of{" "}
         {n.toLocaleString()} items delivers {pct(results.power)} power at α = {alpha.toFixed(3)}.{" "}
         {underpowered
           ? `Reaching ${pct(power)} power needs about ${Number.isFinite(results.required) ? results.required.toLocaleString() : "∞"} items per group — report the CI overlap rather than a bare win.`

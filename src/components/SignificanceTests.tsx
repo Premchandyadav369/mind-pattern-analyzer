@@ -10,6 +10,7 @@ import {
   benjaminiHochberg,
   cohensD,
   syntheticScores,
+  seededRandom,
 } from "@/lib/significance";
 
 const OURS = BASELINES.find((b) => b.ours) ?? BASELINES[BASELINES.length - 1];
