@@ -88,6 +88,27 @@ const FEATURES: Feature[] = [
 
 ];
 
+/** End-to-end processing pipeline, stage by stage. */
+const PIPELINE = [
+  { stage: "01", name: "Ingestion", detail: "Text arrives by paste, dictation (Web Speech API), sample library, shared URL hash or an uploaded CSV/JSON/JSONL dataset.", tech: "Client" },
+  { stage: "02", name: "Preprocessing", detail: "Normalisation, sentence segmentation, tokenisation and readability/lexical statistics; live pattern heuristics fire on every keystroke.", tech: "spaCy-style client rules" },
+  { stage: "03", name: "Translation", detail: "Non-English input is routed through the translation function into the classifier's language while the original is preserved for display.", tech: "Edge function · 13+ languages" },
+  { stage: "04", name: "Classification", detail: "A transformer-backed multi-label head returns per-bias probabilities, trigger spans and attention weights for 20+ distortion classes.", tech: "Edge function · RoBERTa-class model" },
+  { stage: "05", name: "Quantum modelling", detail: "Confidences are recast as amplitudes in a Hilbert-space state; superposition holds competing biases, entanglement encodes co-occurrence, measurement collapses to a label set.", tech: "Client" },
+  { stage: "06", name: "Thresholding & calibration", detail: "Your tuned decision threshold filters the label set; reliability diagrams, ECE and Brier score report how trustworthy the confidences are.", tech: "Client · persisted settings" },
+  { stage: "07", name: "Explanation & reframing", detail: "Evidence spans, reasoning graph, clarity score and neutral rewrites are generated, with attention highlights over the source text.", tech: "Edge function + client XAI" },
+  { stage: "08", name: "Feedback & evaluation", detail: "Your correct/partly/wrong ratings persist locally and to the cloud corpus, feeding agreement statistics, the confusion heatmap, disagreement analysis and significance testing.", tech: "Cloud store with row-level security" },
+];
+
+const RESEARCH_METHODS = [
+  "Bootstrap 95% CIs", "Paired permutation test", "McNemar's χ²", "Benjamini–Hochberg FDR",
+  "Cohen's d", "Two-proportion power analysis", "Wilson score intervals", "Fleiss' κ",
+  "Krippendorff's α", "Gwet's AC1", "Expected Calibration Error", "Brier score",
+  "Row-normalised confusion", "Ablation deltas", "Cross-lingual transfer",
+];
+
+
+
 const CATEGORIES = ["All", ...Array.from(new Set(FEATURES.map((f) => f.category)))];
 
 const Features = () => {
