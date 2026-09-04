@@ -8,8 +8,10 @@ import {
   Trophy, Keyboard, Share2, Focus, Command, BookOpen, Volume2, Printer, Library,
   HelpCircle, ListChecks, Sparkles, Ruler, Activity, LineChart, FlaskConical,
   Quote, Grid3X3, ThumbsUp, Cloud, Sliders, AlertTriangle, Users2, GitCompare,
-  Database, Languages, Atom, Layers, ArrowRight
+  Database, Languages, Atom, Layers, ArrowRight, Cpu, Sigma, Users, Workflow,
+  History, Brain, Palette, Waves, ShieldCheck, TestTube2
 } from "lucide-react";
+
 
 type Feature = {
   icon: typeof Search;
