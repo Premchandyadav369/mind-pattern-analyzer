@@ -162,9 +162,61 @@ const Features = () => {
             <div className="flex flex-wrap justify-center gap-3 mt-6 text-xs font-mono text-muted-foreground">
               <span className="px-3 py-1.5 rounded-full border border-border/50 bg-muted/30">{FEATURES.length} features</span>
               <span className="px-3 py-1.5 rounded-full border border-border/50 bg-muted/30">{CATEGORIES.length - 1} categories</span>
+              <span className="px-3 py-1.5 rounded-full border border-border/50 bg-muted/30">{PIPELINE.length}-stage pipeline</span>
               <span className="px-3 py-1.5 rounded-full border border-border/50 bg-muted/30">20+ biases · 13 languages</span>
             </div>
           </motion.div>
+
+          {/* Pipeline */}
+          <section className="mb-14">
+            <div className="flex items-center gap-2 mb-5 justify-center">
+              <Workflow className="w-5 h-5 text-primary" />
+              <h2 className="font-display font-bold text-lg text-foreground">End-to-End Processing Pipeline</h2>
+            </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              {PIPELINE.map((s, i) => (
+                <motion.div
+                  key={s.stage}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: Math.min(i * 0.04, 0.35) }}
+                  className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-xl p-5`}
+                >
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/30 flex items-center justify-center">
+                      <span className="text-[11px] font-display font-bold text-primary">{s.stage}</span>
+                    </div>
+                    <h3 className="font-display font-semibold text-sm text-foreground">{s.name}</h3>
+                    <span className="ml-auto text-[9px] font-mono px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+                      {s.tech}
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{s.detail}</p>
+                </motion.div>
+              ))}
+            </div>
+          </section>
+
+          {/* Research methods */}
+          <section className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-2xl p-6 mb-14`}>
+            <div className="flex items-center gap-2 mb-4">
+              <Sigma className="w-5 h-5 text-primary" />
+              <h2 className="font-display font-bold text-lg text-foreground">Statistical &amp; Evaluation Methods Implemented</h2>
+            </div>
+            <p className="text-xs text-muted-foreground mb-4 leading-relaxed">
+              Every estimator below is implemented from first principles in the codebase and covered by unit tests —
+              no black-box statistics library, so each number on the Research page is reproducible from a stated seed.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {RESEARCH_METHODS.map((m) => (
+                <span key={m} className="text-[10px] font-mono px-2.5 py-1 rounded bg-muted/40 text-muted-foreground border border-border/50">
+                  {m}
+                </span>
+              ))}
+            </div>
+          </section>
+
+
 
           {/* Search + filters */}
           <div className="mb-8 space-y-4">
