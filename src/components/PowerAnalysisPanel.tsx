@@ -17,7 +17,7 @@ const PowerAnalysisPanel = () => {
   const ours = BASELINES.find((b) => (b as { ours?: boolean }).ours) ?? BASELINES[BASELINES.length - 1];
   const others = BASELINES.filter((b) => b !== ours);
 
-  const [baselineModel, setBaselineName] = useState(others[others.length - 1]?.name ?? others[0]?.name);
+  const [baselineModel, setBaselineName] = useState(others[others.length - 1]?.model ?? others[0]?.model);
   const [alpha, setAlpha] = useState(0.05);
   const [power, setPower] = useState(0.8);
   const [n, setN] = useState(428);
