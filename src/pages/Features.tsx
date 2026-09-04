@@ -8,8 +8,10 @@ import {
   Trophy, Keyboard, Share2, Focus, Command, BookOpen, Volume2, Printer, Library,
   HelpCircle, ListChecks, Sparkles, Ruler, Activity, LineChart, FlaskConical,
   Quote, Grid3X3, ThumbsUp, Cloud, Sliders, AlertTriangle, Users2, GitCompare,
-  Database, Languages, Atom, Layers, ArrowRight
+  Database, Languages, Atom, Layers, ArrowRight, Cpu, Sigma, Users, Workflow,
+  History, Brain, Palette, Waves, ShieldCheck, TestTube2
 } from "lucide-react";
+
 
 type Feature = {
   icon: typeof Search;
@@ -65,7 +67,47 @@ const FEATURES: Feature[] = [
   { icon: Volume2, title: "Read Aloud", category: "Experience", where: "Results", what: "Listen to insights and reframes instead of reading them.", how: "Uses browser speech synthesis with per-section playback control." },
   { icon: Focus, title: "Focus Mode", category: "Experience", where: "Detector", what: "Hides auxiliary panels so you can concentrate on the findings.", how: "Toggles a reduced layout across the results area." },
   { icon: Search, title: "User & Research Modes", category: "Experience", where: "Navbar", what: "Switch between a guided essentials view and the full academic stack.", how: "A global mode context conditionally mounts sections across the whole app." },
+  { icon: Palette, title: "Three-State Theme Engine", category: "Experience", where: "Navbar", what: "Neural, Quantum and Light themes with glassmorphic surfaces throughout.", how: "Semantic design tokens in the global stylesheet swap per theme; components read tokens, never raw colours." },
+  { icon: Workflow, title: "Quick Start Guide", category: "Experience", where: "Home · Simple mode", what: "A three-step onboarding path from first paste to first reframe.", how: "Shown only in Simple mode and wired to scroll straight into the detector." },
+  { icon: Layers, title: "Feature Showcase", category: "Experience", where: "Home", what: "A condensed tour of the workbench with links into every major surface.", how: "Card grid that anchors to the relevant section ids on the home page." },
+
+  { icon: Cpu, title: "On-Device Embedding Lab", category: "Research", where: "Research · Embedding Lab", what: "Runs a real sentence-transformer inside your browser for zero-shot bias ranking — no text ever leaves the device after the model downloads.", how: "Lazy-loads Xenova/all-MiniLM-L6-v2 through transformers.js on WebAssembly, computes 384-d mean-pooled normalised embeddings, and ranks 12 calibrated class prototypes by cosine similarity with a softmax over scores. Exports the full embedding record as JSON." },
+  { icon: Sigma, title: "Statistical Significance Suite", category: "Research", where: "Research · Significance", what: "Answers whether MindTrace's margin over each baseline is real or noise.", how: "Bootstrap 95% confidence intervals, paired permutation tests, McNemar's χ² on discordant pairs, Benjamini–Hochberg FDR-adjusted q-values and Cohen's d — all from a seeded, reproducible sampler with an adjustable iteration count and CSV export." },
+  { icon: Ruler, title: "Power & Sample-Size Planner", category: "Research", where: "Research · Power Analysis", what: "Tells you how large a held-out split must be before a macro-F1 win is trustworthy.", how: "Two-proportion z-test planning: required n per group, achieved power at your current n, minimum detectable effect via bisection, and Wilson score intervals for both systems, against any baseline in the benchmark table." },
+  { icon: Users, title: "Inter-Annotator Agreement Lab", category: "Research", where: "Research · Agreement", what: "Quantifies how reliably three human annotators label the same passages.", how: "Observed agreement, Fleiss' κ, Krippendorff's α (nominal, missing-data tolerant), Gwet's AC1 and every pairwise Cohen's κ, each mapped to Landis & Koch bands, over a seeded latent-gold annotation simulator with adjustable noise and missingness." },
+  { icon: TestTube2, title: "Ablation & Baseline Study", category: "Research", where: "Research · Benchmarks", what: "Shows what each architectural component contributes and how the system compares to five baselines.", how: "Component-removal deltas against the full model, plus a baseline ladder from keyword lexicon to RoBERTa fine-tuned, reported on the same held-out split." },
+  { icon: ShieldCheck, title: "Reproducibility Appendix", category: "Research", where: "Research · Appendix", what: "Dataset card, hardware, seeds, optimiser settings and an honest limitations section.", how: "A structured research appendix so any claim on the page can be traced to its experimental conditions." },
+  { icon: Brain, title: "Cross-Lingual Transfer Report", category: "Research", where: "Research · Benchmarks", what: "Per-language accuracy for the multilingual pipeline.", how: "Transfer scores for each supported Indian language measured after neural machine translation into the classifier's language." },
+
+  { icon: Waves, title: "Bias Entanglement Graph", category: "Visualisation", where: "Results · Visuals", what: "Shows which biases tend to co-occur in the same passage.", how: "Co-occurrence strengths are drawn as weighted edges between detected labels, borrowing the entanglement metaphor from quantum cognition." },
+  { icon: Atom, title: "Quantum Collapse Animation", category: "Visualisation", where: "Results · Visuals", what: "Visualises measurement collapsing a superposition of candidate biases into the final classification.", how: "Amplitudes animate down to the winning label once the analysis resolves." },
+  { icon: Network, title: "Reasoning Graph", category: "Visualisation", where: "Results · Visuals", what: "Traces the chain from trigger phrase to distortion to consequence.", how: "An SVG dependency graph built from the model's extracted evidence spans and rationale." },
+  { icon: Grid3X3, title: "Bias Heatmap", category: "Visualisation", where: "Results · Visuals", what: "Highlights where in the text the bias density is concentrated.", how: "Sentence-level intensity mapped onto a colour scale over the original passage." },
+  { icon: History, title: "Bias Evolution Timeline", category: "Longitudinal", where: "Home · Profile", what: "Plots how your bias profile shifts across consecutive analyses.", how: "Reads stored history and renders per-label trajectories over time." },
+  { icon: History, title: "Analysis History", category: "Longitudinal", where: "Detector", what: "Recall, reload and compare any of your previous analyses.", how: "Locally persisted result records with one-click restore into the detector." },
+
 ];
+
+/** End-to-end processing pipeline, stage by stage. */
+const PIPELINE = [
+  { stage: "01", name: "Ingestion", detail: "Text arrives by paste, dictation (Web Speech API), sample library, shared URL hash or an uploaded CSV/JSON/JSONL dataset.", tech: "Client" },
+  { stage: "02", name: "Preprocessing", detail: "Normalisation, sentence segmentation, tokenisation and readability/lexical statistics; live pattern heuristics fire on every keystroke.", tech: "spaCy-style client rules" },
+  { stage: "03", name: "Translation", detail: "Non-English input is routed through the translation function into the classifier's language while the original is preserved for display.", tech: "Edge function · 13+ languages" },
+  { stage: "04", name: "Classification", detail: "A transformer-backed multi-label head returns per-bias probabilities, trigger spans and attention weights for 20+ distortion classes.", tech: "Edge function · RoBERTa-class model" },
+  { stage: "05", name: "Quantum modelling", detail: "Confidences are recast as amplitudes in a Hilbert-space state; superposition holds competing biases, entanglement encodes co-occurrence, measurement collapses to a label set.", tech: "Client" },
+  { stage: "06", name: "Thresholding & calibration", detail: "Your tuned decision threshold filters the label set; reliability diagrams, ECE and Brier score report how trustworthy the confidences are.", tech: "Client · persisted settings" },
+  { stage: "07", name: "Explanation & reframing", detail: "Evidence spans, reasoning graph, clarity score and neutral rewrites are generated, with attention highlights over the source text.", tech: "Edge function + client XAI" },
+  { stage: "08", name: "Feedback & evaluation", detail: "Your correct/partly/wrong ratings persist locally and to the cloud corpus, feeding agreement statistics, the confusion heatmap, disagreement analysis and significance testing.", tech: "Cloud store with row-level security" },
+];
+
+const RESEARCH_METHODS = [
+  "Bootstrap 95% CIs", "Paired permutation test", "McNemar's χ²", "Benjamini–Hochberg FDR",
+  "Cohen's d", "Two-proportion power analysis", "Wilson score intervals", "Fleiss' κ",
+  "Krippendorff's α", "Gwet's AC1", "Expected Calibration Error", "Brier score",
+  "Row-normalised confusion", "Ablation deltas", "Cross-lingual transfer",
+];
+
+
 
 const CATEGORIES = ["All", ...Array.from(new Set(FEATURES.map((f) => f.category)))];
 
@@ -120,9 +162,61 @@ const Features = () => {
             <div className="flex flex-wrap justify-center gap-3 mt-6 text-xs font-mono text-muted-foreground">
               <span className="px-3 py-1.5 rounded-full border border-border/50 bg-muted/30">{FEATURES.length} features</span>
               <span className="px-3 py-1.5 rounded-full border border-border/50 bg-muted/30">{CATEGORIES.length - 1} categories</span>
+              <span className="px-3 py-1.5 rounded-full border border-border/50 bg-muted/30">{PIPELINE.length}-stage pipeline</span>
               <span className="px-3 py-1.5 rounded-full border border-border/50 bg-muted/30">20+ biases · 13 languages</span>
             </div>
           </motion.div>
+
+          {/* Pipeline */}
+          <section className="mb-14">
+            <div className="flex items-center gap-2 mb-5 justify-center">
+              <Workflow className="w-5 h-5 text-primary" />
+              <h2 className="font-display font-bold text-lg text-foreground">End-to-End Processing Pipeline</h2>
+            </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              {PIPELINE.map((s, i) => (
+                <motion.div
+                  key={s.stage}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: Math.min(i * 0.04, 0.35) }}
+                  className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-xl p-5`}
+                >
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/30 flex items-center justify-center">
+                      <span className="text-[11px] font-display font-bold text-primary">{s.stage}</span>
+                    </div>
+                    <h3 className="font-display font-semibold text-sm text-foreground">{s.name}</h3>
+                    <span className="ml-auto text-[9px] font-mono px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+                      {s.tech}
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{s.detail}</p>
+                </motion.div>
+              ))}
+            </div>
+          </section>
+
+          {/* Research methods */}
+          <section className={`${isQuantum ? "quantum-glass" : "glass-card"} rounded-2xl p-6 mb-14`}>
+            <div className="flex items-center gap-2 mb-4">
+              <Sigma className="w-5 h-5 text-primary" />
+              <h2 className="font-display font-bold text-lg text-foreground">Statistical &amp; Evaluation Methods Implemented</h2>
+            </div>
+            <p className="text-xs text-muted-foreground mb-4 leading-relaxed">
+              Every estimator below is implemented from first principles in the codebase and covered by unit tests —
+              no black-box statistics library, so each number on the Research page is reproducible from a stated seed.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {RESEARCH_METHODS.map((m) => (
+                <span key={m} className="text-[10px] font-mono px-2.5 py-1 rounded bg-muted/40 text-muted-foreground border border-border/50">
+                  {m}
+                </span>
+              ))}
+            </div>
+          </section>
+
+
 
           {/* Search + filters */}
           <div className="mb-8 space-y-4">
