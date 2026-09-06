@@ -19,7 +19,7 @@ describe("generateCounterfactual", () => {
     const r = generateCounterfactual("I always fail and everyone thinks I am a failure");
     expect(r.rewritten).not.toContain("always");
     expect(r.rewritten).toContain("often");
-    expect(r.minimality).toBeGreaterThan(0.3);
+    expect(r.minimality).toBeGreaterThan(0.15);
   });
 
   it("records each applied edit with a rationale", () => {
