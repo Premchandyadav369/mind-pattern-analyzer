@@ -262,6 +262,32 @@ const ResearchSection = () => {
           <AgreementLab />
         </div>
 
+        {/* Adversarial robustness */}
+        <div className="mb-16">
+          <AdversarialLab />
+        </div>
+
+        {/* Temporal drift */}
+        <div className="mb-16">
+          <DriftDashboard />
+        </div>
+
+        {/* Counterfactual rewriting */}
+        <div className="mb-16">
+          <CounterfactualRewriter />
+        </div>
+
+        {/* Fairness audit */}
+        <div className="mb-16">
+          <FairnessAudit />
+        </div>
+
+        {/* Active learning */}
+        <div className="mb-16">
+          <ActiveLearningSampler />
+        </div>
+
+
 
 
 
