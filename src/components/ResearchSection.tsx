@@ -14,6 +14,11 @@ import SignificanceTests from "./SignificanceTests";
 import NeuralEmbeddingLab from "./NeuralEmbeddingLab";
 import AgreementLab from "./AgreementLab";
 import PowerAnalysisPanel from "./PowerAnalysisPanel";
+import AdversarialLab from "./AdversarialLab";
+import DriftDashboard from "./DriftDashboard";
+import CounterfactualRewriter from "./CounterfactualRewriter";
+import FairnessAudit from "./FairnessAudit";
+import ActiveLearningSampler from "./ActiveLearningSampler";
 
 const RESEARCH_CONTRIBUTIONS = [
   {
@@ -261,6 +266,32 @@ const ResearchSection = () => {
         <div className="mb-16">
           <AgreementLab />
         </div>
+
+        {/* Adversarial robustness */}
+        <div className="mb-16">
+          <AdversarialLab />
+        </div>
+
+        {/* Temporal drift */}
+        <div className="mb-16">
+          <DriftDashboard />
+        </div>
+
+        {/* Counterfactual rewriting */}
+        <div className="mb-16">
+          <CounterfactualRewriter />
+        </div>
+
+        {/* Fairness audit */}
+        <div className="mb-16">
+          <FairnessAudit />
+        </div>
+
+        {/* Active learning */}
+        <div className="mb-16">
+          <ActiveLearningSampler />
+        </div>
+
 
 
 
