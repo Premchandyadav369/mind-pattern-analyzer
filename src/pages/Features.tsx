@@ -111,6 +111,9 @@ const RESEARCH_METHODS = [
   "Cohen's d", "Two-proportion power analysis", "Wilson score intervals", "Fleiss' κ",
   "Krippendorff's α", "Gwet's AC1", "Expected Calibration Error", "Brier score",
   "Row-normalised confusion", "Ablation deltas", "Cross-lingual transfer",
+  "Population Stability Index", "Mann-Kendall trend test", "CUSUM change detection",
+  "Adversarial flip rate", "Demographic parity", "Equalized odds", "Disparate impact",
+  "Entropy&margin acquisition", "Max-marginal-relevance batching", "Counterfactual minimality",
 ];
 
 
