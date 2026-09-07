@@ -14,6 +14,11 @@ import SignificanceTests from "./SignificanceTests";
 import NeuralEmbeddingLab from "./NeuralEmbeddingLab";
 import AgreementLab from "./AgreementLab";
 import PowerAnalysisPanel from "./PowerAnalysisPanel";
+import AdversarialLab from "./AdversarialLab";
+import DriftDashboard from "./DriftDashboard";
+import CounterfactualRewriter from "./CounterfactualRewriter";
+import FairnessAudit from "./FairnessAudit";
+import ActiveLearningSampler from "./ActiveLearningSampler";
 
 const RESEARCH_CONTRIBUTIONS = [
   {
