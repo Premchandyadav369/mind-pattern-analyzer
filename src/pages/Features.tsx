@@ -9,7 +9,7 @@ import {
   HelpCircle, ListChecks, Sparkles, Ruler, Activity, LineChart, FlaskConical,
   Quote, Grid3X3, ThumbsUp, Cloud, Sliders, AlertTriangle, Users2, GitCompare,
   Database, Languages, Atom, Layers, ArrowRight, Cpu, Sigma, Users, Workflow,
-  History, Brain, Palette, Waves, ShieldCheck, TestTube2
+  History, Brain, Palette, Waves, ShieldCheck, TestTube2, Target
 } from "lucide-react";
 
 
